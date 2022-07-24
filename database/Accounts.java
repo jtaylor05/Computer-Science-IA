@@ -3,7 +3,7 @@ package database;
 import java.io.*;
 import java.util.*;
 
-public class AccountsDB 
+public class Accounts 
 {
 	private static FileWriter fw;
 	private static RandomAccessFile raf;
