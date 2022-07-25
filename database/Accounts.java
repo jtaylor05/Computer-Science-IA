@@ -1,13 +1,14 @@
 package database;
 
 import java.io.*;
-import java.util.*;
+import library.L;
 
 public class Accounts 
 {
 	private static FileWriter fw;
 	private static RandomAccessFile raf;
 	private final static String DATABASE_FILE_PATH = "database/accounts";
+	
 	
 	private final static int LENGTH_OF_ID = 37;
 	private final static int LENGTH_OF_NAME = 23;
@@ -24,7 +25,7 @@ public class Accounts
 		//addAccount("LeslieT", "12345678", "ltaylor@gmail.com", true);
 		//int index = getUsernameIndex("JacksonT");
 		
-		//System.out.println(shear(getPassword(index)));
+		//System.out.println(L.shear(getPassword(index)));
 		//System.out.println(getID(index));
 		//System.out.println(isTeacher(index));
 		
@@ -33,10 +34,10 @@ public class Accounts
 	//Method adds account data to file "accounts"; returns void.
 	public static void addAccount(String username, String password, String email, boolean isTeacher)
 	{
-		String fixedName = fitToLength(LENGTH_OF_NAME, username);
-		String fixedPass = fitToLength(LENGTH_OF_PASS, password);
-		String fixedEmail = fitToLength(LENGTH_OF_EMAIL, email);
-		String id = getID();
+		String fixedName = L.fitToLength(LENGTH_OF_NAME, username);
+		String fixedPass = L.fitToLength(LENGTH_OF_PASS, password);
+		String fixedEmail = L.fitToLength(LENGTH_OF_EMAIL, email);
+		String id = L.getID();
 		String teacher = "0";
 		if(isTeacher)
 		{
@@ -55,53 +56,11 @@ public class Accounts
 		}		
 	}
 	
-	//Method changes String length to fit integer value length; returns changed String.
-	public static String fitToLength(int length, String str)
-	{
-		if(str.length() > length)
-		{
-			return str.substring(0, length);
-		}
-		else
-		{
-			while(str.length() < length)
-			{
-				str = str + " ";
-			}
-			return str;
-		}
-	}
-	
-	//Method removes spaces at the end of a String; returns changed String.
-	public static String shear(String str)
-	{
-		for(int i = str.length() - 1; i >= 0; i--)
-		{
-			if(str.charAt(i) == 32)
-			{
-				str = str.substring(0, i);
-			}
-			else 
-			{
-				return str;
-			}
-		}
-		return str;
-	}
-	
-	//Method uses UUID to get a random 36 digit hexcode ID; returns ID as a String;
-	public static String getID()
-	{
-		UUID uuid = UUID.randomUUID();
-		String id = uuid.toString();
-		return id;
-	}
-	
 	//Method searches for search term "username" of all usernames in file 
 	//"accounts"; returns int index of account with "username".
 	public static int getUsernameIndex(String username)
 	{
-		String fixedName = fitToLength(LENGTH_OF_NAME, username);
+		String fixedName = L.fitToLength(LENGTH_OF_NAME, username);
 		String name = "";
 		int index = -1;
 		try
@@ -131,11 +90,38 @@ public class Accounts
 		return -1;
 	}
 	
+	//To retrieve username from certain index in database; returns found username.
+	public static String getUsername(int index)
+	{
+		String username = "";
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			else
+			{
+				return null;
+			}
+			
+			String line = raf.readLine();
+			username = line.substring(END_OF_NAME, LENGTH_OF_FILE);
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+		
+		return username;
+	}
+	
 	//Method searches for search term "email" of all email in file 
 	//"accounts"; returns int index of account with "email".
 	public static int getEmailIndex(String email)
 	{
-		String fixedEmail = fitToLength(LENGTH_OF_EMAIL, email);
+		String fixedEmail = L.fitToLength(LENGTH_OF_EMAIL, email);
 		String mail = "";
 		int index = -1;
 		try
