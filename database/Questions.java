@@ -47,7 +47,7 @@ public class Questions
 		}		
 	}
 	
-	//Method finds ID of question at index; returns found ID of account.
+	//Method finds ID of question at index; returns found ID of question.
 	public static String getID(int index)
 	{
 		String ID = "";
