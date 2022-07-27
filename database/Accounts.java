@@ -151,6 +151,40 @@ public class Accounts
 		return -1;
 	}
 	
+	//Method searches for search term "password" of all passwords in file 
+	//"passwords"; returns int index of account with "password".
+	public static int getPasswordIndex(String password)
+	{
+		String fixedPass = L.fitToLength(LENGTH_OF_PASS, password);
+		String pass = "";
+		int index = -1;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+				index = index + 1;
+					
+				String line = raf.readLine();
+				pass = line.substring(END_OF_NAME, END_OF_PASS);
+					
+				if(pass.equals(fixedPass))
+				{
+					return index;
+				}
+					
+				raf.seek(LENGTH_OF_FILE * (index + 1));
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+			
+		return -1;
+	}
+	
 	//Method finds password of account at index; returns found password of account.
 	public static String getPassword(int index)
 	{

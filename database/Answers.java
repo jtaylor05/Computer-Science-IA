@@ -13,7 +13,9 @@ public class Answers
 	private final static int LENGTH_OF_QID = 36;
 	private final static int END_OF_ID = LENGTH_OF_USERID + LENGTH_OF_QID;
 	private final static int LENGTH_OF_PATH = 48;
-	private final static int LENGTH_OF_FILE = END_OF_ID + LENGTH_OF_PATH + 1;
+	private final static int END_OF_PATH = END_OF_ID + LENGTH_OF_PATH;
+	private final static int LENGTH_OF_GRADE = 10;
+	private final static int LENGTH_OF_FILE = END_OF_PATH + LENGTH_OF_GRADE + 1;
 	
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
@@ -31,7 +33,7 @@ public class Answers
 	}
 	
 	//Method adds answer data to file "answer"; returns void.
-	public static void addAnswer(String userID, String qID, String filePath)
+	public static void addAnswer(String userID, String qID, String filePath, int points)
 	{
 		String id = userID + qID;
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
@@ -118,7 +120,7 @@ public class Answers
 			}
 			
 			String line = raf.readLine();
-			filePath = line.substring(END_OF_ID, LENGTH_OF_FILE);
+			filePath = line.substring(END_OF_ID, END_OF_PATH);
 		}
 		catch(Exception e)
 		{
@@ -192,5 +194,62 @@ public class Answers
 		}
 				
 		return -1;
+	}
+	
+	//To find the int value of the total number of points for question at index;
+	//returns the int value found.
+	public static int getPoints(int index)
+	{
+		String points = "";
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			else
+			{
+				return -1;
+			}
+			
+			String line = raf.readLine();
+			points = line.substring(END_OF_PATH, LENGTH_OF_GRADE);
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+		
+		points = L.shear(points);
+		int p = Integer.parseInt(points);
+		return p;
+	}
+	
+	
+	public static boolean changePoints(int index, int newPoints)
+	{
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index + END_OF_PATH);
+			}
+			else
+			{
+				return false;
+			}
+			String points = L.fitToLength(LENGTH_OF_GRADE, "" + newPoints);
+			
+			raf.writeBytes(points);
+			
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+		return false;
 	}
 }

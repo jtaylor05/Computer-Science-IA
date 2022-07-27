@@ -1,6 +1,8 @@
 package pages;
 
-public class dropInPage 
+import javax.swing.*;
+
+public class dropInPage extends JFrame
 {
 	/*
 	 * isTeacher - boolean holding true if user is teacher, false if not
@@ -11,11 +13,31 @@ public class dropInPage
 	 * 
 	 */
 	
-	//public dropInPage() - initialises above objects and values. portfolioList only initialises if isTeacher
+	public dropInPage(boolean isTeacher, String id)
+	{
+		
+	}
 	
-	//public void logOut() - closes dropInPage and reopens logInPage when logOut is pressed
+	//Logs out of application for current account; returns nothing.
+	public void logOut()
+	{
+		setVisible(false);
+		dispose();
+	}
 	
-	//public void questionList() - closes dropInPage and opens questionListPage when questionList is pressed
+	//opens question list page and closes drop in page; returns nothing.
+	public void questionList()
+	{
+		//questionList(teacher, ID)
+		setVisible(false);
+		dispose();
+	}
 	
-	//public void portfolioList() - closes dropInPage and opens portfolioListPage when portfolioList is pressed
+	//opens portfolio list page and closes drop in page; returns nothing.
+	public void portfolioList()
+	{
+		//portfolioList(teacher, ID)
+		setVisible(false);
+		dispose();
+	}
 }
