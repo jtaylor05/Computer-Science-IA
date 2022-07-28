@@ -15,18 +15,18 @@ public class portfolioPage
 	 * homePage - JButton opening homepage
 	 */
 	
-	ArrayList<Answer> qs;
+	ArrayList<Answer> as;
 
 	public portfolioPage(String ID)
 	{
-		qs = makeList(ID);
+		as = makeList(ID);
 		int index = Accounts.getIDIndex(ID);
 		String p = "STUDENT: " + Accounts.getUsername(index) + "\n";
 		p = p + "--------------------------------------------\n";
 
-		for(int i = 0; i < qs.size(); i++)
+		for(int i = 0; i < as.size(); i++)
 		{
-			p = p + qs.get(i);
+			p = p + as.get(i);
 		}
 		
 		System.out.println(p);
@@ -39,7 +39,7 @@ public class portfolioPage
 	
 	private ArrayList<Answer> makeList(String ID)
 	{
-		ArrayList<Answer> questions = new ArrayList<>();
+		ArrayList<Answer> answers = new ArrayList<>();
 		int count = 0;
 		int index = 0;
 		String id = Answers.getUserID(index);
@@ -57,14 +57,14 @@ public class portfolioPage
 				
 				int grade = Answers.getPoints(index);
 				int maxPoints = Questions.getPoints(qIndex);	
-				Answer q = new Answer(name, grade, maxPoints);
+				Answer a = new Answer(name, grade, maxPoints);
 				
-				questions.add(q);
+				answers.add(a);
 			}
 			index = index + 1;
 			id = Answers.getUserID(index);
 		}
-		return questions;
+		return answers;
 	}
 	
 	public static void main(String[] args)

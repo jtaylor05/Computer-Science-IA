@@ -51,6 +51,22 @@ public class Answers
 		}		
 	}
 	
+	//Method uses a question and user ID to find a matching answer
+	public static int findAnswer(String userID, String QID)
+	{
+		int userIndex = 0;
+		while(userIndex > -1)
+		{
+			userIndex = getUserIDIndex(userID, userIndex);
+			if(QID.equals(getQID(userIndex)))
+			{
+				return userIndex;
+			}
+		}
+		
+		return -1;
+	}
+	
 	//Method finds user ID of answer at index; returns found user ID.
 	public static String getUserID(int index)
 	{
@@ -164,6 +180,39 @@ public class Answers
 		return -1;
 	}
 	
+	//method uses looks for index of searchterm "searchUserID"; returns index of where "searchUserID"
+	//was found or -1 if not found.
+	public static int getUserIDIndex(String searchUserID, int minIndex)
+	{
+		String id = "";
+		int index = minIndex;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+				index = index + 1;
+					
+				String line = raf.readLine();
+				id = line.substring(0, LENGTH_OF_USERID);
+					
+				if(id.equals(searchUserID))
+				{
+					return index;
+				}
+						
+				raf.seek(LENGTH_OF_FILE * (index + 1));
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+				
+		return -1;
+	}
+	
 	//method uses looks for index of searchterm "searchQID"; returns index of where "searchQID"
 	//was found or -1 if not found.
 	public static int getQIDIndex(String searchQID)
@@ -186,6 +235,39 @@ public class Answers
 					return index;
 				}
 						
+				raf.seek(LENGTH_OF_FILE * (index + 1));
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+				
+		return -1;
+	}
+	
+	//method uses looks for index of searchterm "searchQID"; returns index of where "searchQID"
+	//was found or -1 if not found.
+	public static int getQIDIndex(String searchQID, int minIndex)
+	{
+		String id = "";
+		int index = minIndex;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+				index = index + 1;
+						
+				String line = raf.readLine();
+				id = line.substring(LENGTH_OF_USERID, END_OF_ID);
+					
+				if(id.equals(searchQID))
+				{
+					return index;
+				}
+							
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
 		}
