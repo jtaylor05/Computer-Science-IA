@@ -20,8 +20,8 @@ public class Answers
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
 	{
-		//addAnswer(Accounts.getID(0), Questions.getID(1), "images/answer_1");
-		//addAnswer(Accounts.getID(1), Questions.getID(0), "images/answer_2");
+		addAnswer(Accounts.getID(0), Questions.getID(1), "images/answer_1", 7);
+		addAnswer(Accounts.getID(1), Questions.getID(0), "images/answer_2", 4);
 		
 		int index1 = getUserIDIndex(Accounts.getID(1));
 		int index2 = getQIDIndex(Questions.getID(1));
@@ -37,11 +37,12 @@ public class Answers
 	{
 		String id = userID + qID;
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
+		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "" + points);
 		
 		try
 		{
 			fw = new FileWriter(DATABASE_FILE_PATH, true);
-			fw.write(id + fixedPath + "\n");
+			fw.write(id + fixedPath + fixedPoints + "\n");
 			fw.close();
 		}
 		catch(Exception e)
@@ -214,7 +215,7 @@ public class Answers
 			}
 			
 			String line = raf.readLine();
-			points = line.substring(END_OF_PATH, LENGTH_OF_GRADE);
+			points = line.substring(END_OF_PATH, LENGTH_OF_FILE - 1);
 		}
 		catch(Exception e)
 		{

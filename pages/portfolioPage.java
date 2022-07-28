@@ -1,10 +1,13 @@
 package pages;
 
 import java.util.*;
+import javax.swing.*;
 import database.*;
 
 public class portfolioPage 
 {
+	private JLabel portfolio = new JLabel("");
+	
 	/*
 	 * portfolioFrame - JFrame containing all components in portfolio page
 	 * portfolioList - a list of all the student accounts, each with a link to their portfolio
@@ -17,6 +20,17 @@ public class portfolioPage
 	public portfolioPage(String ID)
 	{
 		qs = makeList(ID);
+		int index = Accounts.getIDIndex(ID);
+		String p = "STUDENT: " + Accounts.getUsername(index) + "\n";
+		p = p + "--------------------------------------------\n";
+
+		for(int i = 0; i < qs.size(); i++)
+		{
+			p = p + qs.get(i);
+		}
+		
+		System.out.println(p);
+		portfolio.setText(p);
 	}
 	
 	//public void homePage() - closes portfolioPage and opens dropInPage
@@ -31,12 +45,15 @@ public class portfolioPage
 		String id = Answers.getUserID(index);
 		while(id != null)
 		{
-			index = index + 1;
 			if(ID.equals(id))
 			{
 				String qID = Answers.getQID(index);
 				int qIndex = Questions.getIDIndex(qID);
-				String name = Questions.getName(qIndex);
+				String name = "";
+				if(qIndex > -1)
+				{
+					name = Questions.getName(qIndex);
+				}
 				
 				int grade = Answers.getPoints(index);
 				int maxPoints = Questions.getPoints(qIndex);	
@@ -44,9 +61,15 @@ public class portfolioPage
 				
 				questions.add(q);
 			}
+			index = index + 1;
 			id = Answers.getUserID(index);
 		}
 		return questions;
+	}
+	
+	public static void main(String[] args)
+	{
+		portfolioPage pp = new portfolioPage(Accounts.getID(0));
 	}
 	
 }

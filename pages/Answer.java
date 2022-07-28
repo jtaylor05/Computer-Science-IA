@@ -23,4 +23,14 @@ public class Answer
 		String finalGrade = grade + "/" + maxPoints;
 		return finalGrade;
 	}
+	
+	public String toString()
+	{
+		String str = "";
+		
+		str = str + questionName.toUpperCase() + "\n";
+		str = str + grade + "/" + maxPoints;
+		
+		return str;
+	}
 }

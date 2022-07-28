@@ -84,7 +84,7 @@ public class Accounts
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Line 87 error " + e);
 		}
 		
 		return -1;
@@ -107,11 +107,11 @@ public class Accounts
 			}
 			
 			String line = raf.readLine();
-			username = line.substring(END_OF_NAME, LENGTH_OF_FILE);
+			username = line.substring(LENGTH_OF_ID, END_OF_NAME);
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Line 114 error " + e);
 		}
 		
 		return username;
@@ -145,7 +145,7 @@ public class Accounts
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Line 148 error " + e);
 		}
 		
 		return -1;
@@ -179,7 +179,7 @@ public class Accounts
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Line 182 error " + e);
 		}
 			
 		return -1;
@@ -233,10 +233,43 @@ public class Accounts
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Line 236 error " + e);
 		}
 		
 		return ID;
+	}
+	
+	//method uses looks for index of searchterm "searchID"; returns index of where "searchID"
+	//was found or -1 if not found.
+	public static int getIDIndex(String searchID)
+	{
+		String id = "";
+		int index = -1;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+				index = index + 1;
+					
+				String line = raf.readLine();
+				id = line.substring(0, LENGTH_OF_ID);
+						
+				if(id.equals(searchID))
+				{
+					return index;
+				}
+					
+				raf.seek(LENGTH_OF_FILE * (index + 1));
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+				
+		return -1;
 	}
 	
 	//Method uses last value of ID to check whether teacher or student;
@@ -263,7 +296,7 @@ public class Accounts
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Line 266 error " + e);
 		}
 		
 		return isTeacher;

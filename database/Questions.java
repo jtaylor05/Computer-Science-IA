@@ -20,8 +20,8 @@ public class Questions
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
 	{
-		//addQuestion("Question 1", "images/question_1");
-		//addQuestion("Question 2", "images/question_2");
+		//addQuestion("Question 1", "images/question_1", 10);
+		//addQuestion("Question 2", "images/question_2", 12);
 		
 		String name = getName(0);
 		String id = getID(0);
@@ -71,7 +71,7 @@ public class Questions
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Q74 error " + e);
 		}
 		
 		return ID;
@@ -92,7 +92,7 @@ public class Questions
 				index = index + 1;
 				
 				String line = raf.readLine();
-				id = line.substring(LENGTH_OF_ID, END_OF_NAME);
+				id = line.substring(0, LENGTH_OF_ID);
 					
 				if(id.equals(searchID))
 				{
@@ -104,7 +104,7 @@ public class Questions
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Q107 error " + e);
 		}
 			
 		return -1;
@@ -131,7 +131,7 @@ public class Questions
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Q134 error " + e);
 		}
 		
 		return filePath;
@@ -158,7 +158,7 @@ public class Questions
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Q161 error " + e);
 		}
 		
 		return name;
@@ -192,7 +192,7 @@ public class Questions
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Q195 error " + e);
 		}
 		
 		return -1;
@@ -216,11 +216,11 @@ public class Questions
 			}
 			
 			String line = raf.readLine();
-			points = line.substring(END_OF_PATH, LENGTH_OF_GRADE);
+			points = line.substring(END_OF_PATH, LENGTH_OF_FILE - 1);
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("Q223 error " + e);
 		}
 		
 		points = L.shear(points);
