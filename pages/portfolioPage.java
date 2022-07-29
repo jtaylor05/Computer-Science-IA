@@ -15,7 +15,7 @@ public class portfolioPage
 	 * homePage - JButton opening homepage
 	 */
 	
-	ArrayList<Answer> as;
+	private ArrayList<Answer> as;
 
 	public portfolioPage(String ID)
 	{
@@ -40,7 +40,7 @@ public class portfolioPage
 	private ArrayList<Answer> makeList(String ID)
 	{
 		ArrayList<Answer> answers = new ArrayList<>();
-		int count = 0;
+		
 		int index = 0;
 		String id = Answers.getUserID(index);
 		while(id != null)

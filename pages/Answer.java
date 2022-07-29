@@ -3,13 +3,19 @@ package pages;
 public class Answer 
 {
 	String questionName;
-	int grade;
+	int grade = -1;
 	int maxPoints;
 	
 	public Answer(String questionName, int grade, int maxPoints)
 	{
 		this.questionName = questionName;
 		this.grade = grade;
+		this.maxPoints = maxPoints;
+	}
+	
+	public Answer(String questionName, int maxPoints)
+	{
+		this.questionName = questionName;
 		this.maxPoints = maxPoints;
 	}
 	
@@ -22,6 +28,11 @@ public class Answer
 	{
 		String finalGrade = grade + "/" + maxPoints;
 		return finalGrade;
+	}
+	
+	public int getPoints()
+	{
+		return maxPoints;
 	}
 	
 	public String toString()

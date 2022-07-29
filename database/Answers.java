@@ -20,8 +20,8 @@ public class Answers
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
 	{
-		addAnswer(Accounts.getID(0), Questions.getID(1), "images/answer_1", 7);
-		addAnswer(Accounts.getID(1), Questions.getID(0), "images/answer_2", 4);
+		//addAnswer(Accounts.getID(0), Questions.getID(1), "images/answer_1", 7);
+		//addAnswer(Accounts.getID(1), Questions.getID(0), "images/answer_2", 4);
 		
 		int index1 = getUserIDIndex(Accounts.getID(1));
 		int index2 = getQIDIndex(Questions.getID(1));
@@ -54,15 +54,16 @@ public class Answers
 	//Method uses a question and user ID to find a matching answer
 	public static int findAnswer(String userID, String QID)
 	{
-		int userIndex = 0;
-		while(userIndex > -1)
+		int userIndex = -1;
+		do
 		{
-			userIndex = getUserIDIndex(userID, userIndex);
+			userIndex = getUserIDIndex(userID, userIndex + 1);
 			if(QID.equals(getQID(userIndex)))
 			{
 				return userIndex;
 			}
 		}
+		while(userIndex > -1);
 		
 		return -1;
 	}
@@ -189,10 +190,10 @@ public class Answers
 		try
 		{
 			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf.seek(LENGTH_OF_FILE * index);
 			int length = (int)raf.length();
 			while(raf.getFilePointer() < length)
 			{
-				index = index + 1;
 					
 				String line = raf.readLine();
 				id = line.substring(0, LENGTH_OF_USERID);
@@ -201,7 +202,8 @@ public class Answers
 				{
 					return index;
 				}
-						
+				
+				index = index + 1;
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
 		}
@@ -255,11 +257,10 @@ public class Answers
 		try
 		{
 			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf.seek(LENGTH_OF_FILE * index);
 			int length = (int)raf.length();
 			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-						
+			{			
 				String line = raf.readLine();
 				id = line.substring(LENGTH_OF_USERID, END_OF_ID);
 					
@@ -267,7 +268,8 @@ public class Answers
 				{
 					return index;
 				}
-							
+				
+				index = index + 1;
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
 		}

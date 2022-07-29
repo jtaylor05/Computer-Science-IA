@@ -2,8 +2,10 @@ package pages;
 
 import java.util.*;
 
+import database.Accounts;
 import database.Answers;
 import database.Questions;
+import library.L;
 
 public class questionListPage 
 {
@@ -24,11 +26,16 @@ public class questionListPage
 		
 		if(teacher)
 		{
-			
+			questionList = makeList();
 		}
 		else
 		{
 			questionList = makeList(ID);
+		}
+		
+		for(int i = 0; i < questionList.size(); i++)
+		{
+			System.out.println(questionList.get(i));
 		}
 	}
 	
@@ -36,12 +43,31 @@ public class questionListPage
 	
 	//public void homePage() - closes questionListPage and opens dropInPage
 	
+	public ArrayList<Question> makeList()
+	{
+		ArrayList<Question> questions = new ArrayList<>();
+		
+		int index = 0;
+		String QID = Questions.getID(index);
+		
+		while(QID != null)
+		{
+			String name = Questions.getName(index);
+			name = L.shear(name);
+			int maxPoints = Questions.getPoints(index);
+			
+			Question q = new Question(QID, name, maxPoints);
+			
+			questions.add(q);
+		}
+		
+		return questions;
+	}
 	
 	public ArrayList<Question> makeList(String userID)
 	{
 		ArrayList<Question> questions = new ArrayList<>();
 		
-		int count = 0;
 		int index = 0;
 		String QID = Questions.getID(index);
 		while(QID != null)
@@ -54,19 +80,19 @@ public class questionListPage
 			}
 			
 			String name = Questions.getName(index);
+			name = L.shear(name);
 			String filePath = Questions.getFilePath(index);
 			int maxPoints = Questions.getPoints(index);	
 			String message = "";
-			
 			Question q = null;
 			if(points > -1)
 			{
 				String grade = points + "/" + maxPoints;
-				q = new Question(name, filePath, grade, message);
+				q = new Question(QID, name, filePath, grade, message);
 			}
 			else
 			{
-				q = new Question(name, filePath, maxPoints, message);
+				q = new Question(QID, name, filePath, maxPoints, message);
 			}
 						
 			questions.add(q);
@@ -75,12 +101,12 @@ public class questionListPage
 			QID = Questions.getID(index);
 		}
 		
-		
 		return questions;
 	}
 	
 	public static void main(String[] args)
 	{
-		
+		System.out.println(Accounts.getID(0));
+		new questionListPage(Accounts.isTeacher(0), Accounts.getID(0));
 	}
 }
