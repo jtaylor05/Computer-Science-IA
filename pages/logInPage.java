@@ -29,12 +29,20 @@ public class logInPage extends JFrame
 	private JPanel okCloseBox = new JPanel();
 	private JButton ok = new JButton("ok");
 	private JButton close = new JButton("close");
+	private JButton toRegister = new JButton("go register");
 	
 	private JLabel prompt = new JLabel("please enter log-in details");
 	
 	private JPanel userPassBox = new JPanel();
+	private boolean userBoxTyped = false;
 	private JTextField usernameBox = new JTextField("Enter Username");
-	private JTextField passwordBox = new JTextField("Enter Password");
+	
+	private boolean passwordVisible = false;
+	private JButton setPassVisible = new JButton("change password visibility");
+	private String enteredPass = "";
+	private boolean passBoxTyped = false;
+	private final String passwordPrompt = "Enter Password";
+	private JTextField passwordBox = new JTextField(passwordPrompt);
 	private JTextField confirmPasswordBox = new JTextField("Confirm Password");
 	private JTextField emailBox = new JTextField("Enter Email");
 	
@@ -43,7 +51,7 @@ public class logInPage extends JFrame
 		teacher = isTeacher;
 		register = isRegister;
 		
-		okCloseBox.setLayout(new GridLayout(1, 2));
+		okCloseBox.setLayout(new GridLayout(1, 3));
 		ok.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
@@ -84,12 +92,135 @@ public class logInPage extends JFrame
 			
 		});
 		close.setPreferredSize(new Dimension(200, 50));
-		okCloseBox.add(close); okCloseBox.add(ok);
+		toRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!register)
+				{
+					register = true;
+					toRegister.setText("log-in");
+				}
+				else
+				{
+					register = false;
+					toRegister.setText("go register");
+				}
+			}
+		});
+		okCloseBox.add(close); okCloseBox.add(toRegister); okCloseBox.add(ok);
 		
 		userPassBox.setLayout(new GridLayout(5, 1));
 		userPassBox.add(new JLabel(""));
+		usernameBox.addKeyListener(new KeyAdapter()
+				{
+					public void keyPressed(KeyEvent e)
+					{
+						if(!userBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+						{
+							usernameBox.setText("");
+							userBoxTyped = true;
+						}
+					}
+					
+					public void keyReleased(KeyEvent e)
+					{
+						if(usernameBox.getText().equals(""))
+						{
+							usernameBox.setText("Enter Username");
+							userBoxTyped = false;
+						}
+					}
+				});
 		userPassBox.add(usernameBox); userPassBox.add(new JLabel(""));
-		userPassBox.add(passwordBox); userPassBox.add(new JLabel(""));
+		passwordBox.addKeyListener(new KeyAdapter()
+				{
+			
+					public void keyPressed(KeyEvent e)
+					{
+						 if(passwordVisible && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+						    {
+						    	enteredPass = enteredPass + e.getKeyChar();
+						    }
+							else if(!passBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+							{
+								
+								int length = passwordBox.getText().length() - passwordPrompt.length();
+								String input = passwordBox.getText().substring(passwordPrompt.length());
+								String str = "";
+								for(int i = 0; i < length; i++)
+								{
+									str = str + "*";
+								}
+								passwordBox.setText(str);
+								passBoxTyped = true;
+								
+								enteredPass = enteredPass + input; 
+							}
+							else if(e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+							{
+								int length = passwordBox.getText().length();
+								String str = "";
+								for(int i = 0; i < length; i++)
+								{
+									str = str + "*";
+								}
+								
+								passwordBox.setText(str);
+								
+								enteredPass = enteredPass += e.getKeyChar(); 
+							}
+							else if(e.getKeyChar() == 8)
+							{
+								if(!passBoxTyped)
+								{
+									passwordBox.setText("");
+									passBoxTyped = true;
+								}
+								
+								if(enteredPass.length() > 0)
+								{
+									enteredPass = enteredPass.substring(0, enteredPass.length()-1);
+									System.out.println(enteredPass);
+								}
+								
+								if(passwordVisible)
+								{
+									passwordBox.setText(enteredPass + " ");
+								}
+								else
+								{
+									int length = passwordBox.getText().length();
+									String str = "";
+									for(int i = 0; i < length; i++)
+									{
+										str = str + "*";
+									}
+								
+									passwordBox.setText(str);
+								}
+							}
+					}
+				});
+		userPassBox.add(passwordBox);
+		setPassVisible.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				passwordVisible = !passwordVisible;
+				System.out.println(enteredPass);
+				if(passwordVisible)
+				{
+					passwordBox.setText(enteredPass);
+				}
+				else
+				{
+					String str = "";
+					for(int i = 0; i < enteredPass.length(); i++)
+					{
+						str = str + "*";
+					}
+					passwordBox.setText(str);
+				}
+			}
+		});
+		userPassBox.add(setPassVisible);
 		
 		this.setLayout(new GridLayout(3, 1));
 		this.getContentPane().add(prompt);
@@ -106,7 +237,7 @@ public class logInPage extends JFrame
 		String password = passwordBox.getText();
 		
 		int uIndex = Accounts.getUsernameIndex(username);
-		int pIndex = Accounts.getUsernameIndex(password);
+		int pIndex = Accounts.getPasswordIndex(password);
 		
 		if(uIndex > -1 && pIndex > -1 && uIndex == pIndex)
 		{
@@ -140,11 +271,6 @@ public class logInPage extends JFrame
 		return false;
 	}
 	
-	//public void registerPage() - refreshes log-in page as register info page when registerButton is pressed
-	//	changes pageType to 1
-	//public void teacherPage() - refreshes log-in page as teacher log-in page when teacherLogIn is pressed
-	//	changes pageType to 2
-	
 	public void dropInPage(boolean teacher, String ID)
 	{
 		//dropInPage(teacher, ID);
@@ -159,4 +285,5 @@ public class logInPage extends JFrame
 		lip.setVisible(true);
 		lip.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
+
 }
