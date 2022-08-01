@@ -1,6 +1,6 @@
 package pages;
 
-import java.awt.event.*; 
+import java.awt.event.*;  
 import java.awt.*;
 import javax.swing.*;
 import database.*;
@@ -31,7 +31,11 @@ public class logInPage extends JFrame
 	private JButton close = new JButton("close");
 	private JButton toRegister = new JButton("go register");
 	
-	private JLabel prompt = new JLabel("please enter log-in details");
+	private final String logInPrompt = "please enter log-in details";
+	private final String logInFail = "wrong account details";
+	private final String registerPrompt = "please enter new account details";
+	private final String registerFail = "account already exists";
+	private JLabel prompt = new JLabel(logInPrompt);
 	
 	private JPanel userPassBox = new JPanel();
 	private boolean userBoxTyped = false;
@@ -40,10 +44,13 @@ public class logInPage extends JFrame
 	private boolean passwordVisible = false;
 	private JButton setPassVisible = new JButton("change password visibility");
 	private String enteredPass = "";
+	private String confirmedPass = "";
 	private boolean passBoxTyped = false;
+	private boolean confirmPassTyped = false;
 	private final String passwordPrompt = "Enter Password";
 	private JTextField passwordBox = new JTextField(passwordPrompt);
-	private JTextField confirmPasswordBox = new JTextField("Confirm Password");
+	private final String confirmPrompt = "Confirm Password";
+	private JTextField confirmPasswordBox = new JTextField(confirmPrompt);
 	private JTextField emailBox = new JTextField("Enter Email");
 	
 	public logInPage(boolean isTeacher, boolean isRegister)
@@ -77,7 +84,14 @@ public class logInPage extends JFrame
 					}
 					else
 					{
-						prompt.setText("wrong account details");
+						if(register)
+						{
+							prompt.setText(registerFail);
+						}
+						else
+						{
+							prompt.setText(logInFail);
+						}
 					}
 				}
 			}
@@ -98,17 +112,26 @@ public class logInPage extends JFrame
 				{
 					register = true;
 					toRegister.setText("log-in");
+					prompt.setText(registerPrompt);
+					userPassBox.remove(setPassVisible);
+					userPassBox.add(confirmPasswordBox);
+					userPassBox.add(setPassVisible);
 				}
 				else
 				{
 					register = false;
 					toRegister.setText("go register");
+					prompt.setText(logInPrompt);
+					confirmPasswordBox.setText(confirmPrompt);
+					confirmPassTyped = false;
+					userPassBox.remove(confirmPasswordBox);
+					confirmedPass = "";
 				}
 			}
 		});
 		okCloseBox.add(close); okCloseBox.add(toRegister); okCloseBox.add(ok);
 		
-		userPassBox.setLayout(new GridLayout(5, 1));
+		userPassBox.setLayout(new GridLayout(6, 1));
 		userPassBox.add(new JLabel(""));
 		usernameBox.addKeyListener(new KeyAdapter()
 				{
@@ -133,29 +156,63 @@ public class logInPage extends JFrame
 		userPassBox.add(usernameBox); userPassBox.add(new JLabel(""));
 		passwordBox.addKeyListener(new KeyAdapter()
 				{
+					public void keyReleased(KeyEvent e)
+					{
+						if(!passBoxTyped && e.getKeyChar() == 8)
+						{
+							passwordBox.setText("");
+							passBoxTyped = true;
+						}
+						else if(!passBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+						{
+								
+							int length = passwordBox.getText().length() - passwordPrompt.length();
+							String input = passwordBox.getText().substring(passwordPrompt.length());
+							String str = "";
+							for(int i = 0; i < length; i++)
+							{
+								str = str + "*";
+							}
+							passwordBox.setText(str);
+							passBoxTyped = true;
+								
+							enteredPass = enteredPass + input; 
+						}
+					}
+					
 			
 					public void keyPressed(KeyEvent e)
 					{
-						 if(passwordVisible && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
-						    {
-						    	enteredPass = enteredPass + e.getKeyChar();
-						    }
-							else if(!passBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+						if(passwordVisible && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+						{
+						  	enteredPass = enteredPass + e.getKeyChar();
+						}
+						else if(passBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+						{
+							int length = passwordBox.getText().length();
+							String str = "";
+							for(int i = 0; i < length; i++)
 							{
-								
-								int length = passwordBox.getText().length() - passwordPrompt.length();
-								String input = passwordBox.getText().substring(passwordPrompt.length());
-								String str = "";
-								for(int i = 0; i < length; i++)
-								{
-									str = str + "*";
-								}
-								passwordBox.setText(str);
-								passBoxTyped = true;
-								
-								enteredPass = enteredPass + input; 
+								str = str + "*";
 							}
-							else if(e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+							
+							passwordBox.setText(str);
+								
+							enteredPass = enteredPass += e.getKeyChar(); 
+						}
+						else if(passBoxTyped && e.getKeyChar() == 8)
+						{	
+							if(enteredPass.length() > 0)
+							{
+								enteredPass = enteredPass.substring(0, enteredPass.length()-1);
+								System.out.println(enteredPass);
+							}
+								
+							if(passwordVisible)
+							{
+								passwordBox.setText(enteredPass + " ");
+							}
+							else
 							{
 								int length = passwordBox.getText().length();
 								String str = "";
@@ -165,58 +222,125 @@ public class logInPage extends JFrame
 								}
 								
 								passwordBox.setText(str);
-								
-								enteredPass = enteredPass += e.getKeyChar(); 
 							}
-							else if(e.getKeyChar() == 8)
-							{
-								if(!passBoxTyped)
-								{
-									passwordBox.setText("");
-									passBoxTyped = true;
-								}
-								
-								if(enteredPass.length() > 0)
-								{
-									enteredPass = enteredPass.substring(0, enteredPass.length()-1);
-									System.out.println(enteredPass);
-								}
-								
-								if(passwordVisible)
-								{
-									passwordBox.setText(enteredPass + " ");
-								}
-								else
-								{
-									int length = passwordBox.getText().length();
-									String str = "";
-									for(int i = 0; i < length; i++)
-									{
-										str = str + "*";
-									}
-								
-									passwordBox.setText(str);
-								}
-							}
+						}
 					}
 				});
 		userPassBox.add(passwordBox);
-		setPassVisible.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				passwordVisible = !passwordVisible;
-				System.out.println(enteredPass);
-				if(passwordVisible)
+		confirmPasswordBox.addKeyListener(new KeyAdapter()
+		{
+			public void keyReleased(KeyEvent e)
+			{
+				if(!confirmPassTyped && e.getKeyChar() == 8)
 				{
-					passwordBox.setText(enteredPass);
+					confirmPasswordBox.setText("");
+					confirmPassTyped = true;
 				}
-				else
+				else if(!confirmPassTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
 				{
+						
+					int length = confirmPasswordBox.getText().length() - confirmPrompt.length();
+					String input = confirmPasswordBox.getText().substring(confirmPrompt.length());
 					String str = "";
-					for(int i = 0; i < enteredPass.length(); i++)
+					for(int i = 0; i < length; i++)
 					{
 						str = str + "*";
 					}
-					passwordBox.setText(str);
+					confirmPasswordBox.setText(str);
+					confirmPassTyped = true;
+						
+					confirmedPass = confirmedPass + input; 
+				}
+			}
+			
+	
+			public void keyPressed(KeyEvent e)
+			{
+				if(passwordVisible && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+				{
+					confirmedPass = confirmedPass + e.getKeyChar();
+				}
+				else if(confirmPassTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+				{
+					int length = confirmPasswordBox.getText().length();
+					String str = "";
+					for(int i = 0; i < length; i++)
+					{
+						str = str + "*";
+					}
+					
+					confirmPasswordBox.setText(str);
+						
+					confirmedPass = confirmedPass += e.getKeyChar(); 
+				}
+				else if(confirmPassTyped && e.getKeyChar() == 8)
+				{		
+					if(confirmedPass.length() > 0)
+					{
+						confirmedPass = confirmedPass.substring(0, confirmedPass.length()-1);
+						System.out.println(confirmedPass);
+					}
+						
+					if(passwordVisible)
+					{
+						confirmPasswordBox.setText(confirmedPass + " ");
+					}
+					else
+					{
+						int length = confirmPasswordBox.getText().length();
+						String str = "";
+						for(int i = 0; i < length; i++)
+						{
+							str = str + "*";
+						}
+						
+						confirmPasswordBox.setText(str);
+					}
+				}
+			}
+		});
+		setPassVisible.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				passwordVisible = !passwordVisible;
+				if(passBoxTyped)
+				{
+					if(passwordVisible)
+					{
+						passwordBox.setText(enteredPass);
+						confirmPasswordBox.setText(confirmedPass);
+					}
+					else
+					{
+						String str = "";
+						for(int i = 0; i < enteredPass.length(); i++)
+						{
+							str = str + "*";
+						}
+						passwordBox.setText(str);
+						
+						str = "";
+						for(int i = 0; i < confirmedPass.length(); i++)
+						{
+							str = str + "*";
+						}
+						confirmPasswordBox.setText(str);
+					}
+				}
+				if(confirmPassTyped)
+				{
+					if(passwordVisible)
+					{
+						confirmPasswordBox.setText(confirmedPass);
+					}
+					else
+					{
+						String str = "";
+						for(int i = 0; i < confirmedPass.length(); i++)
+						{
+							str = str + "*";
+						}
+						confirmPasswordBox.setText(str);
+					}
 				}
 			}
 		});
@@ -234,7 +358,7 @@ public class logInPage extends JFrame
 	public boolean validateInfo()
 	{
 		String username = usernameBox.getText();
-		String password = passwordBox.getText();
+		String password = enteredPass;
 		
 		int uIndex = Accounts.getUsernameIndex(username);
 		int pIndex = Accounts.getPasswordIndex(password);
@@ -250,8 +374,8 @@ public class logInPage extends JFrame
 	//Adds account and returns true if not, returns false if yes.
 	public boolean registerInfo()
 	{
-		String password1 = passwordBox.getText();
-		String password2 = confirmPasswordBox.getText();
+		String password1 = enteredPass;
+		String password2 = confirmedPass;
 		
 		if(!password1.equals(password2))
 		{
@@ -273,7 +397,7 @@ public class logInPage extends JFrame
 	
 	public void dropInPage(boolean teacher, String ID)
 	{
-		//dropInPage(teacher, ID);
+		new dropInPage(teacher, ID);
 		setVisible(false);
 		dispose();
 	}
