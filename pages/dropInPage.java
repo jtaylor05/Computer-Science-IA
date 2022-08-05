@@ -51,14 +51,27 @@ public class dropInPage extends JFrame
 		infoBox.setLayout(new GridLayout(3, 1));
 		infoBox.add(unansweredQuestions); infoBox.add(returnedQuestions); infoBox.add(feedback);
 		
+		questionPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				questionList();
+			}
+		});
+		portfolioPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				portfolioList();
+			}
+		});
+		
 		routingBox.setLayout(new GridLayout(1, 3));
 		routingBox.add(questionPage); routingBox.add(new JLabel("   ")); routingBox.add(portfolioPage);
 		
-		this.setLayout(new GridLayout(3, 1));
-		this.add(logOutRow);
-		this.add(infoBox);
-		this.add(routingBox);
-		this.setVisible(true);
+		setLayout(new GridLayout(3, 1));
+		getContentPane().add(logOutRow);
+		getContentPane().add(infoBox);
+		getContentPane().add(routingBox);
+		getContentPane().setVisible(true);
 		pack();
 	}
 	
@@ -72,7 +85,7 @@ public class dropInPage extends JFrame
 	//opens question list page and closes drop in page; returns nothing.
 	public void questionList()
 	{
-		//questionList(teacher, ID)
+		new questionListPage(teacher, ID).setVisible(true);
 		setVisible(false);
 		dispose();
 	}

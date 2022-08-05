@@ -1,11 +1,11 @@
 package pages;
 
 import java.util.*;
+import javax.swing.*;
+import java.awt.event.*;
+import database.*;
 
-import database.Accounts;
-import database.Answers;
-
-public class questionPage
+public class questionPage extends JFrame
 {
 	/*
 	 * isTeacher - boolean holding true if user is teacher, false if not
@@ -22,6 +22,8 @@ public class questionPage
 	private Question question;
 	private ArrayList<Answer> answers = new ArrayList<>();
 	private boolean teacher;
+	
+	private JPanel questionBox = new JPanel();
 	
 	public questionPage(Question q, boolean isTeacher)
 	{

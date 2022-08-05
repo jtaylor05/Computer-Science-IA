@@ -2,15 +2,16 @@ package pages;
 
 public class Question 
 {
-	String ID;
+	private boolean teacher = false;
+	private boolean hasAnswer = false;
 	
-	String name;
-	String filePath;
-	int maxPoints = -1;
-	String grade = "ungraded";
-	boolean hasAnswer = false;
-	String message;
-	boolean teacher = false;
+	private String ID;
+	private String name;
+	private String filePath;
+	private String grade;
+	private String message = "not graded";
+	private int maxPoints;
+	
 	
 	public Question(String ID, String name, String filePath, int maxPoints, String message)
 	{
@@ -20,17 +21,17 @@ public class Question
 		this.maxPoints = maxPoints;
 		this.message = message;
 	}
-	
+		
 	public Question(String ID, String name, String filePath, String grade, String message)
 	{
 		this.ID = ID;
 		this.name = name;
 		this.filePath = filePath;
 		this.grade = grade;
-		hasAnswer = true;
 		this.message = message;
+		hasAnswer = true;
 	}
-	
+		
 	public Question(String ID, String name, int maxPoints)
 	{
 		this.ID = ID;
@@ -38,31 +39,27 @@ public class Question
 		this.maxPoints = maxPoints;
 		teacher = true;
 	}
+		
+	public String getID()
+	{ return ID; }
 	
 	public String getName()
-	{
-		return name;
-	}
-	
-	public String getFilePath()
-	{
-		return filePath;
-	}
-	
-	public String getGrade()
-	{
-		return grade;
-	}
+	{ return name; }
 	
 	public int getPoints()
-	{
-		return maxPoints;
-	}
+	{ return maxPoints; }
 	
-	public String getID()
-	{
-		return ID;
-	}
+	public String getPath()
+	{ return filePath; }
+	
+	public boolean hasAnswered()
+	{ return hasAnswer; }
+	
+	public String getGrade()
+	{ return grade; }
+	
+	public String getMessage()
+	{ return message; }
 	
 	public String toString()
 	{
@@ -79,7 +76,7 @@ public class Question
 		{
 			str = name + " : (" + grade + ")"; 
 		}
-		
-		return str;
-	}
+			
+			return str;
+		}
 }

@@ -53,11 +53,8 @@ public class logInPage extends JFrame
 	private JTextField confirmPasswordBox = new JTextField(confirmPrompt);
 	private JTextField emailBox = new JTextField("Enter Email");
 	
-	public logInPage(boolean isTeacher, boolean isRegister)
+	public logInPage()
 	{
-		teacher = isTeacher;
-		register = isRegister;
-		
 		okCloseBox.setLayout(new GridLayout(1, 3));
 		ok.addActionListener(new ActionListener(){
 
@@ -346,10 +343,10 @@ public class logInPage extends JFrame
 		});
 		userPassBox.add(setPassVisible);
 		
-		this.setLayout(new GridLayout(3, 1));
-		this.getContentPane().add(prompt);
-		this.getContentPane().add(userPassBox);
-		this.getContentPane().add(okCloseBox);
+		setLayout(new GridLayout(3, 1));
+		getContentPane().add(prompt);
+		getContentPane().add(userPassBox);
+		getContentPane().add(okCloseBox);
 		pack();
 	}
 	
@@ -397,14 +394,14 @@ public class logInPage extends JFrame
 	
 	public void dropInPage(boolean teacher, String ID)
 	{
-		new dropInPage(teacher, ID);
+		new dropInPage(teacher, ID).setVisible(true);
 		setVisible(false);
 		dispose();
 	}
 	
 	public static void main(String[] args)
 	{
-		logInPage lip = new logInPage(false, false);
+		logInPage lip = new logInPage();
 		lip.setSize(300, 300);
 		lip.setVisible(true);
 		lip.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
