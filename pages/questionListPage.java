@@ -107,7 +107,7 @@ public class questionListPage extends JFrame
 				JButton jb = new JButton(questionList.get(i).getName());
 				jb.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						new questionPage(q, teacher).setVisible(true);
+						new questionPage(q, ID, teacher).setVisible(true);
 						setVisible(false);
 						dispose();
 					}

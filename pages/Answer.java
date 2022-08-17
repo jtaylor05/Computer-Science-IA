@@ -5,6 +5,16 @@ public class Answer
 	String questionName;
 	int grade = -1;
 	int maxPoints;
+	String filePath;
+	boolean hasAnswer = true;
+	
+	public Answer(String questionName, String filePath, int grade, int maxPoints)
+	{
+		this.questionName = questionName;
+		this.grade = grade;
+		this.maxPoints = maxPoints;
+		this.filePath = filePath;
+	} 
 	
 	public Answer(String questionName, int grade, int maxPoints)
 	{
@@ -17,6 +27,7 @@ public class Answer
 	{
 		this.questionName = questionName;
 		this.maxPoints = maxPoints;
+		hasAnswer = false;
 	}
 	
 	public String getName()
@@ -24,7 +35,7 @@ public class Answer
 		return questionName;
 	}
 	
-	public String getGrade() 
+	public String getOutOf() 
 	{
 		String finalGrade = grade + "/" + maxPoints;
 		return finalGrade;
@@ -33,6 +44,21 @@ public class Answer
 	public int getPoints()
 	{
 		return maxPoints;
+	}
+	
+	public int getGrade()
+	{
+		return grade;
+	}
+	
+	public String getPath()
+	{
+		return filePath;
+	}
+	
+	public boolean hasAnswer()
+	{
+		return hasAnswer;
 	}
 	
 	public String toString()
