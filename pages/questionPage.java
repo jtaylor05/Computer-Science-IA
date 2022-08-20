@@ -76,7 +76,6 @@ public class questionPage extends JFrame
 		});
 		homeRow.add(new JLabel("")); homeRow.add(home);
 		
-		System.out.println(teacher);
 		if(teacher)
 		{
 			answerScroller = new JScrollPane(answerBox);
@@ -85,8 +84,53 @@ public class questionPage extends JFrame
 			for(int i = 0; i < answers.size(); i++)
 			{
 				JPanel jp = new JPanel();
+				jp.setLayout(new GridLayout(1, 5));
 						
+				final Answer a = answers.get(i);
 				
+				Canvas c = new Canvas() {
+					public void paint(Graphics g)
+					{
+						Toolkit t = Toolkit.getDefaultToolkit();
+						Image i = t.getImage(a.getPath() + ".png");
+						g.drawImage(i, 50, 50, this);
+					}
+				};
+				jp.add(c);
+				
+				JLabel user = new JLabel(a.getUser());
+				jp.add(user);
+				
+				JLabel grade = new JLabel("");
+				if(a.hasAnswer())
+				{
+					grade.setText("Grade: " + a.getOutOf());
+				}
+				else
+				{
+					grade.setText("Grade: N/A");
+				}
+				jp.add(grade);
+				
+				JButton edit = new JButton("Edit");
+				edit.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e)
+					{
+						edit(teacher);
+					}
+				});
+				jp.add(edit);
+				
+				JButton submit = new JButton("Submit");
+				submit.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e)
+					{
+						submit(answer.getPath());
+					}
+				});
+				jp.add(submit);
+				
+				answerBox.add(jp);
 			}
 		}
 		else
@@ -181,22 +225,29 @@ public class questionPage extends JFrame
 		ArrayList<Answer> as = new ArrayList<>();
 		int index = 0;
 		String userID = Accounts.getID(index);
+		String name = Accounts.getUsername(index);
+		
+		System.out.println(question.getID());
 		while(userID != null) 
 		{
+			System.out.println(userID);
+			System.out.println(name);
 			int answerIndex = Answers.findAnswer(userID, question.getID());
+			
 			Answer a;
 			if(answerIndex > -1)
 			{
-				a = new Answer(question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getPoints());
+				a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getPoints());
 			}
 			else
 			{
-				a = new Answer(question.getName(), question.getPoints());
+				a = new Answer(name, question.getName(), question.getPoints());
 			}
 			as.add(a);
 			
 			index = index + 1;
 			userID = Accounts.getID(index);
+			name = Accounts.getUsername(index);
 		}
 		
 		return as;

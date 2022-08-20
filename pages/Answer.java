@@ -2,11 +2,21 @@ package pages;
 
 public class Answer 
 {
+	String username;
 	String questionName;
 	int grade = -1;
 	int maxPoints;
 	String filePath;
 	boolean hasAnswer = true;
+	
+	public Answer(String user, String questionName, String filePath, int grade, int maxPoints)
+	{
+		this.username = user;
+		this.questionName = questionName;
+		this.grade = grade;
+		this.maxPoints = maxPoints;
+		this.filePath = filePath;
+	} 
 	
 	public Answer(String questionName, String filePath, int grade, int maxPoints)
 	{
@@ -21,6 +31,14 @@ public class Answer
 		this.questionName = questionName;
 		this.grade = grade;
 		this.maxPoints = maxPoints;
+	}
+	
+	public Answer(String user, String questionName, int maxPoints)
+	{
+		this.username = user;
+		this.questionName = questionName;
+		this.maxPoints = maxPoints;
+		hasAnswer = false;
 	}
 	
 	public Answer(String questionName, int maxPoints)
@@ -54,6 +72,11 @@ public class Answer
 	public String getPath()
 	{
 		return filePath;
+	}
+	
+	public String getUser()
+	{
+		return username;
 	}
 	
 	public boolean hasAnswer()

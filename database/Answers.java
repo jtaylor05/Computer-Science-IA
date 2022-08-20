@@ -58,6 +58,7 @@ public class Answers
 		do
 		{
 			userIndex = getUserIDIndex(userID, userIndex + 1);
+			System.out.println(userIndex);
 			if(QID.equals(getQID(userIndex)))
 			{
 				return userIndex;
@@ -89,7 +90,7 @@ public class Answers
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("error on getUserID " + e);
 		}
 		
 		return ID;
@@ -116,7 +117,7 @@ public class Answers
 		}
 		catch(Exception e)
 		{
-			System.out.println("error " + e);
+			System.out.println("error on getQID" + e);
 		}			
 		return ID;
 	}
@@ -197,14 +198,15 @@ public class Answers
 					
 				String line = raf.readLine();
 				id = line.substring(0, LENGTH_OF_USERID);
+				System.out.println("A: " + id + " B: " + searchUserID);
 					
 				if(id.equals(searchUserID))
 				{
 					return index;
 				}
-				
+				System.out.println("A: " + index);
 				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * (index + 1));
+				raf.seek(LENGTH_OF_FILE * index);
 			}
 		}
 		catch(Exception e)

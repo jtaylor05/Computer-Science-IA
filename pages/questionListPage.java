@@ -78,6 +78,17 @@ public class questionListPage extends JFrame
 				};
 				jp.add(c);
 				
+				JButton jb = new JButton(q.getName());
+				jb.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e)
+					{
+						new questionPage(q, ID, teacher).setVisible(true);
+						setVisible(false);
+						dispose();
+					}
+				});
+				jp.add(jb);
+				
 				JLabel jl = new JLabel();
 				jl.setText("Out of " + q.getPoints() + " points");
 				jp.add(jl);
@@ -157,12 +168,14 @@ public class questionListPage extends JFrame
 		while(QID != null)
 		{
 			String name = Questions.getName(index);
-			name = L.shear(name);
 			int maxPoints = Questions.getPoints(index);
 			
 			Question q = new Question(QID, name, maxPoints);
 			
 			questions.add(q);
+			
+			index = index + 1;
+			QID = Questions.getID(index);
 		}
 		
 		return questions;
@@ -210,7 +223,6 @@ public class questionListPage extends JFrame
 	
 	public static void main(String[] args)
 	{
-		System.out.println(Accounts.getID(0));
-		new questionListPage(Accounts.isTeacher(0), Accounts.getID(0));
+		new questionListPage(Accounts.isTeacher(1), Accounts.getID(1));
 	}
 }

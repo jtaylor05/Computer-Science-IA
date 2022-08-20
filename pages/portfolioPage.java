@@ -4,8 +4,13 @@ import java.util.*;
 import javax.swing.*;
 import database.*;
 
-public class portfolioPage 
+public class portfolioPage extends JFrame
 {
+	private JPanel homeRow = new JPanel();
+	private JPanel portfolioBox = new JPanel();
+	
+	private JButton home = new JButton("Go to menu");
+	
 	private JLabel portfolio = new JLabel("");
 	
 	/*

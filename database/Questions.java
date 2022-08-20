@@ -161,7 +161,7 @@ public class Questions
 			System.out.println("Q161 error " + e);
 		}
 		
-		return name;
+		return L.shear(name);
 	}
 	
 	//method uses looks for index of searchterm "name"; returns index of where "name"
