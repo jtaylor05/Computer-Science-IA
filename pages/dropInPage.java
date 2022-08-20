@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
+import database.Accounts;
+
 public class dropInPage extends JFrame
 {
 	/*
@@ -28,6 +30,7 @@ public class dropInPage extends JFrame
 	private JLabel unansweredQuestions = new JLabel();
 	private JLabel returnedQuestions = new JLabel();
 	private JLabel feedback = new JLabel();
+	private JLabel newAnswers = new JLabel();
 	
 	
 	public dropInPage(boolean isTeacher, String id)
@@ -45,12 +48,19 @@ public class dropInPage extends JFrame
 		});
 		logOutRow.add(new JLabel()); logOutRow.add(logOut);
 		
-		unansweredQuestions.setText("You have " + " unanswered Questions");
-		returnedQuestions.setText("You have " + " returned questions");
-		feedback.setText("You have recieved feedback on " + " question");
-		infoBox.setLayout(new GridLayout(3, 1));
-		infoBox.add(unansweredQuestions); infoBox.add(returnedQuestions); infoBox.add(feedback);
-		
+		if(teacher)
+		{
+			newAnswers.setText("There have been " + " new responses");
+			infoBox.add(newAnswers);
+		}
+		else
+		{
+			unansweredQuestions.setText("You have " + " unanswered Questions");
+			returnedQuestions.setText("You have " + " returned questions");
+			feedback.setText("You have recieved feedback on " + " question");
+			infoBox.setLayout(new GridLayout(3, 1));
+			infoBox.add(unansweredQuestions); infoBox.add(returnedQuestions); infoBox.add(feedback);
+		}
 		questionPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -72,6 +82,7 @@ public class dropInPage extends JFrame
 		getContentPane().add(infoBox);
 		getContentPane().add(routingBox);
 		getContentPane().setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	}
 	
@@ -93,8 +104,20 @@ public class dropInPage extends JFrame
 	//opens portfolio list page and closes drop in page; returns nothing.
 	public void portfolioList()
 	{
-		//portfolioList(teacher, ID)
+		if(teacher)
+		{
+			new portfolioListPage(teacher, ID).setVisible(true);
+		}
+		else
+		{
+			new portfolioPage(teacher, ID).setVisible(true);
+		}
 		setVisible(false);
 		dispose();
+	}
+	
+	public static void main(String[] args)
+	{
+		new dropInPage(Accounts.isTeacher(1), Accounts.getID(1)).setVisible(true);
 	}
 }

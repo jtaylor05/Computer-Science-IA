@@ -347,6 +347,7 @@ public class logInPage extends JFrame
 		getContentPane().add(prompt);
 		getContentPane().add(userPassBox);
 		getContentPane().add(okCloseBox);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	}
 	

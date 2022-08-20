@@ -1,46 +1,101 @@
 package pages;
 
-import java.util.*;
+import java.util.*; 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import database.*;
 
 public class portfolioPage extends JFrame
 {
+	boolean teacher;
 	private JPanel homeRow = new JPanel();
 	private JPanel portfolioBox = new JPanel();
 	
-	private JButton home = new JButton("Go to menu");
-	
-	private JLabel portfolio = new JLabel("");
-	
-	/*
-	 * portfolioFrame - JFrame containing all components in portfolio page
-	 * portfolioList - a list of all the student accounts, each with a link to their portfolio
-	 * portfolio - Portfolio object holding the portfolio
-	 * homePage - JButton opening homepage
-	 */
+	private JButton home = new JButton("");
 	
 	private ArrayList<Answer> as;
 
-	public portfolioPage(String ID)
+	public portfolioPage(boolean teacher, String ID)
 	{
+		this.teacher = teacher;
+		
+		home.setText("Go to menu");
+		home.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				dropInPage(teacher, ID);
+			}	
+		});
+		homeRow.add(new JLabel("")); homeRow.add(home);
+		
 		as = makeList(ID);
 		int index = Accounts.getIDIndex(ID);
-		String p = "STUDENT: " + Accounts.getUsername(index) + "\n";
-		p = p + "--------------------------------------------\n";
-
+		
+		portfolioBox.setLayout(new GridLayout(as.size() + 1, 1));
+		JLabel student = new JLabel("STUDENT: " + Accounts.getUsername(index));
+		portfolioBox.add(student);
 		for(int i = 0; i < as.size(); i++)
 		{
-			p = p + as.get(i);
+			JLabel jl = new JLabel("" + as.get(i));
+			portfolioBox.add(jl);
 		}
 		
-		System.out.println(p);
-		portfolio.setText(p);
+		setLayout(new GridLayout(2, 1));
+		add(homeRow);
+		add(portfolioBox);
+		setVisible(true);
+		pack();
 	}
 	
-	//public void homePage() - closes portfolioPage and opens dropInPage
+	public portfolioPage(boolean teacher, String ID, String studentID)
+	{
+		this.teacher = teacher;
+		
+		home.setText("Go to portfolios");
+		home.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				portfolioListPage(teacher, ID);
+			}	
+		});
+		homeRow.add(new JLabel("")); homeRow.add(home);
+		
+		as = makeList(studentID);
+		int index = Accounts.getIDIndex(studentID);
+		
+		portfolioBox.setLayout(new GridLayout(as.size() + 1, 1));
+		JLabel student = new JLabel("STUDENT: " + Accounts.getUsername(index));
+		portfolioBox.add(student);
+		for(int i = 0; i < as.size(); i++)
+		{
+			JLabel jl = new JLabel("" + as.get(i));
+			portfolioBox.add(jl);
+		}
+		
+		setLayout(new GridLayout(2, 1));
+		getContentPane().add(homeRow);
+		getContentPane().add(portfolioBox);
+		getContentPane().setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		pack();
+	}
+	
+	public void dropInPage(boolean teacher, String ID)
+	{
+		new dropInPage(teacher, ID).setVisible(true);
+		setVisible(false);
+		dispose();
+	}
 
-	//public void openPortfolio() - after a portfolio link is pressed, this will then download the portfolio and open it
+	public void portfolioListPage(boolean teacher, String ID)
+	{
+		new portfolioListPage(teacher, ID).setVisible(true);
+		setVisible(false);
+		dispose();
+	}
 	
 	private ArrayList<Answer> makeList(String ID)
 	{
@@ -71,10 +126,4 @@ public class portfolioPage extends JFrame
 		}
 		return answers;
 	}
-	
-	public static void main(String[] args)
-	{
-		portfolioPage pp = new portfolioPage(Accounts.getID(0));
-	}
-	
 }

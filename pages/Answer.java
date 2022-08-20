@@ -88,7 +88,7 @@ public class Answer
 	{
 		String str = "";
 		
-		str = str + questionName.toUpperCase() + "\n";
+		str = str + questionName.toUpperCase() + " - ";
 		str = str + grade + "/" + maxPoints;
 		
 		return str;

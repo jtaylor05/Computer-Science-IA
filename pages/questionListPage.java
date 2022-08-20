@@ -1,6 +1,6 @@
 package pages;
 
-import java.util.*; 
+import java.util.*;  
 import database.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -9,15 +9,6 @@ import library.L;
 
 public class questionListPage extends JFrame
 {
-	
-	/*
-	 * isTeacher - boolean holding true if user is teacher, false if not
-	 * questionListFrame - JFrame holding the list of questions which students can answer or teachers can look at
-	 * homePage - JButton leading back to the dropInPage
-	 * questionList - LinkedList of all of the questions
-	 * addQuestion - JButton allowing teacher user to add a question
-	 */
-	
 	private boolean teacher;
 	private ArrayList<Question> questionList;
 	
@@ -147,7 +138,8 @@ public class questionListPage extends JFrame
 		setLayout(new GridLayout(2, 1));
 		getContentPane().add(homeRow);
 		getContentPane().add(scroller);
-		setVisible(true);
+		getContentPane().setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	}
 	
@@ -219,10 +211,5 @@ public class questionListPage extends JFrame
 		}
 		
 		return questions;
-	}
-	
-	public static void main(String[] args)
-	{
-		new questionListPage(Accounts.isTeacher(1), Accounts.getID(1));
 	}
 }

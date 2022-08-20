@@ -79,6 +79,8 @@ public class questionPage extends JFrame
 		if(teacher)
 		{
 			answerScroller = new JScrollPane(answerBox);
+			answerScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			answerScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			answerBox.setLayout(new GridLayout(answers.size(), 1));
 			
 			for(int i = 0; i < answers.size(); i++)
@@ -181,9 +183,10 @@ public class questionPage extends JFrame
 		}
 		
 		setLayout(new GridLayout(2, 1));
-		add(homeRow);
-		add(answerBox);
-		setVisible(true);
+		getContentPane().add(homeRow);
+		getContentPane().add(answerBox);
+		getContentPane().setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	}
 
