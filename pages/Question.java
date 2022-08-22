@@ -8,7 +8,7 @@ public class Question
 	private String ID;
 	private String name;
 	private String filePath;
-	private String grade;
+	private int grade;
 	private String message = "not graded";
 	private int maxPoints;
 	
@@ -22,12 +22,13 @@ public class Question
 		this.message = message;
 	}
 		
-	public Question(String ID, String name, String filePath, String grade, String message)
+	public Question(String ID, String name, String filePath, int grade, int maxPoints, String message)
 	{
 		this.ID = ID;
 		this.name = name;
 		this.filePath = filePath;
 		this.grade = grade;
+		this.maxPoints = maxPoints;
 		this.message = message;
 		hasAnswer = true;
 	}
@@ -55,8 +56,11 @@ public class Question
 	public boolean hasAnswered()
 	{ return hasAnswer; }
 	
-	public String getGrade()
+	public int getGrade()
 	{ return grade; }
+	
+	public String getOutOf()
+	{ return grade + "/" + maxPoints; }
 	
 	public String getMessage()
 	{ return message; }

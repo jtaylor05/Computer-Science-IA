@@ -64,6 +64,7 @@ public class portfolioListPage extends JFrame
 		pack();
 	}
 	
+	//open a drop-in page, closes this page
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -71,6 +72,7 @@ public class portfolioListPage extends JFrame
 		dispose();
 	}
 	
+	//open a portfolio page, closes this page
 	public void portfolioPage(boolean teacher, String ID, String studentID)
 	{
 		new portfolioPage(teacher, ID, studentID).setVisible(true);
@@ -78,6 +80,7 @@ public class portfolioListPage extends JFrame
 		dispose();
 	}
 	
+	//Makes a list of all student ID's
 	public ArrayList<String> makeStudentList()
 	{
 		ArrayList<String> ids = new ArrayList<>();

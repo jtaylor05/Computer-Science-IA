@@ -83,13 +83,15 @@ public class portfolioPage extends JFrame
 		pack();
 	}
 	
+	//opens a dropInPage, closes current page
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
 		setVisible(false);
 		dispose();
 	}
-
+	
+	//opens a portfolioListPage, closes current page
 	public void portfolioListPage(boolean teacher, String ID)
 	{
 		new portfolioListPage(teacher, ID).setVisible(true);
@@ -97,6 +99,7 @@ public class portfolioPage extends JFrame
 		dispose();
 	}
 	
+	//Make a list of all answers by ID.
 	private ArrayList<Answer> makeList(String ID)
 	{
 		ArrayList<Answer> answers = new ArrayList<>();

@@ -119,7 +119,7 @@ public class questionListPage extends JFrame
 				JLabel jl = new JLabel();
 				if(q.hasAnswered())
 				{
-					jl.setText("Points: " + q.getGrade());
+					jl.setText("Points: " + q.getOutOf());
 				}
 				else
 				{
@@ -143,6 +143,7 @@ public class questionListPage extends JFrame
 		pack();
 	}
 	
+	//closes current page and opens drop-in page
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -150,6 +151,7 @@ public class questionListPage extends JFrame
 		dispose();
 	}
 	
+	//makes a list of all questions, their IDs, names, and max points
 	public ArrayList<Question> makeList()
 	{
 		ArrayList<Question> questions = new ArrayList<>();
@@ -173,6 +175,7 @@ public class questionListPage extends JFrame
 		return questions;
 	}
 	
+	//makes a list of questions as above, but includes userID's answers if there is one
 	public ArrayList<Question> makeList(String userID)
 	{
 		ArrayList<Question> questions = new ArrayList<>();
@@ -196,8 +199,7 @@ public class questionListPage extends JFrame
 			Question q = null;
 			if(points > -1)
 			{
-				String grade = points + "/" + maxPoints;
-				q = new Question(QID, name, filePath, grade, message);
+				q = new Question(QID, name, filePath, points, maxPoints, message);
 			}
 			else
 			{

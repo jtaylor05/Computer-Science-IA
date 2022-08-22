@@ -51,7 +51,7 @@ public class questionPage extends JFrame
 			int maxPoints = -1;
 			if(question.hasAnswered())
 			{
-				maxPoints = Answers.getPoints(index);
+				maxPoints = question.getPoints();
 			}
 			String filePath;
 			int grade = -1;
@@ -139,8 +139,6 @@ public class questionPage extends JFrame
 		{
 			answerBox.setLayout(new GridLayout(1, 4));
 			
-			final Answer a;
-			
 			Canvas c = new Canvas() {
 				public void paint(Graphics g)
 				{
@@ -206,9 +204,8 @@ public class questionPage extends JFrame
 	}
 	
 	
-	//public boolean submit() - allows user to submit files in dropBox as their student answer.
-	//returns true if file is submitted, false if not
 	
+	//submits a file to filePath. returns true if done, false if not
 	public boolean submit(String filePath)
 	{
 		return false;
@@ -216,6 +213,7 @@ public class questionPage extends JFrame
 	
 	//public void download() - downloads questionFile as a file to computer
 	
+	//opens a questionListPage, closing the current page
 	public void questionList()
 	{
 		new questionListPage(teacher, ID).setVisible(true);
@@ -223,6 +221,7 @@ public class questionPage extends JFrame
 		dispose();
 	}
 	
+	//make List of all answers a user has
 	public ArrayList<Answer> makeList()
 	{
 		ArrayList<Answer> as = new ArrayList<>();
