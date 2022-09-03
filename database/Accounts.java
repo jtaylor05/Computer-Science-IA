@@ -81,12 +81,46 @@ public class Accounts
 				
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Line 87 error " + e);
 		}
 		
+		return -1;
+	}
+	
+	public static int getUsernameIndex(String username, int minIndex)
+	{
+		String user = "";
+		int index = minIndex;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf.seek(LENGTH_OF_FILE * index);
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+					
+				String line = raf.readLine();
+				user = line.substring(LENGTH_OF_ID, END_OF_NAME);
+				user = L.shear(user);
+				
+				if(user.equals(username))
+				{
+					return index;
+				}
+				index = index + 1;
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+				
 		return -1;
 	}
 	
@@ -108,6 +142,7 @@ public class Accounts
 			
 			String line = raf.readLine();
 			username = line.substring(LENGTH_OF_ID, END_OF_NAME);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -142,12 +177,46 @@ public class Accounts
 				
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Line 148 error " + e);
 		}
 		
+		return -1;
+	}
+	
+	public static int getEmailIndex(String email, int minIndex)
+	{
+		String mail = "";
+		int index = minIndex;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf.seek(LENGTH_OF_FILE * index);
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+					
+				String line = raf.readLine();
+				mail = line.substring(END_OF_PASS, LENGTH_OF_FILE);
+				mail = L.shear(mail);
+				
+				if(mail.equals(email))
+				{
+					return index;
+				}
+				index = index + 1;
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+				
 		return -1;
 	}
 	
@@ -176,12 +245,46 @@ public class Accounts
 					
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Line 182 error " + e);
 		}
 			
+		return -1;
+	}
+	
+	public static int getPasswordIndex(String password, int minIndex)
+	{
+		String pass = "";
+		int index = minIndex;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf.seek(LENGTH_OF_FILE * index);
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+					
+				String line = raf.readLine();
+				pass = line.substring(END_OF_NAME, END_OF_PASS);
+				pass = L.shear(pass);
+					
+				if(pass.equals(password))
+				{
+					return index;
+				}
+				index = index + 1;
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+				
 		return -1;
 	}
 	
@@ -203,6 +306,7 @@ public class Accounts
 			
 			String line = raf.readLine();
 			password = line.substring(END_OF_NAME, END_OF_PASS);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -230,6 +334,7 @@ public class Accounts
 			
 			String line = raf.readLine();
 			ID = line.substring(0, LENGTH_OF_ID);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -263,6 +368,7 @@ public class Accounts
 					
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -293,6 +399,7 @@ public class Accounts
 			String str = line.substring(LENGTH_OF_ID - 1, LENGTH_OF_ID);
 			if(str.equals("1"))
 			{ isTeacher = true; } 
+			raf.close();
 		}
 		catch(Exception e)
 		{

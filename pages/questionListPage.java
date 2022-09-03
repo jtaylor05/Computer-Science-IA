@@ -1,6 +1,6 @@
 package pages;
 
-import java.util.*;  
+import java.util.*;   
 import database.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -10,6 +10,7 @@ import library.L;
 public class questionListPage extends JFrame
 {
 	private boolean teacher;
+	private String ID;
 	private ArrayList<Question> questionList;
 	
 	private JPanel homeRow = new JPanel();
@@ -17,12 +18,15 @@ public class questionListPage extends JFrame
 	
 	private JButton home = new JButton("Go to menu");
 	
+	private boolean isEdit = false;
+	
 	private JPanel questions = new JPanel();
 	private JScrollPane questionScroller = new JScrollPane(questions);
 	
 	public questionListPage(boolean isTeacher, String ID)
 	{
 		teacher = isTeacher;
+		this.ID = ID;
 		
 		if(teacher)
 		{
@@ -44,14 +48,13 @@ public class questionListPage extends JFrame
 				dropInPage(teacher, ID);
 			}
 		});
-		homeRow.add(new JLabel("")); homeRow.add(home);
 		
 		questionScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		questionScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		questions.setLayout(new GridLayout(questionList.size(), 1));
 		if(teacher)
 		{
+			questions.setLayout(new GridLayout(questionList.size() + 1, 1));
 			for(int i = 0; i < questionList.size(); i++)
 			{
 				JPanel jp = new JPanel();
@@ -73,9 +76,16 @@ public class questionListPage extends JFrame
 				jb.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 					{
-						new questionPage(q, ID, teacher).setVisible(true);
-						setVisible(false);
-						dispose();
+						if(isEdit)
+						{
+							editQuestion(q);
+						}
+						else
+						{
+							new questionPage(q, ID, teacher).setVisible(true);
+							setVisible(false);
+							dispose();
+						}
 					}
 				});
 				jp.add(jb);
@@ -86,9 +96,43 @@ public class questionListPage extends JFrame
 				
 				questions.add(jp);
 			}
+			
+			JButton add = new JButton("add");
+			add.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e)
+				{
+					if(!isEdit) {addQuestion();}
+				}
+			});
+			questions.add(add);
+			
+			JButton edit = new JButton("Edit a Question");
+			edit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e)
+				{
+					if(isEdit)
+					{
+						isEdit = false;
+						edit.setText("Edit a Question");
+						add.setText("Add");
+					}
+					else
+					{
+						isEdit = true;
+						edit.setText("Stop Editing");
+						add.setText("Stop Editing to Add");
+					}
+					
+				}
+			});
+			
+			
+			homeRow.setLayout(new GridLayout(1, 3));
+			homeRow.add(edit); homeRow.add(new JLabel("")); homeRow.add(home);
 		}
 		else
 		{
+			questions.setLayout(new GridLayout(questionList.size(), 1));
 			for(int i = 0; i < questionList.size(); i++)
 			{
 				JPanel jp = new JPanel();
@@ -132,6 +176,9 @@ public class questionListPage extends JFrame
 				
 				questions.add(jp);
 			}
+			
+			homeRow.setLayout(new GridLayout(1, 2));
+			homeRow.add(new JLabel("")); homeRow.add(home);
 		}
 		scroller.add(questionScroller);
 		
@@ -151,28 +198,159 @@ public class questionListPage extends JFrame
 		dispose();
 	}
 	
-	//makes a list of all questions, their IDs, names, and max points
-	public ArrayList<Question> makeList()
+	public void addQuestion()
 	{
-		ArrayList<Question> questions = new ArrayList<>();
+		JFrame add = new JFrame("Add Question");
+		add.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		add.setLayout(new GridLayout(5,1));
+		add.setVisible(true);
 		
-		int index = 0;
-		String QID = Questions.getID(index);
+		JLabel label = new JLabel("Add a Question");
+		add.add(label);
 		
-		while(QID != null)
-		{
-			String name = Questions.getName(index);
-			int maxPoints = Questions.getPoints(index);
-			
-			Question q = new Question(QID, name, maxPoints);
-			
-			questions.add(q);
-			
-			index = index + 1;
-			QID = Questions.getID(index);
-		}
+		JPanel name = new JPanel(); name.setLayout(new GridLayout(2,1));
+		JLabel nameLabel = new JLabel("Enter name:");
+		JTextField nameText = new JTextField();
+		name.add(nameLabel); name.add(nameText);
+		add.add(name);
 		
-		return questions;
+		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
+		JLabel filePathLabel = new JLabel("Enter file path:");
+		JTextField filePathText = new JTextField();
+		filePath.add(filePathLabel); filePath.add(filePathText);
+		add.add(filePath);
+		
+		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
+		JLabel maxPointsLabel = new JLabel("Enter max points:");
+		JTextField maxPointsText = new JTextField();
+		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
+		add.add(maxPoints);
+		
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 2));
+		JButton close = new JButton("Close");
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				dispose();
+			}
+		});
+		JButton jb = new JButton("Add");
+		jb.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				boolean isName = !"".equals(nameText.getText());
+				boolean isFilePath = !"".equals(filePathText.getText());
+				int maxPoints; 
+				try
+				{
+					maxPoints = Integer.parseInt(maxPointsText.getText());
+				}
+				catch(Exception ex)
+				{
+					maxPoints = -1;
+				}
+				
+				if(isName && isFilePath && maxPoints > 0)
+				{
+					Questions.addQuestion(nameText.getText(), filePathText.getText(), maxPoints);
+					add.dispose();
+					new questionListPage(teacher, ID).setVisible(true);
+					dispose();
+				}
+				else
+				{
+					label.setText("Wrong Values");
+				}
+			}
+		});
+		buttons.add(close); buttons.add(jb);
+		add.add(buttons);
+		
+		add.pack();
+	}
+	
+	public void editQuestion(Question q)
+	{
+		JFrame edit = new JFrame("Edit Question");
+		edit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		edit.setLayout(new GridLayout(5,1));
+		edit.setVisible(true);
+		int index = Questions.getIDIndex(q.getID());
+		
+		JLabel label = new JLabel("Edit " + q.getName());
+		edit.add(label);
+		
+		JPanel name = new JPanel(); name.setLayout(new GridLayout(2,1));
+		JLabel nameLabel = new JLabel("Enter name:");
+		JTextField nameText = new JTextField(q.getName());
+		name.add(nameLabel); name.add(nameText);
+		edit.add(name);
+		
+		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
+		JLabel filePathLabel = new JLabel("Enter file path:");
+		JTextField filePathText = new JTextField(L.shear(Questions.getFilePath(index)));
+		filePath.add(filePathLabel); filePath.add(filePathText);
+		edit.add(filePath);
+		
+		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
+		JLabel maxPointsLabel = new JLabel("Enter max points:");
+		JTextField maxPointsText = new JTextField("" + q.getPoints());
+		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
+		edit.add(maxPoints);
+		
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 3));
+		JButton close = new JButton("Close");
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				edit.dispose();
+			}
+		});
+		JButton remove = new JButton("Remove");
+		remove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Questions.removeQuestion(q.getID());
+				edit.dispose();
+				new questionListPage(teacher, ID).setVisible(true);
+				dispose();
+			}
+		});
+		JButton finish = new JButton("Finish");
+		finish.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				boolean isName = !"".equals(nameText.getText()) && nameText.getText().length() <= 23;
+				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 48;
+				int maxPoints; 
+				try
+				{
+					maxPoints = Integer.parseInt(maxPointsText.getText());
+				}
+				catch(Exception ex)
+				{
+					maxPoints = -1;
+				}
+				
+				if(isName && isFilePath && maxPoints > 0)
+				{
+					Questions.replaceQuestion(nameText.getText(), filePathText.getText(), maxPoints, q.getID());
+					edit.dispose();
+					new questionListPage(teacher, ID).setVisible(true);
+					dispose();
+				}
+				else
+				{
+					label.setText("Wrong Values");
+				}
+			}
+		});
+		buttons.add(close); buttons.add(remove); buttons.add(finish);
+		edit.add(buttons);
+		
+		edit.pack();
 	}
 	
 	//makes a list of questions as above, but includes userID's answers if there is one
@@ -212,6 +390,30 @@ public class questionListPage extends JFrame
 			QID = Questions.getID(index);
 		}
 		
+		return questions;
+	}
+	
+	//makes a list of all questions, their IDs, names, and max points
+	public ArrayList<Question> makeList()
+	{
+		ArrayList<Question> questions = new ArrayList<>();
+			
+		int index = 0;
+		String QID = Questions.getID(index);
+			
+		while(QID != null)
+		{
+			String name = Questions.getName(index);
+			int maxPoints = Questions.getPoints(index);
+				
+			Question q = new Question(QID, name, maxPoints);
+				
+			questions.add(q);
+				
+			index = index + 1;
+			QID = Questions.getID(index);
+		}
+			
 		return questions;
 	}
 }

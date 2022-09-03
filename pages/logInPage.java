@@ -1,6 +1,7 @@
 package pages;
 
-import java.awt.event.*;  
+import java.util.*;
+import java.awt.event.*;   
 import java.awt.*;
 import javax.swing.*;
 import database.*;
@@ -30,6 +31,8 @@ public class logInPage extends JFrame
 	private JButton ok = new JButton("ok");
 	private JButton close = new JButton("close");
 	private JButton toRegister = new JButton("go register");
+	
+	private LinkedList<Integer> pIndexs = new LinkedList<>();
 	
 	private final String logInPrompt = "please enter log-in details";
 	private final String logInFail = "wrong account details";
@@ -359,11 +362,23 @@ public class logInPage extends JFrame
 		String password = enteredPass;
 		
 		int uIndex = Accounts.getUsernameIndex(username);
-		int pIndex = Accounts.getPasswordIndex(password);
 		
-		if(uIndex > -1 && pIndex > -1 && uIndex == pIndex)
+		int index = -1;
+		do
 		{
-			return true;
+			index = Accounts.getPasswordIndex(password, index + 1);
+			enqueue(index);
+		}
+		while(index >= 0);
+		
+		int nextIndex = dequeue();
+		while(nextIndex >= 0)
+		{
+			if(uIndex > -1 && nextIndex > -1 && uIndex == nextIndex)
+			{
+				return true;
+			}
+			nextIndex = dequeue();
 		}
 		return false;
 	}
@@ -399,6 +414,11 @@ public class logInPage extends JFrame
 		setVisible(false);
 		dispose();
 	}
+	
+	public void enqueue(Integer i)
+	{	pIndexs.add(i);	}
+	public Integer dequeue()
+	{	return pIndexs.remove(0);	}
 	
 	public static void main(String[] args)
 	{

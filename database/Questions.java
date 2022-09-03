@@ -1,12 +1,12 @@
 package database;
 
 import java.io.*;
+import java.nio.file.Files;
+
 import library.L;
 
 public class Questions 
 {
-	private static FileWriter fw;
-	private static RandomAccessFile raf;
 	private final static String DATABASE_FILE_PATH = "database/questions";
 	
 	private final static int LENGTH_OF_ID = 36;
@@ -20,8 +20,8 @@ public class Questions
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
 	{
-		//addQuestion("Question 1", "images/question_1", 10);
-		//addQuestion("Question 2", "images/question_2", 12);
+		addQuestion("Question 1", "images/question_1", 10);
+		addQuestion("Question 2", "images/question_2", 12);
 		
 		String name = getName(0);
 		String id = getID(0);
@@ -40,7 +40,7 @@ public class Questions
 		
 		try
 		{
-			fw = new FileWriter(DATABASE_FILE_PATH, true);
+			FileWriter fw = new FileWriter(DATABASE_FILE_PATH, true);
 			fw.write(id + fixedName + fixedPath + fixedPoints + "\n");
 			fw.close();
 		}
@@ -50,24 +50,79 @@ public class Questions
 		}		
 	}
 	
+	public static void replaceQuestion(String name, String filePath, int totalPoints, String QID)
+	{
+		String fixedName = L.fitToLength(LENGTH_OF_NAME, name);
+		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
+		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "" + totalPoints);
+		String id = QID;
+		
+		try
+		{
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int filePos = LENGTH_OF_FILE * getIDIndex(QID);
+			raf.seek(filePos);
+			raf.writeBytes(id + fixedName + fixedPath + fixedPoints + "\n");
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("exception");
+		}		
+	}
+	
+	public static void removeQuestion(String QID)
+	{
+		File temp = new File("database/temp");
+		File database = new File(DATABASE_FILE_PATH);
+		try
+		{
+			RandomAccessFile raf = new RandomAccessFile(database, "r");
+			FileWriter fw = new FileWriter(temp, true);
+			int count;
+			int length = (int)raf.length()/LENGTH_OF_FILE;
+			String line = raf.readLine();
+			for(count = 0; count < length; count++)
+			{
+				String ID = line.substring(0, LENGTH_OF_ID);
+				if(!ID.equals(QID))
+				{
+					fw.write(line + "\n");
+				}
+				line = raf.readLine();
+			}
+			raf.close();
+			fw.close();
+			
+			Files.delete(database.toPath());
+			temp.renameTo(database);
+		}
+		catch(Exception e)
+		{
+			System.out.println("exception: " + e);
+		}		
+	}
+	
 	//Method finds ID of question at index; returns found ID of question.
 	public static String getID(int index)
 	{
 		String ID = "";
 		try
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
 			}
 			else
 			{
+				raf.close();
 				return null;
 			}
 			
 			String line = raf.readLine();
 			ID = line.substring(0, LENGTH_OF_ID);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -85,7 +140,7 @@ public class Questions
 		int index = -1;
 		try
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			int length = (int)raf.length();
 			while(raf.getFilePointer() < length)
 			{
@@ -96,11 +151,13 @@ public class Questions
 					
 				if(id.equals(searchID))
 				{
+					raf.close();
 					return index;
 				}
 				
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -116,18 +173,20 @@ public class Questions
 		String filePath = "";
 		try
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
 			}
 			else
 			{
+				raf.close();
 				return null;
 			}
 			
 			String line = raf.readLine();
 			filePath = line.substring(END_OF_NAME, END_OF_PATH);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -143,18 +202,20 @@ public class Questions
 		String name = "";
 		try
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
 			}
 			else
 			{
+				raf.close();
 				return null;
 			}
 			
 			String line = raf.readLine();
 			name = line.substring(LENGTH_OF_ID, END_OF_NAME);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -173,7 +234,7 @@ public class Questions
 		int index = -1;
 		try
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			int length = (int)raf.length();
 			while(raf.getFilePointer() < length)
 			{
@@ -184,11 +245,13 @@ public class Questions
 				
 				if(name.equals(fixedName))
 				{
+					raf.close();
 					return index;
 				}
 				
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -205,18 +268,20 @@ public class Questions
 		String points = "";
 		try
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
 			}
 			else
 			{
+				raf.close();
 				return -1;
 			}
 			
 			String line = raf.readLine();
 			points = line.substring(END_OF_PATH, LENGTH_OF_FILE - 1);
+			raf.close();
 		}
 		catch(Exception e)
 		{

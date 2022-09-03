@@ -58,7 +58,6 @@ public class Answers
 		do
 		{
 			userIndex = getUserIDIndex(userID, userIndex + 1);
-			System.out.println(userIndex);
 			if(QID.equals(getQID(userIndex)))
 			{
 				return userIndex;
@@ -82,11 +81,13 @@ public class Answers
 			}
 			else
 			{
+				raf.close();
 				return null;
 			}
 			
 			String line = raf.readLine();
 			ID = line.substring(0, LENGTH_OF_USERID);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -109,11 +110,13 @@ public class Answers
 				}
 			else
 			{
+				raf.close();
 				return null;
 			}
 				
 			String line = raf.readLine();
 			ID = line.substring(LENGTH_OF_USERID, END_OF_ID);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -135,11 +138,13 @@ public class Answers
 			}
 			else
 			{
+				raf.close();
 				return null;
 			}
 			
 			String line = raf.readLine();
 			filePath = line.substring(END_OF_ID, END_OF_PATH);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -168,11 +173,13 @@ public class Answers
 				
 				if(id.equals(searchUserID))
 				{
+					raf.close();
 					return index;
 				}
 					
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -202,12 +209,14 @@ public class Answers
 					
 				if(id.equals(searchUserID))
 				{
+					raf.close();
 					return index;
 				}
 				System.out.println("A: " + index);
 				index = index + 1;
 				raf.seek(LENGTH_OF_FILE * index);
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -236,11 +245,13 @@ public class Answers
 				
 				if(id.equals(searchQID))
 				{
+					raf.close();
 					return index;
 				}
 						
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -268,12 +279,14 @@ public class Answers
 					
 				if(id.equals(searchQID))
 				{
+					raf.close();
 					return index;
 				}
 				
 				index = index + 1;
 				raf.seek(LENGTH_OF_FILE * (index + 1));
 			}
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -297,11 +310,13 @@ public class Answers
 			}
 			else
 			{
+				raf.close();
 				return -1;
 			}
 			
 			String line = raf.readLine();
 			points = line.substring(END_OF_PATH, LENGTH_OF_FILE - 1);
+			raf.close();
 		}
 		catch(Exception e)
 		{
@@ -325,12 +340,13 @@ public class Answers
 			}
 			else
 			{
+				raf.close();
 				return false;
 			}
 			String points = L.fitToLength(LENGTH_OF_GRADE, "" + newPoints);
 			
 			raf.writeBytes(points);
-			
+			raf.close();
 			return true;
 		}
 		catch(Exception e)
