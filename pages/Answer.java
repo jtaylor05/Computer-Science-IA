@@ -1,6 +1,6 @@
 package pages;
 
-public class Answer 
+public class Answer extends Record
 {
 	String username;
 	String questionName;
@@ -11,23 +11,18 @@ public class Answer
 	
 	public Answer(String user, String questionName, String filePath, int grade, int maxPoints)
 	{
+		super(null, questionName, filePath, grade, maxPoints, true);
 		this.username = user;
-		this.questionName = questionName;
-		this.grade = grade;
-		this.maxPoints = maxPoints;
-		this.filePath = filePath;
 	} 
 	
 	public Answer(String questionName, String filePath, int grade, int maxPoints)
 	{
-		this.questionName = questionName;
-		this.grade = grade;
-		this.maxPoints = maxPoints;
-		this.filePath = filePath;
+		super(null, questionName, filePath, grade, maxPoints, true);
 	} 
 	
 	public Answer(String questionName, int grade, int maxPoints)
 	{
+		super(null, questionName, null, grade, maxPoints, true);
 		this.questionName = questionName;
 		this.grade = grade;
 		this.maxPoints = maxPoints;
@@ -35,53 +30,18 @@ public class Answer
 	
 	public Answer(String user, String questionName, int maxPoints)
 	{
+		super(null, questionName, null, -1, maxPoints, false);
 		this.username = user;
-		this.questionName = questionName;
-		this.maxPoints = maxPoints;
-		hasAnswer = false;
 	}
 	
 	public Answer(String questionName, int maxPoints)
 	{
-		this.questionName = questionName;
-		this.maxPoints = maxPoints;
-		hasAnswer = false;
-	}
-	
-	public String getName()
-	{
-		return questionName;
-	}
-	
-	public String getOutOf() 
-	{
-		String finalGrade = grade + "/" + maxPoints;
-		return finalGrade;
-	}
-	
-	public int getPoints()
-	{
-		return maxPoints;
-	}
-	
-	public int getGrade()
-	{
-		return grade;
-	}
-	
-	public String getPath()
-	{
-		return filePath;
+		super(null, questionName, null, -1, maxPoints, false);
 	}
 	
 	public String getUser()
 	{
 		return username;
-	}
-	
-	public boolean hasAnswer()
-	{
-		return hasAnswer;
 	}
 	
 	public String toString()

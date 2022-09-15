@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import database.*;
+import library.L;
 
 public class questionPage extends JFrame
 {
@@ -49,9 +50,9 @@ public class questionPage extends JFrame
 			String name = question.getName();
 			int index = Answers.findAnswer(ID, question.getID());
 			int maxPoints = -1;
-			if(question.hasAnswered())
+			if(question.hasAnswer())
 			{
-				maxPoints = question.getPoints();
+				maxPoints = question.getMaxPoints();
 			}
 			String filePath;
 			int grade = -1;
@@ -82,8 +83,7 @@ public class questionPage extends JFrame
 			answerScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			answerScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			answerBox.setLayout(new GridLayout(answers.size(), 1));
-			
-			for(int i = 0; i < answers.size(); i++)
+			for(int i = 0; i < answers.size() - 1; i++)
 			{
 				JPanel jp = new JPanel();
 				jp.setLayout(new GridLayout(1, 5));
@@ -114,7 +114,7 @@ public class questionPage extends JFrame
 				}
 				jp.add(grade);
 				
-				JButton edit = new JButton("Edit");
+				JButton edit = new JButton("Give Grade");
 				edit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 					{
@@ -123,11 +123,11 @@ public class questionPage extends JFrame
 				});
 				jp.add(edit);
 				
-				JButton submit = new JButton("Submit");
+				JButton submit = new JButton("Give Feedback");
 				submit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 					{
-						submit(answer.getPath());
+						submitImage(a, teacher);
 					}
 				});
 				jp.add(submit);
@@ -174,7 +174,7 @@ public class questionPage extends JFrame
 			submit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e)
 				{
-					submit(answer.getPath());
+					submitImage(answer, teacher);
 				}
 			});
 			answerBox.add(submit);
@@ -206,9 +206,63 @@ public class questionPage extends JFrame
 	
 	
 	//submits a file to filePath. returns true if done, false if not
-	public boolean submit(String filePath)
+	public void submitImage(Answer a, boolean teacher)
 	{
-		return false;
+		JFrame submit = new JFrame("Submit Image");
+		submit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		submit.setLayout(new GridLayout(5,1));
+		submit.setVisible(true);
+		int index = Questions.getIDIndex(a.getID());
+		
+		JLabel label = new JLabel(" " + a.getName());
+		submit.add(label);
+		
+		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
+		JLabel filePathLabel = new JLabel("Enter file path:");
+		JTextField filePathText = new JTextField(L.shear(Questions.getFilePath(index)));
+		filePath.add(filePathLabel); filePath.add(filePathText);
+		submit.add(filePath);
+		
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 3));
+		JButton close = new JButton("Close");
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				submit.dispose();
+			}
+		});
+		JButton finish = new JButton("Finish");
+		finish.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e)
+			{
+				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 48;
+				
+				if(isFilePath)
+				{
+					
+					if(a.getID() != null)
+					{
+						Answers.changeFilePath(index, filePathText.getText());
+					}
+					else
+					{
+						Answers.addAnswer(a.getUser(), a.getID(), filePathText.getText());
+					}
+					submit.dispose();
+					new questionListPage(teacher, ID).setVisible(true);
+					dispose();
+				}
+				else
+				{
+					label.setText("Wrong Values");
+				}
+			}
+		});
+		buttons.add(close); buttons.add(finish);
+		submit.add(buttons);
+		
+		submit.pack();
 	}
 	
 	//public void download() - downloads questionFile as a file to computer
@@ -232,20 +286,19 @@ public class questionPage extends JFrame
 		System.out.println(question.getID());
 		while(userID != null) 
 		{
-			System.out.println(userID);
-			System.out.println(name);
 			int answerIndex = Answers.findAnswer(userID, question.getID());
 			
 			Answer a;
 			if(answerIndex > -1)
 			{
-				a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getPoints());
+				a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getMaxPoints());
+				as.add(a);
 			}
-			else
+			else if(userID != null)
 			{
-				a = new Answer(name, question.getName(), question.getPoints());
+				a = new Answer(name, question.getName(), question.getMaxPoints());
+				as.add(a);
 			}
-			as.add(a);
 			
 			index = index + 1;
 			userID = Accounts.getID(index);

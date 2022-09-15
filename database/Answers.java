@@ -51,6 +51,25 @@ public class Answers
 		}		
 	}
 	
+	//Method adds answer data to file "answer"; returns void.
+		public static void addAnswer(String userID, String qID, String filePath)
+		{
+			String id = userID + qID;
+			String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
+			String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "");
+			
+			try
+			{
+				fw = new FileWriter(DATABASE_FILE_PATH, true);
+				fw.write(id + fixedPath + fixedPoints + "\n");
+				fw.close();
+			}
+			catch(Exception e)
+			{
+				System.out.println("exception");
+			}		
+		}
+	
 	//Method uses a question and user ID to find a matching answer
 	public static int findAnswer(String userID, String QID)
 	{
@@ -120,7 +139,7 @@ public class Answers
 		}
 		catch(Exception e)
 		{
-			System.out.println("error on getQID" + e);
+			System.out.println("error on getQID " + e);
 		}			
 		return ID;
 	}
@@ -152,6 +171,33 @@ public class Answers
 		}
 		
 		return filePath;
+	}
+	
+	public static boolean changeFilePath(int index, String newPath)
+	{
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index + END_OF_ID);
+			}
+			else
+			{
+				raf.close();
+				return false;
+			}
+			String path = L.fitToLength(LENGTH_OF_PATH, "" + newPath);
+			
+			raf.writeBytes(path);
+			raf.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+		return false;
 	}
 	
 	//method uses looks for index of searchterm "searchUserID"; returns index of where "searchUserID"
@@ -205,14 +251,12 @@ public class Answers
 					
 				String line = raf.readLine();
 				id = line.substring(0, LENGTH_OF_USERID);
-				System.out.println("A: " + id + " B: " + searchUserID);
 					
 				if(id.equals(searchUserID))
 				{
 					raf.close();
 					return index;
 				}
-				System.out.println("A: " + index);
 				index = index + 1;
 				raf.seek(LENGTH_OF_FILE * index);
 			}

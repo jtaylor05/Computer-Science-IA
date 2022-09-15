@@ -91,7 +91,7 @@ public class questionListPage extends JFrame
 				jp.add(jb);
 				
 				JLabel jl = new JLabel();
-				jl.setText("Out of " + q.getPoints() + " points");
+				jl.setText("Out of " + q.getMaxPoints() + " points");
 				jp.add(jl);
 				
 				questions.add(jp);
@@ -161,7 +161,7 @@ public class questionListPage extends JFrame
 				jp.add(jb);
 				
 				JLabel jl = new JLabel();
-				if(q.hasAnswered())
+				if(q.hasAnswer())
 				{
 					jl.setText("Points: " + q.getOutOf());
 				}
@@ -295,7 +295,7 @@ public class questionListPage extends JFrame
 		
 		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
 		JLabel maxPointsLabel = new JLabel("Enter max points:");
-		JTextField maxPointsText = new JTextField("" + q.getPoints());
+		JTextField maxPointsText = new JTextField("" + q.getMaxPoints());
 		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
 		edit.add(maxPoints);
 		
