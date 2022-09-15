@@ -118,7 +118,7 @@ public class dropInPage extends JFrame
 	
 	public static void main(String[] args)
 	{
-		//new dropInPage(Accounts.isTeacher(0), Accounts.getID(0)).setVisible(true);
-		new dropInPage(Accounts.isTeacher(1), Accounts.getID(1)).setVisible(true);
+		new dropInPage(Accounts.isTeacher(0), Accounts.getID(0)).setVisible(true);
+		//new dropInPage(Accounts.isTeacher(1), Accounts.getID(1)).setVisible(true);
 	}
 }

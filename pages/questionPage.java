@@ -28,7 +28,6 @@ public class questionPage extends JFrame
 	private String ID;
 	
 	private JPanel homeRow = new JPanel();
-	private JPanel questionBox = new JPanel();
 	
 	private JButton home = new JButton("Go to questions");
 	
@@ -247,7 +246,7 @@ public class questionPage extends JFrame
 					}
 					else
 					{
-						Answers.addAnswer(a.getUser(), a.getID(), filePathText.getText());
+						Answers.addAnswer(ID, question.getID(), filePathText.getText());
 					}
 					submit.dispose();
 					new questionListPage(teacher, ID).setVisible(true);
