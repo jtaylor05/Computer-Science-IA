@@ -46,10 +46,18 @@ public class Answer extends Record
 	
 	public String toString()
 	{
-		String str = "";
+		String str = "<html>";
 		
-		str = str + questionName.toUpperCase() + " - ";
-		str = str + grade + "/" + maxPoints;
+		str = str + "<b>" + questionName.toUpperCase() + "</b> ~ ";
+		if(grade >= 0)
+		{
+			str = str + "<u>" + grade + "/" + maxPoints + "</u>";
+		}
+		else
+		{
+			str = str + "<u>*</u>";
+		}
+		str = str + "</html>";
 		
 		return str;
 	}

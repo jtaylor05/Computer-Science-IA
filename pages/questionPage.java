@@ -286,7 +286,7 @@ public class questionPage extends JFrame
 		submit.setVisible(true);
 		int temp = Accounts.getUsernameIndex(a.getUser());
 		String uID = Accounts.getID(temp);
-		int index = Answers.findAnswer(ID, question.getID());
+		int index = Answers.findAnswer(uID, question.getID());
 			
 		JLabel label = new JLabel(" " + a.getName());
 		submit.add(label);
@@ -296,7 +296,7 @@ public class questionPage extends JFrame
 		JTextField filePathText;
 		if(index >= 0)
 		{
-			filePathText = new JTextField("" + Answers.getFilePath(index));
+			filePathText = new JTextField("" + L.shear(Answers.getFilePath(index)));
 		}
 		else
 		{

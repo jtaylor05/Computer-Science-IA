@@ -45,10 +45,11 @@ public class portfolioListPage extends JFrame
 			String name = Accounts.getUsername(index);
 			jb.setText(name);
 			
+			final int j = i;
 			jb.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e)
 				{
-					portfolioPage(teacher, ID, StudentIDs.get(index));
+					portfolioPage(teacher, ID, StudentIDs.get(j));
 				}
 			});
 			
@@ -89,7 +90,7 @@ public class portfolioListPage extends JFrame
 		
 		while(id != null)
 		{
-			if(!Accounts.isTeacher(index))
+			if(!Accounts.isTeacher(index) && !id.equals(""))
 			{
 				ids.add(id);
 			}
@@ -97,7 +98,6 @@ public class portfolioListPage extends JFrame
 			index = index + 1;
 			id = Accounts.getID(index);
 		}
-		
 		return ids;
 	}
 }

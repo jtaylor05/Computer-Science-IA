@@ -104,29 +104,26 @@ public class portfolioPage extends JFrame
 	{
 		ArrayList<Answer> answers = new ArrayList<>();
 		
-		int index = 0;
-		String id = Answers.getUserID(index);
-		while(id != null)
+		int index = -1;
+		do
 		{
-			if(ID.equals(id))
+			index = Answers.getUserIDIndex(ID, index + 1);
+			
+			String QID = Answers.getQID(index);
+			int qIndex = Questions.getIDIndex(QID);
+			String name = Questions.getName(qIndex);
+			
+			int grade = Answers.getPoints(index);
+			int maxPoints = Questions.getPoints(qIndex);
+			
+			if(!name.equals(""))
 			{
-				String qID = Answers.getQID(index);
-				int qIndex = Questions.getIDIndex(qID);
-				String name = "";
-				if(qIndex > -1)
-				{
-					name = Questions.getName(qIndex);
-				}
-				
-				int grade = Answers.getPoints(index);
-				int maxPoints = Questions.getPoints(qIndex);	
 				Answer a = new Answer(name, grade, maxPoints);
-				
 				answers.add(a);
 			}
-			index = index + 1;
-			id = Answers.getUserID(index);
 		}
+		while(index >= 0);
+		
 		return answers;
 	}
 }

@@ -121,6 +121,8 @@ public class Questions
 			
 			Files.delete(database.toPath());
 			temp.renameTo(database);
+			
+			Answers.update();
 		}
 		catch(Exception e)
 		{
