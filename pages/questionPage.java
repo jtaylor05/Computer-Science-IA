@@ -435,21 +435,23 @@ public class questionPage extends JFrame
 		String userID = Accounts.getID(index);
 		String name = Accounts.getUsername(index);
 		
-		System.out.println(question.getID());
 		while(userID != null) 
 		{
 			int answerIndex = Answers.findAnswer(userID, question.getID());
 			
 			Answer a;
-			if(answerIndex > -1)
+			if(!Accounts.isTeacher(index))
 			{
-				a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getMaxPoints());
-				as.add(a);
-			}
-			else if(userID != null)
-			{
-				a = new Answer(name, question.getName(), question.getMaxPoints());
-				as.add(a);
+				if(answerIndex > -1)
+				{
+					a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getMaxPoints());
+					as.add(a);
+				}
+				else if(userID != null)
+				{
+					a = new Answer(name, question.getName(), question.getMaxPoints());
+					as.add(a);
+				}
 			}
 			
 			index = index + 1;

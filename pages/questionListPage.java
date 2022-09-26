@@ -37,11 +37,6 @@ public class questionListPage extends JFrame
 			questionList = makeList(ID);
 		}
 		
-		for(int i = 0; i < questionList.size(); i++)
-		{
-			System.out.println(questionList.get(i));
-		}
-		
 		home.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -231,7 +226,7 @@ public class questionListPage extends JFrame
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				dispose();
+				add.dispose();
 			}
 		});
 		JButton jb = new JButton("Add");

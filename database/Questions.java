@@ -7,6 +7,8 @@ import library.L;
 
 public class Questions 
 {
+	private static FileWriter fw;
+	private static RandomAccessFile raf;
 	private final static String DATABASE_FILE_PATH = "database/questions";
 	
 	private final static int LENGTH_OF_ID = 36;
@@ -40,7 +42,7 @@ public class Questions
 		
 		try
 		{
-			FileWriter fw = new FileWriter(DATABASE_FILE_PATH, true);
+			fw = new FileWriter(DATABASE_FILE_PATH, true);
 			fw.write(id + fixedName + fixedPath + fixedPoints + "\n");
 			fw.close();
 		}
@@ -57,10 +59,33 @@ public class Questions
 		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "" + totalPoints);
 		String id = QID;
 		
+		int index = getIDIndex(QID);
+		int prevPoints = getPoints(index);
+		if(totalPoints != prevPoints)
+		{
+			float ratio = totalPoints/ (float) prevPoints;
+			int i = -1;
+			do
+			{
+				i = Answers.getQIDIndex(QID, i + 1);
+				System.out.println(i);
+				if(i >= 0)
+				{
+					int grade = Answers.getPoints(i);
+					if(grade > -1)
+					{
+						int newGrade = (int)(ratio * grade);
+						Answers.changePoints(i, newGrade);
+					}
+				}
+			}
+			while(i > -1);
+		}
+		
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int filePos = LENGTH_OF_FILE * getIDIndex(QID);
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int filePos = LENGTH_OF_FILE * index;
 			raf.seek(filePos);
 			raf.writeBytes(id + fixedName + fixedPath + fixedPoints + "\n");
 			raf.close();
@@ -77,8 +102,8 @@ public class Questions
 		File database = new File(DATABASE_FILE_PATH);
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(database, "r");
-			FileWriter fw = new FileWriter(temp, true);
+			raf = new RandomAccessFile(database, "r");
+			fw = new FileWriter(temp, true);
 			int count;
 			int length = (int)raf.length()/LENGTH_OF_FILE;
 			String line = raf.readLine();
@@ -109,7 +134,7 @@ public class Questions
 		String ID = "";
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
@@ -140,7 +165,7 @@ public class Questions
 		int index = -1;
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			int length = (int)raf.length();
 			while(raf.getFilePointer() < length)
 			{
@@ -173,7 +198,7 @@ public class Questions
 		String filePath = "";
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
@@ -202,7 +227,7 @@ public class Questions
 		String name = "";
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
@@ -234,7 +259,7 @@ public class Questions
 		int index = -1;
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			int length = (int)raf.length();
 			while(raf.getFilePointer() < length)
 			{
@@ -265,10 +290,10 @@ public class Questions
 	//returns the int value found.
 	public static int getPoints(int index)
 	{
-		String points = "";
+		String points = "-1";
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
 			if(LENGTH_OF_FILE * index < raf.length())
 			{
 				raf.seek(LENGTH_OF_FILE * index);
@@ -292,4 +317,5 @@ public class Questions
 		int p = Integer.parseInt(points);
 		return p;
 	}
+	
 }

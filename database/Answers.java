@@ -383,7 +383,7 @@ public class Answers
 	//returns the int value found.
 	public static int getPoints(int index)
 	{
-		String points = "";
+		String points = "-1";
 		try
 		{
 			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
