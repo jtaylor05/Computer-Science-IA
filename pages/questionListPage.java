@@ -161,7 +161,7 @@ public class questionListPage extends JFrame
 				jp.add(jb);
 				
 				JLabel jl = new JLabel();
-				if(q.hasAnswer())
+				if(q.hasAnswer() && q.getGrade() > -1)
 				{
 					jl.setText("Points: " + q.getOutOf());
 				}
@@ -363,7 +363,7 @@ public class questionListPage extends JFrame
 		while(QID != null)
 		{
 			int answerIndex = Answers.findAnswer(userID, QID);
-			int points = -1;
+			int points = -2;
 			if(answerIndex > -1)
 			{
 				points = Answers.getPoints(answerIndex);
@@ -375,7 +375,7 @@ public class questionListPage extends JFrame
 			int maxPoints = Questions.getPoints(index);	
 			String message = "";
 			Question q = null;
-			if(points > -1)
+			if(points > -2)
 			{
 				q = new Question(QID, name, filePath, points, maxPoints, message);
 			}

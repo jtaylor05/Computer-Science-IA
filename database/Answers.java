@@ -1,6 +1,8 @@
 package database;
 
 import java.io.*;
+import java.nio.file.Files;
+
 import library.L;
 
 public class Answers 
@@ -22,14 +24,20 @@ public class Answers
 	{
 		//addAnswer(Accounts.getID(0), Questions.getID(1), "images/answer_1", 7);
 		//addAnswer(Accounts.getID(1), Questions.getID(0), "images/answer_2", 4);
+		int i = 0;
+		String uID = getUserID(i);
+		String qID = getQID(i);
+		while(uID != null)
+		{
+			System.out.println(uID + " " + qID);
+			
+			i = i + 1;
+			uID = getUserID(i);
+			qID = getQID(i);
+		}
 		
-		int index1 = getUserIDIndex(Accounts.getID(1));
-		int index2 = getQIDIndex(Questions.getID(1));
-		String userID = getUserID(index2);
-		String QID = getQID(index1);
-		
-		System.out.println(index1 + " " + index2);
-		System.out.println(userID + " " + QID);
+		System.out.println(findAnswer(getUserID(1), getQID(1)));
+
 	}
 	
 	//Method adds answer data to file "answer"; returns void.
@@ -52,23 +60,54 @@ public class Answers
 	}
 	
 	//Method adds answer data to file "answer"; returns void.
-		public static void addAnswer(String userID, String qID, String filePath)
-		{
-			String id = userID + qID;
-			String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
-			String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "-1");
+	public static void addAnswer(String userID, String qID, String filePath)
+	{
+		String id = userID + qID;
+		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
+		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "-1");
 			
-			try
-			{
-				fw = new FileWriter(DATABASE_FILE_PATH, true);
-				fw.write(id + fixedPath + fixedPoints + "\n");
-				fw.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("exception");
-			}		
+		try
+		{
+			fw = new FileWriter(DATABASE_FILE_PATH, true);
+			fw.write(id + fixedPath + fixedPoints + "\n");
+			fw.close();
 		}
+		catch(Exception e)
+		{
+			System.out.println("exception");
+		}		
+	}
+	
+	public static void removeAnswer(int index)
+	{
+		File temp = new File("database/temp");
+		File database = new File(DATABASE_FILE_PATH);
+		try
+		{
+			RandomAccessFile raf = new RandomAccessFile(database, "r");
+			FileWriter fw = new FileWriter(temp, true);
+			int count;
+			int length = (int)raf.length()/LENGTH_OF_FILE;
+			String line = raf.readLine();
+			for(count = 0; count < length; count++)
+			{
+				if(count != index)
+				{
+					fw.write(line + "\n");
+				}
+				line = raf.readLine();
+			}
+			raf.close();
+			fw.close();
+			
+			Files.delete(database.toPath());
+			temp.renameTo(database);
+		}
+		catch(Exception e)
+		{
+			System.out.println("exception: " + e);
+		}		
+	}
 	
 	//Method uses a question and user ID to find a matching answer
 	public static int findAnswer(String userID, String QID)
@@ -398,5 +437,40 @@ public class Answers
 			System.out.println("error " + e);
 		}
 		return false;
+	}
+	
+	public static void update()
+	{
+		int index = 0;
+		String userID = getUserID(index);
+		while(userID != null)
+		{
+			if(Accounts.getIDIndex(userID) == -1)
+			{
+				removeAnswer(index);
+				userID = getUserID(index);
+			}
+			else
+			{
+				index++;
+				userID = getUserID(index);
+			}
+		}
+		
+		index = 0;
+		String QID = getQID(index);
+		while(QID != null)
+		{
+			if(Questions.getIDIndex(QID) == -1)
+			{
+				removeAnswer(index);
+				QID = getQID(index);
+			}
+			else
+			{
+				index++;
+				QID = getQID(index);
+			}
+		}
 	}
 }
