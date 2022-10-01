@@ -30,12 +30,24 @@ public class portfolioListPage extends JFrame
 				dropInPage(teacher, ID);
 			}
 		});
-		homeRow.add(new JLabel("")); homeRow.add(home);
+		homeRow.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.weightx = 1;
+		homeRow.add(new JLabel(""), c); 
+			c.fill = GridBagConstraints.NONE;
+			
+			c.gridx = 1;
+			
+			c.weightx = 0;
+			home.setPreferredSize(new Dimension(110, 30));
+		homeRow.add(home, c);
 		
 		portfolioScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		portfolioScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		portfolios.setLayout(new GridLayout(StudentIDs.size(), 1));
+		portfolios.setLayout(new GridBagLayout());
 		
 		for(int i = 0; i < StudentIDs.size(); i++)
 		{
@@ -53,13 +65,33 @@ public class portfolioListPage extends JFrame
 				}
 			});
 			
-			portfolios.add(jb);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				
+				c.gridx = 0; c.gridy = i;
+				
+				c.weightx = 1;
+				c.insets = new Insets(10, 10, 10, 10);
+			portfolios.add(jb, c);
 		}
+			portfolios.setPreferredSize(new Dimension(400, 200));
 		scroller.add(portfolios);
 		
-		setLayout(new GridLayout(2, 1));
-		getContentPane().add(homeRow);
-		getContentPane().add(scroller);
+		setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.weightx = 1;
+			c.insets = new Insets(0, 0, 0, 0);
+		getContentPane().add(homeRow, c);
+			
+			c.fill = GridBagConstraints.BOTH;
+			
+			c.gridx = 0;
+			c.gridy = 1;
+			
+			c.weighty = 1;
+		getContentPane().add(scroller, c);
 		getContentPane().setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();

@@ -16,6 +16,9 @@ public class portfolioPage extends JFrame
 	
 	private JButton home = new JButton("");
 	
+	private final Font studentFont = new Font("Arial", Font.BOLD, 20);
+	private final Font questionFont = new Font(Font.MONOSPACED, Font.PLAIN, 15);
+	
 	private ArrayList<Answer> as;
 
 	public portfolioPage(boolean teacher, String ID)
@@ -29,23 +32,47 @@ public class portfolioPage extends JFrame
 				dropInPage(teacher, ID);
 			}	
 		});
-		homeRow.add(new JLabel("")); homeRow.add(home);
+		homeRow.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.weightx = 1;
+		homeRow.add(new JLabel(""), c); 
+			c.fill = GridBagConstraints.NONE;
+			
+			c.gridx = 1;
+			
+			c.weightx = 0;
+			home.setPreferredSize(new Dimension(110, 30));
+		homeRow.add(home, c);
 		
 		as = makeList(ID);
 		int index = Accounts.getIDIndex(ID);
 		
 		portfolioBox.setLayout(new GridLayout(as.size() + 1, 1));
 		JLabel student = new JLabel("STUDENT: " + Accounts.getUsername(index));
+		student.setFont(studentFont);
 		portfolioBox.add(student);
 		for(int i = 0; i < as.size(); i++)
 		{
 			JLabel jl = new JLabel("" + as.get(i));
+			jl.setFont(questionFont);
 			portfolioBox.add(jl);
 		}
 		
-		setLayout(new GridLayout(2, 1));
-		add(homeRow);
-		add(portfolioBox);
+		setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.weightx = 1;
+		add(homeRow, c);
+			c.fill = GridBagConstraints.VERTICAL;
+			
+			c.gridy = 1;
+			
+			c.weighty = 1;
+		add(portfolioBox, c);
 		setVisible(true);
 		pack();
 	}
@@ -61,23 +88,62 @@ public class portfolioPage extends JFrame
 				portfolioListPage(teacher, ID);
 			}	
 		});
-		homeRow.add(new JLabel("")); homeRow.add(home);
+		homeRow.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.weightx = 1;
+		homeRow.add(new JLabel(""), c); 
+			c.fill = GridBagConstraints.NONE;
+			
+			c.gridx = 1;
+			
+			c.weightx = 0;
+			home.setPreferredSize(new Dimension(130, 30));
+		homeRow.add(home, c);
 		
 		as = makeList(studentID);
 		int index = Accounts.getIDIndex(studentID);
 		
-		portfolioBox.setLayout(new GridLayout(as.size() + 1, 1));
+		portfolioBox.setLayout(new GridBagLayout());
 		JLabel student = new JLabel("STUDENT: " + Accounts.getUsername(index));
-		portfolioBox.add(student);
+		student.setFont(studentFont);
+			c.fill = GridBagConstraints.NONE;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.insets = new Insets(0, 0, 30, 0);
+		portfolioBox.add(student, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		for(int i = 0; i < as.size(); i++)
 		{
 			JLabel jl = new JLabel("" + as.get(i));
-			portfolioBox.add(jl);
+			jl.setFont(questionFont);
+				c.gridy = i + 1;
+			portfolioBox.add(jl, c);
 		}
 		
-		setLayout(new GridLayout(2, 1));
-		getContentPane().add(homeRow);
-		getContentPane().add(portfolioBox);
+		setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+		
+			c.gridx = 0; c.gridy = 0;
+		
+			c.weightx = 1;
+		add(homeRow, c);
+			c.fill = GridBagConstraints.NONE;
+		
+			c.gridy = 1;
+			
+			c.weighty = 0;
+			c.insets = new Insets(30, 0, 0, 0);
+		add(portfolioBox, c);
+			c.fill = GridBagConstraints.VERTICAL;
+			
+			c.gridy = 2;
+			
+			c.weighty = 1;
+			c.insets = new Insets(0, 0, 0, 0);
+		add(new JLabel(""), c);
 		getContentPane().setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();

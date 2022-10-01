@@ -84,8 +84,8 @@ public class Answers
 		File database = new File(DATABASE_FILE_PATH);
 		try
 		{
-			RandomAccessFile raf = new RandomAccessFile(database, "r");
-			FileWriter fw = new FileWriter(temp, true);
+			raf = new RandomAccessFile(database, "r");
+			fw = new FileWriter(temp, true);
 			int count;
 			int length = (int)raf.length()/LENGTH_OF_FILE;
 			String line = raf.readLine();
@@ -102,6 +102,7 @@ public class Answers
 			
 			Files.delete(database.toPath());
 			temp.renameTo(database);
+			
 		}
 		catch(Exception e)
 		{

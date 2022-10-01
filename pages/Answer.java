@@ -1,5 +1,7 @@
 package pages;
 
+import library.L;
+
 public class Answer extends Record
 {
 	String username;
@@ -46,19 +48,8 @@ public class Answer extends Record
 	
 	public String toString()
 	{
-		String str = "<html>";
-		
-		str = str + "<b>" + questionName.toUpperCase() + "</b> ~ ";
-		if(grade >= 0)
-		{
-			str = str + "<u>" + grade + "/" + maxPoints + "</u>";
-		}
-		else
-		{
-			str = str + "<u>*</u>";
-		}
-		str = str + "</html>";
-		
-		return str;
+		String name = L.fitToLength(23, questionName.toUpperCase());
+		String points = L.fitToLength(10, grade + "/" + maxPoints);
+		return name + "    ~ " + points; 
 	}
 }

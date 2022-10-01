@@ -1,9 +1,16 @@
 package library;
 
 import java.util.UUID;
+import java.awt.*;
 
 public class L 
 {
+	public final Color PRIME_BLUE = new Color(100, 211, 255);
+	public final Color DARK_BLUE = new Color(52, 143, 179);
+	public final Color LIGHT_BLUE = new Color(125, 218, 255);
+	public final Color DARK_BROWN = new Color(179, 110, 34);
+	public final Color LIGHT_BROWN = new Color(255, 181, 99);
+	
 	//Method changes String length to fit integer value length; returns changed String.
 	public static String fitToLength(int length, String str)
 	{

@@ -1,6 +1,6 @@
 package pages;
 
-import java.awt.event.*;
+import java.awt.event.*; 
 import java.awt.*;
 import javax.swing.*;
 
@@ -38,7 +38,9 @@ public class dropInPage extends JFrame
 		teacher = isTeacher;
 		ID = id;
 		
-		logOutRow.setLayout(new GridLayout(1, 2));
+		logOutRow.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
 		logOut.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
@@ -46,16 +48,54 @@ public class dropInPage extends JFrame
 				dispose();
 			}
 		});
-		logOutRow.add(new JLabel()); logOutRow.add(logOut);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.weightx = 1;
+		logOutRow.add(new JLabel(""), c); 
+			c.fill = GridBagConstraints.NONE;
+			
+			c.gridx = 1;
+			
+			c.insets = new Insets(0, 0, 0, 10);
+			logOut.setPreferredSize(new Dimension(80, 30));
+		logOutRow.add(logOut);
+			c.insets = new Insets(0, 0, 0, 0);
 		
+		ComponentListener cl = new ComponentListener() {
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int y = infoBox.getHeight();
+				Font f;
+				if(teacher)
+				{
+					f = new Font("Arial", Font.PLAIN, y/5 + 5);
+					newAnswers.setFont(f);
+				}
+				else
+				{
+					f = new Font("Arial", Font.PLAIN, y/12 + 5);
+					unansweredQuestions.setFont(f);
+					returnedQuestions.setFont(f);
+					feedback.setFont(f);
+				}
+			}
+
+			public void componentMoved(ComponentEvent e) {}
+			public void componentShown(ComponentEvent e) {}
+			public void componentHidden(ComponentEvent e) {}
+		};	
+			
 		if(teacher)
 		{
 			newAnswers.setText("There have been " + " new responses");
+			newAnswers.addComponentListener(cl);
 			infoBox.add(newAnswers);
 		}
 		else
 		{
 			unansweredQuestions.setText("You have " + " unanswered Questions");
+			unansweredQuestions.addComponentListener(cl);
 			returnedQuestions.setText("You have " + " returned questions");
 			feedback.setText("You have recieved feedback on " + " question");
 			infoBox.setLayout(new GridLayout(3, 1));
@@ -74,13 +114,52 @@ public class dropInPage extends JFrame
 			}
 		});
 		
-		routingBox.setLayout(new GridLayout(1, 3));
-		routingBox.add(questionPage); routingBox.add(new JLabel("   ")); routingBox.add(portfolioPage);
+		routingBox.setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 1;
+			
+			c.weightx = 0.5;
+		routingBox.add(new JLabel(), c);
+			c.fill = GridBagConstraints.NONE;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.weightx = 0;
+			
+			c.insets = new Insets(0, 10, 0, 5);
+			questionPage.setPreferredSize(new Dimension(150, 30));
+		routingBox.add(questionPage, c);
+			c.gridx = 2;
+			
+			c.insets = new Insets(0, 5, 0, 10);
+			portfolioPage.setPreferredSize(new Dimension(150, 30));
+		routingBox.add(portfolioPage, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		
-		setLayout(new GridLayout(3, 1));
-		getContentPane().add(logOutRow);
-		getContentPane().add(infoBox);
-		getContentPane().add(routingBox);
+		setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.weightx = 0.5;
+		getContentPane().add(logOutRow, c);
+			c.fill = GridBagConstraints.BOTH;
+			
+			c.gridy = 1;
+			
+			c.ipady = 50;
+			
+			c.weighty = 0.5;
+		getContentPane().add(infoBox, c);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridy = 2;
+			
+			c.ipady = 0;
+			
+			c.weighty = 0;
+		getContentPane().add(routingBox, c);
 		getContentPane().setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();

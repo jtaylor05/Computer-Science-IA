@@ -2,6 +2,8 @@ package pages;
 
 import java.util.*; 
 import javax.swing.*;
+import javax.xml.transform.Templates;
+
 import java.awt.event.*;
 import java.awt.*;
 import database.*;
@@ -36,6 +38,8 @@ public class questionPage extends JFrame
 	
 	public questionPage(Question q, String ID, boolean isTeacher)
 	{
+		GridBagConstraints c = new GridBagConstraints();
+		
 		question = q;
 		teacher = isTeacher;
 		this.ID = ID;
@@ -74,22 +78,32 @@ public class questionPage extends JFrame
 				questionList();
 			}
 		});
-		homeRow.add(new JLabel("")); homeRow.add(home);
+		homeRow.setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0;
+			
+			c.weightx = 1;
+		homeRow.add(new JLabel(""), c); 
+			c.fill = GridBagConstraints.NONE;
+		
+			c.gridx = 1;
+			
+			c.weightx = 0;
+			home.setPreferredSize(new Dimension(140, 30));
+		homeRow.add(home, c);
 		
 		if(teacher)
 		{
 			answerScroller = new JScrollPane(answerBox);
 			answerScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			answerScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			answerBox.setLayout(new GridLayout(answers.size(), 1));
+			answerBox.setLayout(new GridBagLayout());
 			for(int i = 0; i < answers.size() - 1; i++)
 			{
-				JPanel jp = new JPanel();
-				jp.setLayout(new GridLayout(1, 5));
-						
 				final Answer a = answers.get(i);
 				
-				Canvas c = new Canvas() {
+				Canvas ca = new Canvas() {
 					public void paint(Graphics g)
 					{
 						Toolkit t = Toolkit.getDefaultToolkit();
@@ -97,21 +111,38 @@ public class questionPage extends JFrame
 						g.drawImage(i, 50, 50, this);
 					}
 				};
-				jp.add(c);
+					c.fill = GridBagConstraints.HORIZONTAL;
+				
+					c.gridx = 0; c.gridy = i;
+				
+					c.weightx = 0.5;
+				answerBox.add(ca, c);
 				
 				JLabel user = new JLabel(a.getUser());
-				jp.add(user);
+					c.fill = GridBagConstraints.NONE;
+				
+					c.gridx = 1;
+				
+					c.weightx = 0;
+					c.insets = new Insets(0, 0, 0, 20);
+					user.setPreferredSize(new Dimension(150, 30));
+				answerBox.add(user, c);
 				
 				JLabel grade = new JLabel("");
 				if(a.hasAnswer() && a.getGrade() > -1)
 				{
 					grade.setText("Grade: " + a.getOutOf());
 				}
+				else if(a.hasAnswer() && a.getGrade() == -1)
+				{
+					grade.setText("Grade: Missing");
+				}
 				else
 				{
 					grade.setText("Grade: N/A");
 				}
-				jp.add(grade);
+					c.gridx = 2;
+				answerBox.add(grade, c);
 				
 				JButton edit = new JButton("Give Grade");
 				edit.addActionListener(new ActionListener() {
@@ -120,7 +151,9 @@ public class questionPage extends JFrame
 						grade(a, teacher);
 					}
 				});
-				jp.add(edit);
+					c.gridx = 3;
+					edit.setPreferredSize(new Dimension(130, 30));
+				answerBox.add(edit, c);
 				
 				JButton submit = new JButton("Give Feedback");
 				submit.addActionListener(new ActionListener() {
@@ -129,16 +162,16 @@ public class questionPage extends JFrame
 						submitFeedback(a, teacher);
 					}
 				});
-				jp.add(submit);
-				
-				answerBox.add(jp);
+					c.gridx = 4;
+					submit.setPreferredSize(new Dimension(130, 30));
+				answerBox.add(submit, c);
 			}
 		}
 		else
 		{
-			answerBox.setLayout(new GridLayout(1, 4));
+			answerBox.setLayout(new GridBagLayout());
 			
-			Canvas c = new Canvas() {
+			Canvas ca = new Canvas() {
 				public void paint(Graphics g)
 				{
 					Toolkit t = Toolkit.getDefaultToolkit();
@@ -146,8 +179,12 @@ public class questionPage extends JFrame
 					g.drawImage(i, 50, 50, this);
 				}
 			};
+				c.fill = GridBagConstraints.HORIZONTAL;
 			
-			answerBox.add(c);
+				c.gridx = 0;
+		
+				c.weightx = 0.5;
+			answerBox.add(ca, c);
 			
 			JLabel grade = new JLabel("");
 			if(answer.hasAnswer() && q.getGrade() > -1)
@@ -158,16 +195,14 @@ public class questionPage extends JFrame
 			{
 				grade.setText("Grade: N/A");
 			}
-			answerBox.add(grade);
+				c.fill = GridBagConstraints.NONE;
 			
-			JButton edit = new JButton("Edit");
-			edit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e)
-				{
-					//edit(teacher);
-				}
-			});
-			answerBox.add(edit);
+				c.gridx = 1;
+		
+				c.weightx = 0;
+				c.insets = new Insets(0, 0, 0, 20);
+				grade.setPreferredSize(new Dimension(150, 30));
+			answerBox.add(grade, c);
 			
 			JButton submit = new JButton("Submit");
 			submit.addActionListener(new ActionListener() {
@@ -176,12 +211,25 @@ public class questionPage extends JFrame
 					submitWork(answer, teacher);
 				}
 			});
-			answerBox.add(submit);
+				c.gridx = 2;
+				submit.setPreferredSize(new Dimension(150, 30));
+			answerBox.add(submit, c);
 		}
 		
-		setLayout(new GridLayout(2, 1));
-		getContentPane().add(homeRow);
-		getContentPane().add(answerBox);
+		setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridy = 0;
+			
+			c.weightx = 1;
+		getContentPane().add(homeRow, c);
+			c.fill = GridBagConstraints.BOTH;
+			
+			c.gridy = 1;
+			
+			c.weighty = 1;
+			c.insets = new Insets(20, 0, 0, 0);
+		getContentPane().add(answerBox, c);
 		getContentPane().setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
@@ -192,16 +240,21 @@ public class questionPage extends JFrame
 	{
 		JFrame grade = new JFrame("Grade");
 		grade.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		grade.setLayout(new GridLayout(5,1));
+		grade.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		grade.setVisible(true);
 		int temp = Accounts.getUsernameIndex(a.getUser());
 		String uID = Accounts.getID(temp);
 		int index = Answers.findAnswer(uID, question.getID());
 		
-		JLabel label = new JLabel(" " + a.getName() + " Max Points: " + a.getMaxPoints());
-		grade.add(label);
+		JLabel label1 = new JLabel(" " + a.getName());
+			c.fill = GridBagConstraints.HORIZONTAL;
+		grade.add(label1, c);
+		JLabel label2 = new JLabel("Max Points: " + a.getMaxPoints());
+			c.gridy = 1;
+		grade.add(label2, c);
 		
-		Canvas c = new Canvas() {
+		Canvas ca = new Canvas() {
 			public void paint(Graphics g)
 			{
 				Toolkit t = Toolkit.getDefaultToolkit();
@@ -209,7 +262,10 @@ public class questionPage extends JFrame
 				g.drawImage(i, 50, 50, this);
 			}
 		};
-		grade.add(c);
+			c.fill = GridBagConstraints.BOTH;
+			
+			c.gridy = 2;
+		grade.add(ca, c);
 		
 		JPanel newGrade = new JPanel(); newGrade.setLayout(new GridLayout(2,1));
 		JLabel newGradeLabel = new JLabel("Enter New Grade:");
@@ -223,10 +279,14 @@ public class questionPage extends JFrame
 			newGradeText = new JTextField("NG");
 		}
 		newGrade.add(newGradeLabel); newGrade.add(newGradeText);
-		grade.add(newGrade);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridy = 3;
+		grade.add(newGrade, c);
 		
-		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 3));
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
 		JButton close = new JButton("Close");
+		close.setPreferredSize(new Dimension(70, 20));
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -234,6 +294,7 @@ public class questionPage extends JFrame
 			}
 		});
 		JButton finish = new JButton("Finish");
+		finish.setPreferredSize(new Dimension(70, 20));
 		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -267,12 +328,16 @@ public class questionPage extends JFrame
 				}
 				else
 				{
-					label.setText("Wrong Values " + " Max: " + a.getMaxPoints());
+					label1.setText("Wrong Values");
 				}
 			}
 		});
-		buttons.add(close); buttons.add(finish);
-		grade.add(buttons);
+			c.insets = new Insets(10, 10, 10, 10);
+		buttons.add(close, c); buttons.add(finish, c);
+			c.gridy = 4;
+			
+			c.insets = new Insets(0, 0, 0, 0);
+		grade.add(buttons, c);
 		
 		grade.pack();
 	}
@@ -282,13 +347,15 @@ public class questionPage extends JFrame
 	{
 		JFrame submit = new JFrame("Submit Image");
 		submit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		submit.setLayout(new GridLayout(5,1));
+		submit.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		submit.setVisible(true);
 		int temp = Accounts.getUsernameIndex(a.getUser());
 		String uID = Accounts.getID(temp);
 		int index = Answers.findAnswer(uID, question.getID());
 			
 		JLabel label = new JLabel(" " + a.getName());
+			c.fill = GridBagConstraints.HORIZONTAL;
 		submit.add(label);
 			
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
@@ -303,10 +370,14 @@ public class questionPage extends JFrame
 			filePathText = new JTextField("");
 		}
 		filePath.add(filePathLabel); filePath.add(filePathText);
-		submit.add(filePath);
+			c.fill = GridBagConstraints.HORIZONTAL;
+		
+			c.gridy = 1;
+		submit.add(filePath, c);
 			
-		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 3));
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
 		JButton close = new JButton("Close");
+		close.setPreferredSize(new Dimension(70, 20));
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -314,6 +385,7 @@ public class questionPage extends JFrame
 			}
 		});
 		JButton finish = new JButton("Finish");
+		finish.setPreferredSize(new Dimension(70, 20));
 		finish.addActionListener(new ActionListener() {
 				
 			public void actionPerformed(ActionEvent e)
@@ -341,8 +413,12 @@ public class questionPage extends JFrame
 				}
 			}
 		});
-		buttons.add(close); buttons.add(finish);
-		submit.add(buttons);
+			c.insets = new Insets(10, 10, 10, 10);
+		buttons.add(close, c); buttons.add(finish, c);
+			c.gridy = 2;
+		
+			c.insets = new Insets(0, 0, 0, 0);
+		submit.add(buttons, c);
 		
 		submit.pack();
 	}
@@ -352,13 +428,23 @@ public class questionPage extends JFrame
 	{
 		JFrame submit = new JFrame("Submit Image");
 		submit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		submit.setLayout(new GridLayout(5,1));
+		submit.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		submit.setVisible(true);
-		int temp = Accounts.getUsernameIndex(a.getUser());
+		int temp;
+		if(teacher)
+		{
+			temp = Accounts.getUsernameIndex(a.getUser());
+		}
+		else
+		{
+			temp = Accounts.getIDIndex(ID);
+		}
 		String uID = Accounts.getID(temp);
 		int index = Answers.findAnswer(uID, question.getID());
 		
 		JLabel label = new JLabel(" " + a.getName());
+			c.fill = GridBagConstraints.HORIZONTAL;
 		submit.add(label);
 		
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
@@ -373,10 +459,14 @@ public class questionPage extends JFrame
 			filePathText = new JTextField("");
 		}
 		filePath.add(filePathLabel); filePath.add(filePathText);
-		submit.add(filePath);
+			c.fill = GridBagConstraints.HORIZONTAL;
 		
-		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 3));
+			c.gridy = 1;
+		submit.add(filePath, c);
+		
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
 		JButton close = new JButton("Close");
+		close.setPreferredSize(new Dimension(70, 20));
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -384,6 +474,7 @@ public class questionPage extends JFrame
 			}
 		});
 		JButton finish = new JButton("Finish");
+		finish.setPreferredSize(new Dimension(70, 20));
 		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -411,8 +502,12 @@ public class questionPage extends JFrame
 				}
 			}
 		});
-		buttons.add(close); buttons.add(finish);
-		submit.add(buttons);
+			c.insets = new Insets(10, 10, 10, 10);
+		buttons.add(close, c); buttons.add(finish, c);
+			c.gridy = 2;
+			
+			c.insets = new Insets(0, 0, 0, 0);
+		submit.add(buttons, c);
 		
 		submit.pack();
 	}

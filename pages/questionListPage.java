@@ -25,6 +25,8 @@ public class questionListPage extends JFrame
 	
 	public questionListPage(boolean isTeacher, String ID)
 	{
+		GridBagConstraints c = new GridBagConstraints();
+		
 		teacher = isTeacher;
 		this.ID = ID;
 		
@@ -49,15 +51,13 @@ public class questionListPage extends JFrame
 		
 		if(teacher)
 		{
-			questions.setLayout(new GridLayout(questionList.size() + 1, 1));
+			questions.setLayout(new GridBagLayout());
 			for(int i = 0; i < questionList.size(); i++)
 			{
-				JPanel jp = new JPanel();
-				jp.setLayout(new GridLayout(1, 3));
 				
 				final Question q = questionList.get(i);
 				
-				Canvas c = new Canvas() {
+				Canvas ca = new Canvas() {
 					public void paint(Graphics g)
 					{
 						Toolkit t = Toolkit.getDefaultToolkit();
@@ -65,7 +65,12 @@ public class questionListPage extends JFrame
 						g.drawImage(i, 50, 50, this);
 					}
 				};
-				jp.add(c);
+					c.fill = GridBagConstraints.HORIZONTAL;
+					
+					c.gridx = 0; c.gridy = i;
+					
+					c.weightx = 0.5;
+				questions.add(ca, c);
 				
 				JButton jb = new JButton(q.getName());
 				jb.addActionListener(new ActionListener() {
@@ -83,13 +88,20 @@ public class questionListPage extends JFrame
 						}
 					}
 				});
-				jp.add(jb);
+					c.fill = GridBagConstraints.NONE;
+					
+					c.gridx = 1;
+					
+					c.weightx = 0;
+					c.insets = new Insets(0, 0, 0, 20);
+					jb.setPreferredSize(new Dimension(150, 30));
+				questions.add(jb, c);
 				
 				JLabel jl = new JLabel();
 				jl.setText("Out of " + q.getMaxPoints() + " points");
-				jp.add(jl);
-				
-				questions.add(jp);
+					c.gridx = 2;
+					c.insets = new Insets(0, 0, 0, 0);
+				questions.add(jl, c);
 			}
 			
 			JButton add = new JButton("add");
@@ -99,7 +111,6 @@ public class questionListPage extends JFrame
 					if(!isEdit) {addQuestion();}
 				}
 			});
-			questions.add(add);
 			
 			JButton edit = new JButton("Edit a Question");
 			edit.addActionListener(new ActionListener() {
@@ -115,27 +126,45 @@ public class questionListPage extends JFrame
 					{
 						isEdit = true;
 						edit.setText("Stop Editing");
-						add.setText("Stop Editing to Add");
+						add.setText("X");
 					}
 					
 				}
 			});
 			
 			
-			homeRow.setLayout(new GridLayout(1, 3));
-			homeRow.add(edit); homeRow.add(new JLabel("")); homeRow.add(home);
+			homeRow.setLayout(new GridBagLayout());
+				c.fill = GridBagConstraints.NONE;
+			
+				c.gridx = 0;
+			
+				c.insets = new Insets(10, 0, 0, 0);
+				edit.setPreferredSize(new Dimension(150, 30));
+			homeRow.add(edit, c);
+				c.gridx = 1;
+				add.setPreferredSize(new Dimension(60, 30));
+			homeRow.add(add, c);
+				c.gridx = 3;
+				home.setPreferredSize(new Dimension(120, 30));
+			homeRow.add(home, c);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				
+				c.gridx = 2;
+				
+				c.weightx = 0.5;
+				
+				c.insets = new Insets(0, 0, 0, 0);
+			homeRow.add(new JLabel(""), c); 
 		}
 		else
 		{
-			questions.setLayout(new GridLayout(questionList.size(), 1));
+			questions.setLayout(new GridBagLayout());
 			for(int i = 0; i < questionList.size(); i++)
 			{
-				JPanel jp = new JPanel();
-				jp.setLayout(new GridLayout(1, 4));
 				
 				final Question q = questionList.get(i);
 				
-				Canvas c = new Canvas() {
+				Canvas ca = new Canvas() {
 					public void paint(Graphics g)
 					{
 						Toolkit t = Toolkit.getDefaultToolkit();
@@ -143,7 +172,12 @@ public class questionListPage extends JFrame
 						g.drawImage(i, 50, 50, this);
 					}
 				};
-				jp.add(c);
+					c.fill = GridBagConstraints.HORIZONTAL;
+				
+					c.gridx = 0; c.gridy = i;
+				
+					c.weightx = 0.5;
+				questions.add(ca, c);
 				
 				JButton jb = new JButton(questionList.get(i).getName());
 				jb.addActionListener(new ActionListener() {
@@ -153,33 +187,67 @@ public class questionListPage extends JFrame
 						dispose();
 					}
 				});
-				jp.add(jb);
+					c.fill = GridBagConstraints.NONE;
+				
+					c.gridx = 1;
+				
+					c.weightx = 0;
+					c.insets = new Insets(0, 0, 0, 20);
+					jb.setPreferredSize(new Dimension(150, 30));
+				questions.add(jb, c);
 				
 				JLabel jl = new JLabel();
 				if(q.hasAnswer() && q.getGrade() > -1)
 				{
 					jl.setText("Points: " + q.getOutOf());
 				}
+				else if(q.hasAnswer() && q.getGrade() == -1)
+				{
+					jl.setText("Points: Missing");
+				}
 				else
 				{
 					jl.setText("Points: N/A");
 				}
-				jp.add(jl);
+					c.gridx = 2;
+					c.insets = new Insets(0, 0, 0, 0);
+				questions.add(jl, c);
 				
 				JLabel message = new JLabel(q.getMessage());
-				jp.add(message);
-				
-				questions.add(jp);
+					c.gridx = 3;
+				questions.add(message, c);
 			}
 			
-			homeRow.setLayout(new GridLayout(1, 2));
-			homeRow.add(new JLabel("")); homeRow.add(home);
+			homeRow.setLayout(new GridBagLayout());
+				c.fill = GridBagConstraints.HORIZONTAL;
+				
+				c.gridx = 0;
+				
+				c.weightx = 1;
+			homeRow.add(new JLabel(""), c); 
+				c.fill = GridBagConstraints.NONE;
+				
+				c.gridx = 1;
+				
+				c.weightx = 0;
+			homeRow.add(home, c);
 		}
-		scroller.add(questionScroller);
-		
-		setLayout(new GridLayout(2, 1));
-		getContentPane().add(homeRow);
-		getContentPane().add(scroller);
+			questionScroller.setPreferredSize(new Dimension(400, 200));
+		scroller.add(questionScroller, c);
+			
+		setLayout(new GridBagLayout());
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.weightx = 1;
+		getContentPane().add(homeRow, c);
+			c.fill = GridBagConstraints.BOTH;
+			
+			c.gridy = 1;
+			
+			c.weighty = 1;
+		getContentPane().add(scroller, c);
 		getContentPane().setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
@@ -206,31 +274,37 @@ public class questionListPage extends JFrame
 		JPanel name = new JPanel(); name.setLayout(new GridLayout(2,1));
 		JLabel nameLabel = new JLabel("Enter name:");
 		JTextField nameText = new JTextField();
+		nameText.setPreferredSize(new Dimension(200, 30));
 		name.add(nameLabel); name.add(nameText);
 		add.add(name);
 		
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
 		JLabel filePathLabel = new JLabel("Enter file path:");
 		JTextField filePathText = new JTextField();
+		filePathText.setPreferredSize(new Dimension(200, 30));
 		filePath.add(filePathLabel); filePath.add(filePathText);
 		add.add(filePath);
 		
 		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
 		JLabel maxPointsLabel = new JLabel("Enter max points:");
 		JTextField maxPointsText = new JTextField();
+		maxPointsText.setPreferredSize(new Dimension(200, 30));
 		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
 		add.add(maxPoints);
 		
-		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 2));
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		JButton close = new JButton("Close");
+		close.setPreferredSize(new Dimension(70, 20));
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				add.dispose();
 			}
 		});
-		JButton jb = new JButton("Add");
-		jb.addActionListener(new ActionListener() {
+		JButton finish = new JButton("Add");
+		finish.setPreferredSize(new Dimension(70, 20));
+		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
 			{
@@ -259,7 +333,8 @@ public class questionListPage extends JFrame
 				}
 			}
 		});
-		buttons.add(close); buttons.add(jb);
+			c.insets = new Insets(10, 10, 10, 10);
+		buttons.add(close, c); buttons.add(finish, c);
 		add.add(buttons);
 		
 		add.pack();
@@ -269,33 +344,41 @@ public class questionListPage extends JFrame
 	{
 		JFrame edit = new JFrame("Edit Question");
 		edit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		edit.setLayout(new GridLayout(5,1));
+		edit.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		edit.setVisible(true);
 		int index = Questions.getIDIndex(q.getID());
 		
 		JLabel label = new JLabel("Edit " + q.getName());
-		edit.add(label);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.weighty = 1;
+		edit.add(label, c);
 		
 		JPanel name = new JPanel(); name.setLayout(new GridLayout(2,1));
 		JLabel nameLabel = new JLabel("Enter name:");
 		JTextField nameText = new JTextField(q.getName());
 		name.add(nameLabel); name.add(nameText);
-		edit.add(name);
+			c.gridy = 1;
+		edit.add(name, c);
 		
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
 		JLabel filePathLabel = new JLabel("Enter file path:");
 		JTextField filePathText = new JTextField(L.shear(Questions.getFilePath(index)));
 		filePath.add(filePathLabel); filePath.add(filePathText);
-		edit.add(filePath);
+			c.gridy = 2;
+		edit.add(filePath, c);
 		
 		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
 		JLabel maxPointsLabel = new JLabel("Enter max points:");
 		JTextField maxPointsText = new JTextField("" + q.getMaxPoints());
 		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
-		edit.add(maxPoints);
+			c.gridy = 3;
+		edit.add(maxPoints, c);
 		
-		JPanel buttons = new JPanel(); buttons.setLayout(new GridLayout(1, 3));
+		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
 		JButton close = new JButton("Close");
+		close.setPreferredSize(new Dimension(70, 20));
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -303,6 +386,7 @@ public class questionListPage extends JFrame
 			}
 		});
 		JButton remove = new JButton("Remove");
+		remove.setPreferredSize(new Dimension(90, 20));
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -313,6 +397,7 @@ public class questionListPage extends JFrame
 			}
 		});
 		JButton finish = new JButton("Finish");
+		finish.setPreferredSize(new Dimension(70, 20));
 		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -342,8 +427,12 @@ public class questionListPage extends JFrame
 				}
 			}
 		});
-		buttons.add(close); buttons.add(remove); buttons.add(finish);
-		edit.add(buttons);
+			c.insets = new Insets(10, 10, 10, 10);
+		buttons.add(close, c); buttons.add(remove, c); buttons.add(finish, c);
+			c.gridy = 4;
+			
+			c.insets = new Insets(0, 0, 0, 0);
+		edit.add(buttons, c);
 		
 		edit.pack();
 	}
@@ -408,7 +497,28 @@ public class questionListPage extends JFrame
 			index = index + 1;
 			QID = Questions.getID(index);
 		}
-			
+		
+		questions = sortList(questions);
+		
 		return questions;
+	}
+	
+	public ArrayList<Question> sortList(ArrayList<Question> list)
+	{
+		for(int i = 0; i < list.size(); i++)
+		{
+			for(int j = i; j > 0; j--)
+			{
+				Question first = list.get(j);
+				Question second = list.get(j - 1);
+				if(first.getName().compareTo(second.getName()) < 0) 
+				{
+					Question temp = list.get(j);
+					list.set(j, list.get(j - 1));
+					list.set(j - 1, temp);
+				}		
+			}
+		}
+		return list;
 	}
 }
