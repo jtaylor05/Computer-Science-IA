@@ -22,14 +22,14 @@ public class Questions
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
 	{
-		addQuestion("Question 1", "images/question_1", 10);
-		addQuestion("Question 2", "images/question_2", 12);
+		//addQuestion("Question 1", "images/question_1", 10);
+		//addQuestion("Question 2", "images/question_2", 12);
 		
-		String name = getName(0);
-		String id = getID(0);
-		int index = getNameIndex("Question 2");
+		//String name = getName(0);
+		//String id = getID(0);
+		//int index = getNameIndex("Question 2");
 		
-		System.out.println(L.shear(name) + "\n" + id + "\n" + index);
+		//System.out.println(L.shear(name) + "\n" + id + "\n" + index);
 	}
 	
 	//Method adds question data to file "questions"; returns void.
@@ -50,6 +50,8 @@ public class Questions
 		{
 			System.out.println("exception");
 		}		
+		
+		Accounts.updateUnanswered(true, false, false, null);
 	}
 	
 	public static void replaceQuestion(String name, String filePath, int totalPoints, String QID)
@@ -57,7 +59,7 @@ public class Questions
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, name);
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
 		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "" + totalPoints);
-		String id = QID;
+		String id = L.getID();
 		
 		int index = getIDIndex(QID);
 		int prevPoints = getPoints(index);
@@ -93,7 +95,11 @@ public class Questions
 		catch(Exception e)
 		{
 			System.out.println("exception");
-		}		
+		}	
+		
+		Accounts.updateUnanswered(false, true, false, QID);
+		
+		Answers.update();
 	}
 	
 	public static void removeQuestion(String QID)
@@ -126,6 +132,8 @@ public class Questions
 		{
 			System.out.println("exception: " + e);
 		}	
+		
+		Accounts.updateUnanswered(false, false, true, QID);
 		
 		Answers.update();
 	}
@@ -318,6 +326,28 @@ public class Questions
 		points = L.shear(points);
 		int p = Integer.parseInt(points);
 		return p;
+	}
+	
+	public static int numberQuestions()
+	{
+		int index = 0;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+				index = index + 1;
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Q195 error " + e);
+		}
+		
+		return index;
 	}
 	
 }

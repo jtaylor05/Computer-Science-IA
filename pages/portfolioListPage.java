@@ -7,6 +7,7 @@ import java.util.*;
 import javax.swing.*;
 
 import database.Accounts;
+import library.L;
 
 public class portfolioListPage extends JFrame
 {
@@ -24,29 +25,39 @@ public class portfolioListPage extends JFrame
 	{
 		StudentIDs = makeStudentList();
 		
+		GridBagConstraints c = new GridBagConstraints();
 		home.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				dropInPage(teacher, ID);
 			}
 		});
+		homeRow.setBackground(L.LIGHT_BROWN);
 		homeRow.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
 			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0;
 			
 			c.weightx = 1;
 		homeRow.add(new JLabel(""), c); 
 			c.fill = GridBagConstraints.NONE;
-			
+		
 			c.gridx = 1;
 			
 			c.weightx = 0;
-			home.setPreferredSize(new Dimension(110, 30));
+			
+			c.insets = new Insets(3, 3, 3, 3);
+			home.setPreferredSize(new Dimension(140, 30));
+			home.setBackground(L.DARK_BROWN);
+			home.setForeground(Color.WHITE);
 		homeRow.add(home, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		
 		portfolioScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		portfolioScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
+		scroller.setBackground(L.DARK_BLUE);
+		portfolios.setBackground(L.PRIME_BLUE);
 		portfolios.setLayout(new GridBagLayout());
 		
 		for(int i = 0; i < StudentIDs.size(); i++)
@@ -65,15 +76,18 @@ public class portfolioListPage extends JFrame
 				}
 			});
 			
-				c.fill = GridBagConstraints.HORIZONTAL;
+				c.fill = GridBagConstraints.NONE;
 				
 				c.gridx = 0; c.gridy = i;
 				
 				c.weightx = 1;
 				c.insets = new Insets(10, 10, 10, 10);
+				jb.setPreferredSize(new Dimension(120, 30));
+				jb.setBackground(L.LIGHT_BROWN);
+				jb.setForeground(Color.BLACK);
 			portfolios.add(jb, c);
 		}
-			portfolios.setPreferredSize(new Dimension(400, 200));
+			portfolios.setPreferredSize(new Dimension(300, 200));
 		scroller.add(portfolios);
 		
 		setLayout(new GridBagLayout());

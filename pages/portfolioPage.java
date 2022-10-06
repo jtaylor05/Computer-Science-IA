@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import database.*;
+import library.L;
 
 public class portfolioPage extends JFrame
 {
@@ -34,45 +35,70 @@ public class portfolioPage extends JFrame
 		});
 		homeRow.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		homeRow.setBackground(L.LIGHT_BROWN);
 			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0;
 			
 			c.weightx = 1;
 		homeRow.add(new JLabel(""), c); 
 			c.fill = GridBagConstraints.NONE;
-			
+		
 			c.gridx = 1;
 			
 			c.weightx = 0;
-			home.setPreferredSize(new Dimension(110, 30));
+			
+			c.insets = new Insets(3, 3, 3, 3);
+			home.setPreferredSize(new Dimension(140, 30));
+			home.setBackground(L.DARK_BROWN);
+			home.setForeground(Color.WHITE);
 		homeRow.add(home, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		
 		as = makeList(ID);
 		int index = Accounts.getIDIndex(ID);
 		
-		portfolioBox.setLayout(new GridLayout(as.size() + 1, 1));
+		portfolioBox.setLayout(new GridBagLayout());
 		JLabel student = new JLabel("STUDENT: " + Accounts.getUsername(index));
 		student.setFont(studentFont);
-		portfolioBox.add(student);
+		student.setBackground(L.PRIME_BLUE); student.setOpaque(true);
+			c.fill = GridBagConstraints.BOTH;
+			
+			c.gridx = 0; c.gridy = 0;
+			
+			c.ipady = 30;
+		portfolioBox.add(student, c);
+			c.ipady = 0;
 		for(int i = 0; i < as.size(); i++)
 		{
 			JLabel jl = new JLabel("" + as.get(i));
 			jl.setFont(questionFont);
-			portfolioBox.add(jl);
+			jl.setBackground(L.PRIME_BLUE); jl.setOpaque(true);
+				c.gridy = i + 1;
+			portfolioBox.add(jl, c);
 		}
 		
 		setLayout(new GridBagLayout());
 			c.fill = GridBagConstraints.HORIZONTAL;
-			
+	
 			c.gridx = 0; c.gridy = 0;
-			
+	
 			c.weightx = 1;
 		add(homeRow, c);
-			c.fill = GridBagConstraints.VERTICAL;
-			
+			c.fill = GridBagConstraints.HORIZONTAL;
+	
 			c.gridy = 1;
-			
-			c.weighty = 1;
+		
+			c.weighty = 0;
 		add(portfolioBox, c);
+			c.fill = GridBagConstraints.VERTICAL;
+		
+			c.gridy = 2;
+		
+			c.weighty = 1;
+			JLabel jl = new JLabel(""); 
+			jl.setBackground(L.PRIME_BLUE); jl.setOpaque(true);
+		add(jl, c);
 		setVisible(true);
 		pack();
 	}
@@ -90,35 +116,47 @@ public class portfolioPage extends JFrame
 		});
 		homeRow.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		homeRow.setBackground(L.LIGHT_BROWN);
 			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.gridx = 0;
 			
 			c.weightx = 1;
 		homeRow.add(new JLabel(""), c); 
 			c.fill = GridBagConstraints.NONE;
-			
+		
 			c.gridx = 1;
 			
 			c.weightx = 0;
-			home.setPreferredSize(new Dimension(130, 30));
+			
+			c.insets = new Insets(3, 3, 3, 3);
+			home.setPreferredSize(new Dimension(140, 30));
+			home.setBackground(L.DARK_BROWN);
+			home.setForeground(Color.WHITE);
 		homeRow.add(home, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		
 		as = makeList(studentID);
 		int index = Accounts.getIDIndex(studentID);
 		
 		portfolioBox.setLayout(new GridBagLayout());
 		JLabel student = new JLabel("STUDENT: " + Accounts.getUsername(index));
+		student.setHorizontalTextPosition(JLabel.CENTER);
 		student.setFont(studentFont);
-			c.fill = GridBagConstraints.NONE;
+		student.setBackground(L.PRIME_BLUE); student.setOpaque(true);
+			c.fill = GridBagConstraints.BOTH;
 			
 			c.gridx = 0; c.gridy = 0;
 			
-			c.insets = new Insets(0, 0, 30, 0);
+			c.ipady = 30;
 		portfolioBox.add(student, c);
+			c.ipady = 0;
 			c.insets = new Insets(0, 0, 0, 0);
 		for(int i = 0; i < as.size(); i++)
 		{
 			JLabel jl = new JLabel("" + as.get(i));
 			jl.setFont(questionFont);
+			jl.setBackground(L.PRIME_BLUE); jl.setOpaque(true);
 				c.gridy = i + 1;
 			portfolioBox.add(jl, c);
 		}
@@ -130,12 +168,12 @@ public class portfolioPage extends JFrame
 		
 			c.weightx = 1;
 		add(homeRow, c);
-			c.fill = GridBagConstraints.NONE;
+			c.fill = GridBagConstraints.HORIZONTAL;
 		
 			c.gridy = 1;
 			
-			c.weighty = 0;
-			c.insets = new Insets(30, 0, 0, 0);
+			c.weightx = 0.2;
+			portfolioBox.setBackground(L.PRIME_BLUE);
 		add(portfolioBox, c);
 			c.fill = GridBagConstraints.VERTICAL;
 			
@@ -143,7 +181,9 @@ public class portfolioPage extends JFrame
 			
 			c.weighty = 1;
 			c.insets = new Insets(0, 0, 0, 0);
-		add(new JLabel(""), c);
+			JLabel jl = new JLabel(""); 
+			jl.setBackground(L.PRIME_BLUE); jl.setOpaque(true);
+		add(jl, c);
 		getContentPane().setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();

@@ -1,15 +1,19 @@
 package library;
 
+import java.util.ArrayList;
 import java.util.UUID;
+
+import database.Accounts;
+
 import java.awt.*;
 
 public class L 
 {
-	public final Color PRIME_BLUE = new Color(100, 211, 255);
-	public final Color DARK_BLUE = new Color(52, 143, 179);
-	public final Color LIGHT_BLUE = new Color(125, 218, 255);
-	public final Color DARK_BROWN = new Color(179, 110, 34);
-	public final Color LIGHT_BROWN = new Color(255, 181, 99);
+	public static final Color PRIME_BLUE = new Color(100, 211, 255);
+	public static final Color DARK_BLUE = new Color(52, 143, 179);
+	public static final Color LIGHT_BLUE = new Color(125, 218, 255);
+	public static final Color DARK_BROWN = new Color(179, 110, 34);
+	public static final Color LIGHT_BROWN = new Color(255, 181, 99);
 	
 	//Method changes String length to fit integer value length; returns changed String.
 	public static String fitToLength(int length, String str)
@@ -51,5 +55,24 @@ public class L
 		UUID uuid = UUID.randomUUID();
 		String id = uuid.toString();
 		return id;
+	}
+	
+	public static ArrayList<String> makeTeacherList()
+	{
+		int index = 0;
+		String id = Accounts.getID(index);
+		ArrayList<String> ids = new ArrayList<>();
+		while(id != null)
+		{
+			if(Accounts.isTeacher(index))
+			{
+				ids.add(id);
+			}
+			
+			index = index + 1;
+			id = Accounts.getID(index);
+		}
+		
+		return ids;
 	}
 }

@@ -3,6 +3,8 @@ package pages;
 import java.util.*;   
 import database.*;
 import javax.swing.*;
+import javax.swing.text.AttributeSet.ColorAttribute;
+
 import java.awt.event.*;
 import java.awt.*;
 import library.L;
@@ -39,6 +41,7 @@ public class questionListPage extends JFrame
 			questionList = makeList(ID);
 		}
 		
+		homeRow.setBackground(L.LIGHT_BROWN);
 		home.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -46,6 +49,9 @@ public class questionListPage extends JFrame
 			}
 		});
 		
+		questions.setBackground(L.LIGHT_BLUE);
+		scroller.setBackground(L.DARK_BLUE);
+		questionScroller.setBackground(L.DARK_BLUE);
 		questionScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		questionScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
@@ -70,6 +76,8 @@ public class questionListPage extends JFrame
 					c.gridx = 0; c.gridy = i;
 					
 					c.weightx = 0.5;
+					
+					c.insets = new Insets(0, 0, 10, 0);
 				questions.add(ca, c);
 				
 				JButton jb = new JButton(q.getName());
@@ -93,8 +101,9 @@ public class questionListPage extends JFrame
 					c.gridx = 1;
 					
 					c.weightx = 0;
-					c.insets = new Insets(0, 0, 0, 20);
 					jb.setPreferredSize(new Dimension(150, 30));
+					jb.setBackground(L.LIGHT_BROWN);
+					jb.setForeground(Color.BLACK);
 				questions.add(jb, c);
 				
 				JLabel jl = new JLabel();
@@ -104,11 +113,11 @@ public class questionListPage extends JFrame
 				questions.add(jl, c);
 			}
 			
-			JButton add = new JButton("add");
+			JButton add = new JButton("Add");
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e)
 				{
-					if(!isEdit) {addQuestion();}
+					addQuestion();
 				}
 			});
 			
@@ -128,7 +137,7 @@ public class questionListPage extends JFrame
 						edit.setText("Stop Editing");
 						add.setText("X");
 					}
-					
+					add.setEnabled(!isEdit);
 				}
 			});
 			
@@ -138,14 +147,20 @@ public class questionListPage extends JFrame
 			
 				c.gridx = 0;
 			
-				c.insets = new Insets(10, 0, 0, 0);
+				c.insets = new Insets(3, 3, 3, 3);
 				edit.setPreferredSize(new Dimension(150, 30));
+				edit.setBackground(L.DARK_BROWN);
+				edit.setForeground(Color.WHITE);
 			homeRow.add(edit, c);
 				c.gridx = 1;
 				add.setPreferredSize(new Dimension(60, 30));
+				add.setBackground(L.DARK_BROWN);
+				add.setForeground(Color.WHITE);
 			homeRow.add(add, c);
 				c.gridx = 3;
 				home.setPreferredSize(new Dimension(120, 30));
+				home.setBackground(L.DARK_BROWN);
+				home.setForeground(Color.WHITE);
 			homeRow.add(home, c);
 				c.fill = GridBagConstraints.HORIZONTAL;
 				
@@ -177,6 +192,8 @@ public class questionListPage extends JFrame
 					c.gridx = 0; c.gridy = i;
 				
 					c.weightx = 0.5;
+					
+					c.insets = new Insets(0, 0, 10, 0);
 				questions.add(ca, c);
 				
 				JButton jb = new JButton(questionList.get(i).getName());
@@ -192,8 +209,9 @@ public class questionListPage extends JFrame
 					c.gridx = 1;
 				
 					c.weightx = 0;
-					c.insets = new Insets(0, 0, 0, 20);
 					jb.setPreferredSize(new Dimension(150, 30));
+					jb.setBackground(L.LIGHT_BROWN);
+					jb.setForeground(Color.BLACK);
 				questions.add(jb, c);
 				
 				JLabel jl = new JLabel();
@@ -204,6 +222,10 @@ public class questionListPage extends JFrame
 				else if(q.hasAnswer() && q.getGrade() == -1)
 				{
 					jl.setText("Points: Missing");
+				}
+				else if(q.hasAnswer() && q.getGrade() == -2)
+				{
+					jl.setText("Points: *");
 				}
 				else
 				{
@@ -230,7 +252,12 @@ public class questionListPage extends JFrame
 				c.gridx = 1;
 				
 				c.weightx = 0;
+				c.insets = new Insets(3, 3, 3, 3);
+				home.setPreferredSize(new Dimension(120, 30));
+				home.setBackground(L.DARK_BROWN);
+				home.setForeground(Color.WHITE);
 			homeRow.add(home, c);
+				c.insets = new Insets(0, 0, 0, 0);
 		}
 			questionScroller.setPreferredSize(new Dimension(400, 200));
 		scroller.add(questionScroller, c);
@@ -269,10 +296,13 @@ public class questionListPage extends JFrame
 		add.setVisible(true);
 		
 		JLabel label = new JLabel("Add a Question");
+		label.setHorizontalAlignment(WIDTH/2);
+		label.setBackground(L.LIGHT_BROWN); label.setOpaque(true);
 		add.add(label);
 		
 		JPanel name = new JPanel(); name.setLayout(new GridLayout(2,1));
 		JLabel nameLabel = new JLabel("Enter name:");
+		nameLabel.setBackground(L.LIGHT_BLUE); nameLabel.setOpaque(true);
 		JTextField nameText = new JTextField();
 		nameText.setPreferredSize(new Dimension(200, 30));
 		name.add(nameLabel); name.add(nameText);
@@ -280,6 +310,7 @@ public class questionListPage extends JFrame
 		
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
 		JLabel filePathLabel = new JLabel("Enter file path:");
+		filePathLabel.setBackground(L.LIGHT_BLUE); filePathLabel.setOpaque(true);
 		JTextField filePathText = new JTextField();
 		filePathText.setPreferredSize(new Dimension(200, 30));
 		filePath.add(filePathLabel); filePath.add(filePathText);
@@ -287,15 +318,18 @@ public class questionListPage extends JFrame
 		
 		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
 		JLabel maxPointsLabel = new JLabel("Enter max points:");
+		maxPointsLabel.setBackground(L.LIGHT_BLUE); maxPointsLabel.setOpaque(true);
 		JTextField maxPointsText = new JTextField();
 		maxPointsText.setPreferredSize(new Dimension(200, 30));
 		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
 		add.add(maxPoints);
 		
 		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
+		buttons.setBackground(L.LIGHT_BROWN);
 		GridBagConstraints c = new GridBagConstraints();
 		JButton close = new JButton("Close");
 		close.setPreferredSize(new Dimension(70, 20));
+		close.setBackground(L.DARK_BROWN); close.setForeground(Color.WHITE);
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -304,6 +338,7 @@ public class questionListPage extends JFrame
 		});
 		JButton finish = new JButton("Add");
 		finish.setPreferredSize(new Dimension(70, 20));
+		finish.setBackground(L.DARK_BROWN); finish.setForeground(Color.WHITE);
 		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -333,7 +368,7 @@ public class questionListPage extends JFrame
 				}
 			}
 		});
-			c.insets = new Insets(10, 10, 10, 10);
+			c.insets = new Insets(5, 5, 5, 5);
 		buttons.add(close, c); buttons.add(finish, c);
 		add.add(buttons);
 		
@@ -350,13 +385,16 @@ public class questionListPage extends JFrame
 		int index = Questions.getIDIndex(q.getID());
 		
 		JLabel label = new JLabel("Edit " + q.getName());
+		label.setHorizontalTextPosition(WIDTH/2);
 			c.fill = GridBagConstraints.HORIZONTAL;
 			
 			c.weighty = 1;
+			label.setBackground(L.LIGHT_BROWN); label.setOpaque(true);
 		edit.add(label, c);
 		
 		JPanel name = new JPanel(); name.setLayout(new GridLayout(2,1));
 		JLabel nameLabel = new JLabel("Enter name:");
+		nameLabel.setBackground(L.LIGHT_BLUE); nameLabel.setOpaque(true);
 		JTextField nameText = new JTextField(q.getName());
 		name.add(nameLabel); name.add(nameText);
 			c.gridy = 1;
@@ -364,6 +402,7 @@ public class questionListPage extends JFrame
 		
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
 		JLabel filePathLabel = new JLabel("Enter file path:");
+		filePathLabel.setBackground(L.LIGHT_BLUE); filePathLabel.setOpaque(true);
 		JTextField filePathText = new JTextField(L.shear(Questions.getFilePath(index)));
 		filePath.add(filePathLabel); filePath.add(filePathText);
 			c.gridy = 2;
@@ -371,14 +410,17 @@ public class questionListPage extends JFrame
 		
 		JPanel maxPoints = new JPanel(); maxPoints.setLayout(new GridLayout(2,1));
 		JLabel maxPointsLabel = new JLabel("Enter max points:");
+		maxPointsLabel.setBackground(L.LIGHT_BLUE); maxPointsLabel.setOpaque(true);
 		JTextField maxPointsText = new JTextField("" + q.getMaxPoints());
 		maxPoints.add(maxPointsLabel); maxPoints.add(maxPointsText);
 			c.gridy = 3;
 		edit.add(maxPoints, c);
 		
 		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
+		buttons.setBackground(L.LIGHT_BROWN);
 		JButton close = new JButton("Close");
 		close.setPreferredSize(new Dimension(70, 20));
+		close.setBackground(L.DARK_BROWN); close.setForeground(Color.WHITE);
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -387,6 +429,7 @@ public class questionListPage extends JFrame
 		});
 		JButton remove = new JButton("Remove");
 		remove.setPreferredSize(new Dimension(90, 20));
+		remove.setBackground(L.DARK_BROWN); remove.setForeground(Color.WHITE);
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -397,6 +440,7 @@ public class questionListPage extends JFrame
 			}
 		});
 		JButton finish = new JButton("Finish");
+		finish.setBackground(L.DARK_BROWN); finish.setForeground(Color.WHITE);
 		finish.setPreferredSize(new Dimension(70, 20));
 		finish.addActionListener(new ActionListener() {
 			
@@ -447,7 +491,7 @@ public class questionListPage extends JFrame
 		while(QID != null)
 		{
 			int answerIndex = Answers.findAnswer(userID, QID);
-			int points = -2;
+			int points = -3;
 			if(answerIndex > -1)
 			{
 				points = Answers.getPoints(answerIndex);
@@ -459,14 +503,7 @@ public class questionListPage extends JFrame
 			int maxPoints = Questions.getPoints(index);	
 			String message = "";
 			Question q = null;
-			if(points > -2)
-			{
-				q = new Question(QID, name, filePath, points, maxPoints, message);
-			}
-			else
-			{
-				q = new Question(QID, name, filePath, maxPoints, message);
-			}
+			q = new Question(QID, name, filePath, points, maxPoints, message);
 						
 			questions.add(q);
 			

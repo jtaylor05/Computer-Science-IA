@@ -1,10 +1,11 @@
 package pages;
 
-import java.util.*;
+import java.util.*; 
 import java.awt.event.*;   
 import java.awt.*;
 import javax.swing.*;
 import database.*;
+import library.L;
 
 public class logInPage extends JFrame
 {
@@ -41,6 +42,7 @@ public class logInPage extends JFrame
 	private JLabel prompt = new JLabel(logInPrompt);
 	
 	private JPanel userPassBox = new JPanel();
+	private JPanel registerBox = new JPanel();
 	private boolean userBoxTyped = false;
 	private JTextField usernameBox = new JTextField("Enter Username");
 	
@@ -59,6 +61,7 @@ public class logInPage extends JFrame
 	
 	public logInPage()
 	{
+		okCloseBox.setBackground(L.LIGHT_BROWN);
 		okCloseBox.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -111,94 +114,47 @@ public class logInPage extends JFrame
 		close.setPreferredSize(new Dimension(200, 50));
 		toRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!register)
-				{
-					register = true;
-					toRegister.setText("Log-in");
-					prompt.setText(registerPrompt);
-					userPassBox.remove(setPassVisible);
-						c.fill = GridBagConstraints.HORIZONTAL;
-						
-						c.gridx = 0; c.gridy = 2;
-						
-						c.gridwidth = 4;
-						
-						c.insets = new Insets(0, 10, 5, 10);
-					userPassBox.add(confirmPasswordBox, c);
-						c.gridy = 3;
-					userPassBox.add(emailBox, c);
-						c.fill = GridBagConstraints.NONE;
-					
-						c.gridx = 1; c.gridy = 4;
-					
-						c.weightx = 0;
-					
-						c.insets = new Insets(5, 10, 0, 10);
-						c.anchor = GridBagConstraints.LAST_LINE_END;
-					userPassBox.add(setPassVisible, c);
-					
-						c.gridx = 0; c.gridy = 0;
-						c.insets = new Insets(0, 0, 0, 0);
-						c.anchor = GridBagConstraints.CENTER;
-				}
-				else
-				{
-					register = false;
-					toRegister.setText("Go register");
-					prompt.setText(logInPrompt);
-					confirmPasswordBox.setText(confirmPrompt);
-					confirmPassTyped = false;
-					userPassBox.remove(confirmPasswordBox);
-					userPassBox.remove(emailBox);
-					userPassBox.remove(setPassVisible);
-						c.fill = GridBagConstraints.NONE;
-					
-						c.gridx = 1; c.gridy = 2;
-					
-						c.weightx = 0;
-					
-						c.insets = new Insets(5, 10, 0, 10);
-						c.anchor = GridBagConstraints.LAST_LINE_END;
-					userPassBox.add(setPassVisible, c);
-					confirmedPass = "";
-					
-						c.gridx = 0; c.gridy = 0;
-						c.insets = new Insets(0, 0, 0, 0);
-						c.anchor = GridBagConstraints.CENTER;
-				}
+				setupBox();
 			}
 		});
 			c.fill = GridBagConstraints.HORIZONTAL;
 			
-			c.gridx = 0; c.gridy = 2;
+			c.gridx = 0; c.gridy = 0;
 			
-			c.weightx = 1;
+			c.weightx = 0.5;
 		okCloseBox.add(new JLabel(), c);
 			c.fill = GridBagConstraints.NONE;
 		
-			c.gridx = 1; c.gridy = 2;
+			c.gridx = 1; c.gridy = 0;
 			
 			c.weightx = 0;
 			
 			c.anchor = GridBagConstraints.LAST_LINE_END;
+			c.insets = new Insets(5, 5, 5, 5);
 			ok.setPreferredSize(new Dimension(60, 30));
+			ok.setBackground(L.DARK_BROWN);
+			ok.setForeground(Color.WHITE);
 		okCloseBox.add(ok, c);
 		
 			c.gridx = 2;
 			
 			toRegister.setPreferredSize(new Dimension (100, 30));
+			toRegister.setBackground(L.DARK_BROWN);
+			toRegister.setForeground(Color.WHITE);
 		okCloseBox.add(toRegister, c);
 		
 			c.gridx = 3;
 			
-			c.insets = new Insets(0, 0, 0, 5);
 			close.setPreferredSize(new Dimension(70, 30));
+			close.setBackground(L.DARK_BROWN);
+			close.setForeground(Color.WHITE);
 		okCloseBox.add(close, c);
 			c.gridx = 0; c.gridy = 0;
 			c.anchor = GridBagConstraints.CENTER;
 			c.insets = new Insets(0, 0, 0, 0);
 		
-		userPassBox.setLayout(new GridBagLayout());
+		userPassBox.setBackground(Color.WHITE); registerBox.setBackground(Color.WHITE);
+		userPassBox.setLayout(new GridBagLayout()); registerBox.setLayout(new GridBagLayout());
 		usernameBox.addKeyListener(new KeyAdapter()
 				{
 					public void keyPressed(KeyEvent e)
@@ -220,8 +176,8 @@ public class logInPage extends JFrame
 					}
 				});
 			c.fill = GridBagConstraints.HORIZONTAL;
-		
-			c.gridwidth = 4;
+			
+			c.gridwidth = 2;
 			
 			c.weightx = 0.5;
 			
@@ -392,6 +348,7 @@ public class logInPage extends JFrame
 				}
 			}
 		});
+		setPassVisible.setBackground(L.LIGHT_BROWN);
 		setPassVisible.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				passwordVisible = !passwordVisible;
@@ -437,13 +394,9 @@ public class logInPage extends JFrame
 				}
 			}
 		});
-			c.gridx = 0; c.gridy = 2;
-			
-			c.weightx = 1;
-		userPassBox.add(new JLabel("     "), c);
 			c.fill = GridBagConstraints.NONE;
 			
-			c.gridx = 1;
+			c.gridx = 1; c.gridy = 2;
 			
 			c.weightx = 0;
 			
@@ -459,8 +412,13 @@ public class logInPage extends JFrame
 		
 			c.gridx = 0; c.gridy = 0;
 			
+			c.gridwidth = 3;
+			
 			c.weightx = 0.2; c.weighty = 0.2;
 		getContentPane().add(prompt, c);
+		prompt.setBackground(L.PRIME_BLUE);
+		prompt.setForeground(L.DARK_BROWN);
+		prompt.setOpaque(true);
 		prompt.setHorizontalAlignment(SwingConstants.CENTER);
 		prompt.addComponentListener(new ComponentListener() {
 
@@ -470,11 +428,11 @@ public class logInPage extends JFrame
 				Font f;
 				if(register)
 				{
-					f = new Font("Arial", Font.PLAIN, y/4 + 5);
+					f = new Font("Arial", Font.PLAIN, y/6 + 10);
 				}
 				else
 				{
-					f = new Font("Arial", Font.PLAIN, y/8 + 5);
+					f = new Font("Arial", Font.PLAIN, y/6 + 5);
 				}
 				prompt.setFont(f);
 				
@@ -486,7 +444,7 @@ public class logInPage extends JFrame
 			
 		});
 		
-			c.gridy = 1;
+			c.gridx = 1; c.gridy = 1;
 			
 			c.ipady = 40;
 			
@@ -495,13 +453,8 @@ public class logInPage extends JFrame
 			c.gridy = 2;
 			
 			c.ipady = 0;
-			
-			c.insets = new Insets(20, 0, 0, 0);
 		getContentPane().add(okCloseBox, c);
-			
-			c.gridx = 0; c.gridy = 0;
-			
-			c.insets = new Insets(0, 0, 0, 0);
+		setBackground(Color.WHITE);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	}
@@ -568,6 +521,8 @@ public class logInPage extends JFrame
 	
 	public void dropInPage(boolean teacher, String ID)
 	{
+		Accounts.updateFeedback(true, false, false, ID);
+		Accounts.updateAnswered(true, false, false, ID);
 		new dropInPage(teacher, ID).setVisible(true);
 		setVisible(false);
 		dispose();
@@ -584,6 +539,68 @@ public class logInPage extends JFrame
 		lip.setSize(300, 300);
 		lip.setVisible(true);
 		lip.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	}
+	
+	public void setupBox()
+	{
+		GridBagConstraints c = new GridBagConstraints();
+		
+		if(!register)
+		{
+			register = true;
+			toRegister.setText("Log-in");
+			prompt.setText(registerPrompt);
+			userPassBox.remove(setPassVisible);
+				c.fill = GridBagConstraints.HORIZONTAL;
+
+				c.gridx = 0; c.gridy = 2;
+
+				c.gridwidth = 4;
+
+				c.insets = new Insets(0, 10, 5, 10);
+			userPassBox.add(confirmPasswordBox, c);
+				c.gridy = 3;
+			userPassBox.add(emailBox, c);
+				c.fill = GridBagConstraints.NONE;
+
+				c.gridx = 1; c.gridy = 4;
+
+				c.weightx = 0;
+
+				c.insets = new Insets(5, 10, 0, 10);
+				c.anchor = GridBagConstraints.LAST_LINE_END;
+			userPassBox.add(setPassVisible, c);
+
+				c.gridx = 0; c.gridy = 0;
+				c.insets = new Insets(0, 0, 0, 0);
+				c.anchor = GridBagConstraints.CENTER;
+		}
+		else
+		{
+			register = false;
+			toRegister.setText("go register");
+			toRegister.setText("Go register");
+			prompt.setText(logInPrompt);
+			confirmPasswordBox.setText(confirmPrompt);
+			confirmPassTyped = false;
+			userPassBox.remove(confirmPasswordBox);
+			userPassBox.remove(emailBox);
+			userPassBox.remove(setPassVisible);
+				c.fill = GridBagConstraints.NONE;
+
+				c.gridx = 1; c.gridy = 2;
+
+				c.weightx = 0;
+
+				c.insets = new Insets(5, 10, 0, 10);
+				c.anchor = GridBagConstraints.LAST_LINE_END;
+			userPassBox.add(setPassVisible, c);
+			confirmedPass = "";
+
+				c.gridx = 0; c.gridy = 0;
+				c.insets = new Insets(0, 0, 0, 0);
+				c.anchor = GridBagConstraints.CENTER;
+		}
 	}
 
 }

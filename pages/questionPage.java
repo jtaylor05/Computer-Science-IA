@@ -78,6 +78,7 @@ public class questionPage extends JFrame
 				questionList();
 			}
 		});
+		homeRow.setBackground(L.LIGHT_BROWN);
 		homeRow.setLayout(new GridBagLayout());
 			c.fill = GridBagConstraints.HORIZONTAL;
 			
@@ -90,16 +91,22 @@ public class questionPage extends JFrame
 			c.gridx = 1;
 			
 			c.weightx = 0;
+			
+			c.insets = new Insets(3, 3, 3, 3);
 			home.setPreferredSize(new Dimension(140, 30));
+			home.setBackground(L.DARK_BROWN);
+			home.setForeground(Color.WHITE);
 		homeRow.add(home, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		
+		answerBox.setBackground(L.PRIME_BLUE);
 		if(teacher)
 		{
 			answerScroller = new JScrollPane(answerBox);
 			answerScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			answerScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			answerBox.setLayout(new GridBagLayout());
-			for(int i = 0; i < answers.size() - 1; i++)
+			for(int i = 0; i < answers.size(); i++)
 			{
 				final Answer a = answers.get(i);
 				
@@ -116,6 +123,7 @@ public class questionPage extends JFrame
 					c.gridx = 0; c.gridy = i;
 				
 					c.weightx = 0.5;
+					c.insets = new Insets(20, 0, 0, 0);
 				answerBox.add(ca, c);
 				
 				JLabel user = new JLabel(a.getUser());
@@ -124,7 +132,6 @@ public class questionPage extends JFrame
 					c.gridx = 1;
 				
 					c.weightx = 0;
-					c.insets = new Insets(0, 0, 0, 20);
 					user.setPreferredSize(new Dimension(150, 30));
 				answerBox.add(user, c);
 				
@@ -136,6 +143,10 @@ public class questionPage extends JFrame
 				else if(a.hasAnswer() && a.getGrade() == -1)
 				{
 					grade.setText("Grade: Missing");
+				}
+				else if(a.hasAnswer() && a.getGrade() == -2)
+				{
+					grade.setText("Grade: *");
 				}
 				else
 				{
@@ -152,7 +163,11 @@ public class questionPage extends JFrame
 					}
 				});
 					c.gridx = 3;
+					
+					c.insets = new Insets(3, 3, 3, 3);
 					edit.setPreferredSize(new Dimension(130, 30));
+					edit.setBackground(L.LIGHT_BROWN);
+					edit.setForeground(Color.BLACK);
 				answerBox.add(edit, c);
 				
 				JButton submit = new JButton("Give Feedback");
@@ -164,7 +179,10 @@ public class questionPage extends JFrame
 				});
 					c.gridx = 4;
 					submit.setPreferredSize(new Dimension(130, 30));
+					submit.setBackground(L.LIGHT_BROWN);
+					submit.setForeground(Color.BLACK);
 				answerBox.add(submit, c);
+					c.insets = new Insets(0, 0, 0, 0);
 			}
 		}
 		else
@@ -187,9 +205,17 @@ public class questionPage extends JFrame
 			answerBox.add(ca, c);
 			
 			JLabel grade = new JLabel("");
-			if(answer.hasAnswer() && q.getGrade() > -1)
+			if(answer.hasAnswer() && answer.getGrade() > -1)
 			{
 				grade.setText("Grade: " + answer.getOutOf());
+			}
+			else if(answer.hasAnswer() && answer.getGrade() == -1)
+			{
+				grade.setText("Missing");
+			}
+			else if(answer.hasAnswer() && answer.getGrade() == -2)
+			{
+				grade.setText("Grade: *");
 			}
 			else
 			{
@@ -200,7 +226,7 @@ public class questionPage extends JFrame
 				c.gridx = 1;
 		
 				c.weightx = 0;
-				c.insets = new Insets(0, 0, 0, 20);
+				c.insets = new Insets(20, 0, 0, 0);
 				grade.setPreferredSize(new Dimension(150, 30));
 			answerBox.add(grade, c);
 			
@@ -212,8 +238,13 @@ public class questionPage extends JFrame
 				}
 			});
 				c.gridx = 2;
+				
+				c.insets = new Insets(3, 3, 3, 3);
 				submit.setPreferredSize(new Dimension(150, 30));
+				submit.setBackground(L.LIGHT_BROWN);
+				submit.setForeground(Color.BLACK);
 			answerBox.add(submit, c);
+			c.insets = new Insets(0, 0, 0, 0);
 		}
 		
 		setLayout(new GridBagLayout());
@@ -222,15 +253,18 @@ public class questionPage extends JFrame
 			c.gridy = 0;
 			
 			c.weightx = 1;
+			c.insets = new Insets(0, 0, 0, 0);
 		getContentPane().add(homeRow, c);
-			c.fill = GridBagConstraints.BOTH;
+			c.fill = GridBagConstraints.NONE;
 			
 			c.gridy = 1;
 			
+			c.ipady = 20;
+			
 			c.weighty = 1;
-			c.insets = new Insets(20, 0, 0, 0);
 		getContentPane().add(answerBox, c);
 		getContentPane().setVisible(true);
+		setBackground(L.DARK_BLUE);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	}
@@ -247,11 +281,15 @@ public class questionPage extends JFrame
 		String uID = Accounts.getID(temp);
 		int index = Answers.findAnswer(uID, question.getID());
 		
-		JLabel label1 = new JLabel(" " + a.getName());
+		JLabel label1 = new JLabel("" + a.getName());
 			c.fill = GridBagConstraints.HORIZONTAL;
+			
+			c.weightx = 0.5; c.weighty = 0.5;
+			label1.setBackground(L.LIGHT_BROWN); label1.setOpaque(true);
 		grade.add(label1, c);
 		JLabel label2 = new JLabel("Max Points: " + a.getMaxPoints());
 			c.gridy = 1;
+			label2.setBackground(L.LIGHT_BROWN); label2.setOpaque(true);
 		grade.add(label2, c);
 		
 		Canvas ca = new Canvas() {
@@ -269,10 +307,23 @@ public class questionPage extends JFrame
 		
 		JPanel newGrade = new JPanel(); newGrade.setLayout(new GridLayout(2,1));
 		JLabel newGradeLabel = new JLabel("Enter New Grade:");
+		newGradeLabel.setBackground(L.LIGHT_BLUE); newGradeLabel.setOpaque(true);
 		JTextField newGradeText;
 		if(index >= 0)
 		{
-			newGradeText = new JTextField("" + Answers.getPoints(index));
+			int oldPoints = Answers.getPoints(index);
+			if(oldPoints >= 0)
+			{
+				newGradeText = new JTextField("" + Answers.getPoints(index));
+			}
+			else if(oldPoints == -1)
+			{
+				newGradeText = new JTextField("Missing");
+			}
+			else
+			{
+				newGradeText = new JTextField("*");
+			}
 		}
 		else
 		{
@@ -285,8 +336,10 @@ public class questionPage extends JFrame
 		grade.add(newGrade, c);
 		
 		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
+		buttons.setBackground(L.LIGHT_BROWN);
 		JButton close = new JButton("Close");
 		close.setPreferredSize(new Dimension(70, 20));
+		close.setBackground(L.DARK_BROWN); close.setForeground(Color.WHITE);
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -295,6 +348,7 @@ public class questionPage extends JFrame
 		});
 		JButton finish = new JButton("Finish");
 		finish.setPreferredSize(new Dimension(70, 20));
+		finish.setBackground(L.DARK_BROWN); finish.setForeground(Color.WHITE);
 		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -317,11 +371,22 @@ public class questionPage extends JFrame
 					if(index >= 0)
 					{
 						Answers.changePoints(index, points);
+						if(!Answers.isNewAnswer(index))
+						{
+							Answers.changeNewAnswer(index);
+						}
 					}
 					else
 					{
 						Answers.addAnswer(uID, question.getID(), "", points);
 					}
+					
+					ArrayList<String> ids = L.makeTeacherList();
+					for(int i = 0; i < ids.size(); i++)
+					{
+						Accounts.updateAnswered(false, false, true, ids.get(i));
+					}
+					
 					grade.dispose();
 					new questionPage(question, ID, teacher).setVisible(true);
 					dispose();
@@ -347,6 +412,7 @@ public class questionPage extends JFrame
 	{
 		JFrame submit = new JFrame("Submit Image");
 		submit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		submit.setBackground(L.LIGHT_BROWN);
 		submit.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		submit.setVisible(true);
@@ -354,12 +420,16 @@ public class questionPage extends JFrame
 		String uID = Accounts.getID(temp);
 		int index = Answers.findAnswer(uID, question.getID());
 			
-		JLabel label = new JLabel(" " + a.getName());
+		JLabel label = new JLabel("" + a.getName());
 			c.fill = GridBagConstraints.HORIZONTAL;
-		submit.add(label);
+		
+			c.weightx = 1;
+			label.setBackground(L.LIGHT_BROWN); label.setOpaque(true);
+		submit.add(label, c);
 			
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
 		JLabel filePathLabel = new JLabel("Enter file path:");
+		filePathLabel.setBackground(L.LIGHT_BLUE); filePathLabel.setOpaque(true);
 		JTextField filePathText;
 		if(index >= 0)
 		{
@@ -376,8 +446,10 @@ public class questionPage extends JFrame
 		submit.add(filePath, c);
 			
 		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
+		buttons.setBackground(L.LIGHT_BROWN);
 		JButton close = new JButton("Close");
 		close.setPreferredSize(new Dimension(70, 20));
+		close.setBackground(L.DARK_BROWN); close.setForeground(Color.WHITE);
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -386,6 +458,7 @@ public class questionPage extends JFrame
 		});
 		JButton finish = new JButton("Finish");
 		finish.setPreferredSize(new Dimension(70, 20));
+		finish.setBackground(L.DARK_BROWN); finish.setForeground(Color.WHITE);
 		finish.addActionListener(new ActionListener() {
 				
 			public void actionPerformed(ActionEvent e)
@@ -398,11 +471,27 @@ public class questionPage extends JFrame
 					if(index >= 0)
 					{
 						Answers.changeFilePath(index, filePathText.getText());
+						if(!Answers.hasFeedback(index))
+						{
+							Answers.changeFeedback(index);
+						}
+						if(!Answers.isNewAnswer(index))
+						{
+							Answers.changeNewAnswer(index);
+						}
 					}
 					else
 					{
 						Answers.addAnswer(uID, question.getID(), filePathText.getText());
 					}
+					Accounts.updateFeedback(false, true, false, uID);
+					
+					ArrayList<String> ids = L.makeTeacherList();
+					for(int i = 0; i < ids.size(); i++)
+					{
+						Accounts.updateAnswered(false, false, true, ids.get(i));
+					}
+					
 					submit.dispose();
 					new questionPage(question, ID, teacher).setVisible(true);
 					dispose();
@@ -431,28 +520,22 @@ public class questionPage extends JFrame
 		submit.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		submit.setVisible(true);
-		int temp;
-		if(teacher)
-		{
-			temp = Accounts.getUsernameIndex(a.getUser());
-		}
-		else
-		{
-			temp = Accounts.getIDIndex(ID);
-		}
-		String uID = Accounts.getID(temp);
-		int index = Answers.findAnswer(uID, question.getID());
+		int index = Answers.findAnswer(ID, question.getID());
 		
-		JLabel label = new JLabel(" " + a.getName());
+		JLabel label = new JLabel("" + a.getName());
 			c.fill = GridBagConstraints.HORIZONTAL;
-		submit.add(label);
+	
+			c.weightx = 1;
+			label.setBackground(L.LIGHT_BROWN); label.setOpaque(true);
+		submit.add(label, c);
 		
 		JPanel filePath = new JPanel(); filePath.setLayout(new GridLayout(2,1));
 		JLabel filePathLabel = new JLabel("Enter file path:");
+		filePathLabel.setBackground(L.LIGHT_BLUE); filePathLabel.setOpaque(true);
 		JTextField filePathText;
 		if(index >= 0)
 		{
-			filePathText = new JTextField("" + Answers.getFilePath(index));
+			filePathText = new JTextField("" + L.shear(Answers.getFilePath(index)));
 		}
 		else
 		{
@@ -465,8 +548,10 @@ public class questionPage extends JFrame
 		submit.add(filePath, c);
 		
 		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
+		buttons.setBackground(L.LIGHT_BROWN);
 		JButton close = new JButton("Close");
 		close.setPreferredSize(new Dimension(70, 20));
+		close.setBackground(L.DARK_BROWN); close.setForeground(Color.WHITE);
 		close.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -475,6 +560,7 @@ public class questionPage extends JFrame
 		});
 		JButton finish = new JButton("Finish");
 		finish.setPreferredSize(new Dimension(70, 20));
+		finish.setBackground(L.DARK_BROWN); finish.setForeground(Color.WHITE);
 		finish.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e)
@@ -483,15 +569,31 @@ public class questionPage extends JFrame
 				
 				if(isFilePath)
 				{
-					
 					if(index >= 0)
 					{
 						Answers.changeFilePath(index, filePathText.getText());
+						if(Answers.hasFeedback(index))
+						{
+							Answers.changeFeedback(index);
+							Accounts.updateFeedback(false, false, true, ID);
+						}
+						if(!Answers.isNewAnswer(index))
+						{
+							Answers.changeNewAnswer(index);
+						}
 					}
 					else
 					{
-						Answers.addAnswer(uID, question.getID(), filePathText.getText());
+						Answers.addAnswer(ID, question.getID(), filePathText.getText());
+						Accounts.updateUnanswered(ID);
 					}
+					
+					ArrayList<String> ids = L.makeTeacherList();
+					for(int i = 0; i < ids.size(); i++)
+					{
+						Accounts.updateAnswered(false, true, false, ids.get(i));
+					}
+					
 					submit.dispose();
 					new questionPage(question, ID, teacher).setVisible(true);
 					dispose();
@@ -537,6 +639,7 @@ public class questionPage extends JFrame
 			Answer a;
 			if(!Accounts.isTeacher(index))
 			{
+				System.out.println(name);
 				if(answerIndex > -1)
 				{
 					a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getMaxPoints());

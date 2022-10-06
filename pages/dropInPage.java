@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import database.Accounts;
+import library.L;
 
 public class dropInPage extends JFrame
 {
@@ -28,7 +29,6 @@ public class dropInPage extends JFrame
 	private JPanel routingBox = new JPanel();
 	
 	private JLabel unansweredQuestions = new JLabel();
-	private JLabel returnedQuestions = new JLabel();
 	private JLabel feedback = new JLabel();
 	private JLabel newAnswers = new JLabel();
 	
@@ -38,6 +38,7 @@ public class dropInPage extends JFrame
 		teacher = isTeacher;
 		ID = id;
 		
+		logOutRow.setBackground(L.LIGHT_BROWN);
 		logOutRow.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -56,10 +57,14 @@ public class dropInPage extends JFrame
 			
 			c.gridx = 1;
 			
-			c.insets = new Insets(0, 0, 0, 10);
+			c.insets = new Insets(3, 0, 3, 10);
+			c.anchor = GridBagConstraints.LAST_LINE_END;
 			logOut.setPreferredSize(new Dimension(80, 30));
-		logOutRow.add(logOut);
+			logOut.setBackground(L.DARK_BROWN);
+			logOut.setForeground(Color.WHITE);
+		logOutRow.add(logOut, c);
 			c.insets = new Insets(0, 0, 0, 0);
+			c.anchor = GridBagConstraints.CENTER;
 		
 		ComponentListener cl = new ComponentListener() {
 
@@ -76,7 +81,6 @@ public class dropInPage extends JFrame
 				{
 					f = new Font("Arial", Font.PLAIN, y/12 + 5);
 					unansweredQuestions.setFont(f);
-					returnedQuestions.setFont(f);
 					feedback.setFont(f);
 				}
 			}
@@ -85,21 +89,22 @@ public class dropInPage extends JFrame
 			public void componentShown(ComponentEvent e) {}
 			public void componentHidden(ComponentEvent e) {}
 		};	
-			
+		
+		infoBox.setBackground(L.LIGHT_BLUE);
 		if(teacher)
 		{
-			newAnswers.setText("There have been " + " new responses");
+			newAnswers.setText("There have been " + Accounts.getAnswered(ID) + " new responses");
 			newAnswers.addComponentListener(cl);
 			infoBox.add(newAnswers);
 		}
 		else
 		{
-			unansweredQuestions.setText("You have " + " unanswered Questions");
+			unansweredQuestions.setText("You have " + Accounts.getUnanswered(ID) + " unanswered Questions");
 			unansweredQuestions.addComponentListener(cl);
-			returnedQuestions.setText("You have " + " returned questions");
-			feedback.setText("You have recieved feedback on " + " question");
+			feedback.setText("You have recieved feedback on " + Accounts.getFeedback(ID) + " question");
+			feedback.addComponentListener(cl);
 			infoBox.setLayout(new GridLayout(3, 1));
-			infoBox.add(unansweredQuestions); infoBox.add(returnedQuestions); infoBox.add(feedback);
+			infoBox.add(unansweredQuestions); infoBox.add(feedback);
 		}
 		questionPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -114,6 +119,7 @@ public class dropInPage extends JFrame
 			}
 		});
 		
+		routingBox.setBackground(L.LIGHT_BROWN);
 		routingBox.setLayout(new GridBagLayout());
 			c.fill = GridBagConstraints.HORIZONTAL;
 			
@@ -127,13 +133,17 @@ public class dropInPage extends JFrame
 			
 			c.weightx = 0;
 			
-			c.insets = new Insets(0, 10, 0, 5);
+			c.insets = new Insets(3, 10, 3, 5);
 			questionPage.setPreferredSize(new Dimension(150, 30));
+			questionPage.setBackground(L.DARK_BROWN);
+			questionPage.setForeground(Color.WHITE);
 		routingBox.add(questionPage, c);
 			c.gridx = 2;
 			
-			c.insets = new Insets(0, 5, 0, 10);
+			c.insets = new Insets(3, 5, 3, 10);
 			portfolioPage.setPreferredSize(new Dimension(150, 30));
+			portfolioPage.setBackground(L.DARK_BROWN);
+			portfolioPage.setForeground(Color.WHITE);
 		routingBox.add(portfolioPage, c);
 			c.insets = new Insets(0, 0, 0, 0);
 		

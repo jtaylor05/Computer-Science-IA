@@ -5,7 +5,6 @@ import library.L;
 public class Answer extends Record
 {
 	String username;
-	String questionName;
 	int grade = -1;
 	int maxPoints;
 	String filePath;
@@ -25,7 +24,6 @@ public class Answer extends Record
 	public Answer(String questionName, int grade, int maxPoints)
 	{
 		super(null, questionName, null, grade, maxPoints, true);
-		this.questionName = questionName;
 		this.grade = grade;
 		this.maxPoints = maxPoints;
 	}
@@ -48,8 +46,20 @@ public class Answer extends Record
 	
 	public String toString()
 	{
-		String name = L.fitToLength(23, questionName.toUpperCase());
-		String points = L.fitToLength(10, grade + "/" + maxPoints);
+		String name = L.fitToLength(23, this.name.toUpperCase());
+		String points = L.fitToLength(10, "");
+		if(grade > -1)
+		{
+			points = L.fitToLength(10, grade + "/" + maxPoints);
+		}
+		else if(grade == -1)
+		{
+			points = L.fitToLength(10, "Missing");
+		}
+		else if(grade == -2)
+		{
+			points = L.fitToLength(10, "Points: *");
+		}
 		return name + "    ~ " + points; 
 	}
 }

@@ -17,7 +17,10 @@ public class Answers
 	private final static int LENGTH_OF_PATH = 48;
 	private final static int END_OF_PATH = END_OF_ID + LENGTH_OF_PATH;
 	private final static int LENGTH_OF_GRADE = 10;
-	private final static int LENGTH_OF_FILE = END_OF_PATH + LENGTH_OF_GRADE + 1;
+	private final static int END_OF_GRADE = END_OF_PATH + LENGTH_OF_GRADE;
+	private final static int GOTTEN_FEEDBACK = END_OF_GRADE + 1;
+	private final static int NEW_ANSWER = GOTTEN_FEEDBACK + 1;
+	private final static int LENGTH_OF_FILE = NEW_ANSWER + 1;
 	
 	//following is a tester method; REMOVE FOR FINAL PRODUCT.
 	public static void main(String[] args)
@@ -50,7 +53,7 @@ public class Answers
 		try
 		{
 			fw = new FileWriter(DATABASE_FILE_PATH, true);
-			fw.write(id + fixedPath + fixedPoints + "\n");
+			fw.write(id + fixedPath + fixedPoints + "10\n");
 			fw.close();
 		}
 		catch(Exception e)
@@ -64,12 +67,12 @@ public class Answers
 	{
 		String id = userID + qID;
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
-		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "-1");
+		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "-2");
 			
 		try
 		{
 			fw = new FileWriter(DATABASE_FILE_PATH, true);
-			fw.write(id + fixedPath + fixedPoints + "\n");
+			fw.write(id + fixedPath + fixedPoints + "01\n");
 			fw.close();
 		}
 		catch(Exception e)
@@ -399,7 +402,7 @@ public class Answers
 			}
 			
 			String line = raf.readLine();
-			points = line.substring(END_OF_PATH, LENGTH_OF_FILE - 1);
+			points = line.substring(END_OF_PATH, END_OF_GRADE);
 			raf.close();
 		}
 		catch(Exception e)
@@ -473,5 +476,157 @@ public class Answers
 				QID = getQID(index);
 			}
 		}
+	}
+	
+	public static int numberAnswers()
+	{
+		int index = 0;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			int length = (int)raf.length();
+			while(raf.getFilePointer() < length)
+			{
+				index = index + 1;
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Q195 error " + e);
+		}
+		
+		return index;
+	}
+	
+	public static boolean hasFeedback(int index)
+	{
+		boolean hasFeedback = false;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			else
+			{
+				return false;
+			}
+			
+			String line = raf.readLine();
+			String str = line.substring(END_OF_GRADE, GOTTEN_FEEDBACK);
+			if(str.equals("1"))
+			{ hasFeedback = true; } 
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Line 266 error " + e);
+		}
+		
+		return hasFeedback;
+	}
+	
+	public static boolean changeFeedback(int index)
+	{
+		boolean hasFeedback = hasFeedback(index);
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index + END_OF_GRADE);
+			}
+			else
+			{
+				raf.close();
+				return false;
+			}
+			
+			if(hasFeedback)
+			{
+				raf.writeBytes("0");
+			}
+			else
+			{
+				raf.writeBytes("1");
+			}
+			
+			
+			raf.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+		return false;
+	}
+	
+	public static boolean isNewAnswer(int index)
+	{
+		boolean isNewAnswer = false;
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index);
+			}
+			else
+			{
+				return false;
+			}
+			
+			String line = raf.readLine();
+			String str = line.substring(GOTTEN_FEEDBACK, NEW_ANSWER);
+			if(str.equals("1"))
+			{ isNewAnswer = true; } 
+			raf.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Line 266 error " + e);
+		}
+		
+		return isNewAnswer;
+	}
+	
+	public static boolean changeNewAnswer(int index)
+	{
+		boolean isNewAnswer = isNewAnswer(index);
+		try
+		{
+			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
+			if(LENGTH_OF_FILE * index < raf.length())
+			{
+				raf.seek(LENGTH_OF_FILE * index + GOTTEN_FEEDBACK);
+			}
+			else
+			{
+				raf.close();
+				return false;
+			}
+			
+			if(isNewAnswer)
+			{
+				raf.writeBytes("0");
+			}
+			else
+			{
+				raf.writeBytes("1");
+			}
+			
+			
+			raf.close();
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println("error " + e);
+		}
+		return false;
 	}
 }
