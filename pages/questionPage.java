@@ -371,7 +371,7 @@ public class questionPage extends JFrame
 					if(index >= 0)
 					{
 						Answers.changePoints(index, points);
-						if(!Answers.isNewAnswer(index))
+						if(Answers.isNewAnswer(index))
 						{
 							Answers.changeNewAnswer(index);
 						}
@@ -379,11 +379,14 @@ public class questionPage extends JFrame
 					else
 					{
 						Answers.addAnswer(uID, question.getID(), "", points);
+						Answers.changeNewAnswer(index);
+						Answers.changeFeedback(index);
 					}
 					
 					ArrayList<String> ids = L.makeTeacherList();
 					for(int i = 0; i < ids.size(); i++)
 					{
+						if(!Answers.isNewAnswer(index))
 						Accounts.updateAnswered(false, false, true, ids.get(i));
 					}
 					
@@ -475,7 +478,7 @@ public class questionPage extends JFrame
 						{
 							Answers.changeFeedback(index);
 						}
-						if(!Answers.isNewAnswer(index))
+						if(Answers.isNewAnswer(index))
 						{
 							Answers.changeNewAnswer(index);
 						}
@@ -483,6 +486,8 @@ public class questionPage extends JFrame
 					else
 					{
 						Answers.addAnswer(uID, question.getID(), filePathText.getText());
+						Answers.changeNewAnswer(index);
+						Answers.changeFeedback(index);
 					}
 					Accounts.updateFeedback(false, true, false, uID);
 					
