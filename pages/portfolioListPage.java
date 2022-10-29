@@ -21,6 +21,7 @@ public class portfolioListPage extends JFrame
 	private JPanel portfolios = new JPanel();
 	private JScrollPane portfolioScroller = new JScrollPane(portfolios);
 	
+	//instantiates portfolioListPage Frame
 	public portfolioListPage(boolean teacher, String ID)
 	{
 		StudentIDs = makeStudentList();
@@ -111,7 +112,7 @@ public class portfolioListPage extends JFrame
 		pack();
 	}
 	
-	//open a drop-in page, closes this page
+	//open a drop-in page, disposes portfolioListPage.
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -119,7 +120,7 @@ public class portfolioListPage extends JFrame
 		dispose();
 	}
 	
-	//open a portfolio page, closes this page
+	//open a portfolio page, disposes portfolioListPage.
 	public void portfolioPage(boolean teacher, String ID, String studentID)
 	{
 		new portfolioPage(teacher, ID, studentID).setVisible(true);

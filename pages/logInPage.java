@@ -9,22 +9,6 @@ import library.L;
 
 public class logInPage extends JFrame
 {
-
-	/*
-	 * pageType - int value, 0 for normal, 1 for register page, 2 for teacher log-in
-	 * logInFrame - JFrame where all components will be held to log-in
-	 * forgotPassword - JButton where one can press to go through process of reseting password
-	 * teacherLogIn - JButton which will lead you to an identical log-in page for teachers
-	 * registerButton - JButton which will lead you to a slightly different page for registering and account
-	 * usernameBox - JTextField which user will enter in their username
-	 * passwordBox - JTextField used both to enter in password or register a new one
-	 * retryPasswordBox - JTextField used in registration to confirm password
-	 * prompt - JLabel which would prompt user if something was wrong
-	 * continue - JButton which sends inputed information to central system which accesses Database. 
-	 * 			  Will open to dropInPage if log-in information is correct or will resent log-in
-	 *    	      page if account has been registered.
-	 */
-	
 	private boolean teacher = false;
 	private boolean register = false;
 	
@@ -59,12 +43,14 @@ public class logInPage extends JFrame
 	private boolean emailBoxTyped = false;
 	private JTextField emailBox = new JTextField("Enter Email");
 	
+	//Instantiates Frame
 	public logInPage()
 	{
 		okCloseBox.setBackground(L.LIGHT_BROWN);
 		okCloseBox.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
+		//ok button begins validation sequence
 		ok.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
@@ -103,6 +89,7 @@ public class logInPage extends JFrame
 			}
 			
 		});
+		//close button disposes of Frame
 		close.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
@@ -112,6 +99,7 @@ public class logInPage extends JFrame
 			
 		});
 		close.setPreferredSize(new Dimension(200, 50));
+		//toRegister alters page to registry
 		toRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setupBox();
@@ -155,6 +143,7 @@ public class logInPage extends JFrame
 		
 		userPassBox.setBackground(Color.WHITE); registerBox.setBackground(Color.WHITE);
 		userPassBox.setLayout(new GridBagLayout()); registerBox.setLayout(new GridBagLayout());
+		//keyListener empties textField after first key is pressed
 		usernameBox.addKeyListener(new KeyAdapter()
 				{
 					public void keyPressed(KeyEvent e)
@@ -183,6 +172,7 @@ public class logInPage extends JFrame
 			
 			c.insets = new Insets(0, 10, 5, 10);
 		userPassBox.add(usernameBox, c);
+		//makes the password hidden
 		passwordBox.addKeyListener(new KeyAdapter()
 				{
 					public void keyReleased(KeyEvent e)
@@ -234,7 +224,6 @@ public class logInPage extends JFrame
 							if(enteredPass.length() > 0)
 							{
 								enteredPass = enteredPass.substring(0, enteredPass.length()-1);
-								System.out.println(enteredPass);
 							}
 								
 							if(passwordVisible)
@@ -257,6 +246,7 @@ public class logInPage extends JFrame
 				});
 			c.gridx = 0; c.gridy = 1;
 		userPassBox.add(passwordBox, c);
+		//same as passwordBox
 		confirmPasswordBox.addKeyListener(new KeyAdapter()
 		{
 			public void keyReleased(KeyEvent e)
@@ -519,6 +509,7 @@ public class logInPage extends JFrame
 		return false;
 	}
 	
+	//opens dropInPage Frame
 	public void dropInPage(boolean teacher, String ID)
 	{
 		Accounts.updateFeedback(true, false, false, ID);
@@ -528,11 +519,13 @@ public class logInPage extends JFrame
 		dispose();
 	}
 	
+	//enqueue and dequeue helps with LinkedList pIndexs, which acts as a dynamic queue
 	public void enqueue(Integer i)
 	{	pIndexs.add(i);	}
 	public Integer dequeue()
 	{	return pIndexs.remove(0);	}
 	
+	//opens log-in page
 	public static void main(String[] args)
 	{
 		logInPage lip = new logInPage();
@@ -541,6 +534,7 @@ public class logInPage extends JFrame
 		lip.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
+	//sets up register or log-in box
 	public void setupBox()
 	{
 		GridBagConstraints c = new GridBagConstraints();

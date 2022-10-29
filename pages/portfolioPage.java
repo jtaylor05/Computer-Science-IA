@@ -21,7 +21,8 @@ public class portfolioPage extends JFrame
 	private final Font questionFont = new Font(Font.MONOSPACED, Font.PLAIN, 15);
 	
 	private ArrayList<Answer> as;
-
+	
+	//instantiates portfolioPage Frame for student
 	public portfolioPage(boolean teacher, String ID)
 	{
 		this.teacher = teacher;
@@ -103,6 +104,7 @@ public class portfolioPage extends JFrame
 		pack();
 	}
 	
+	//instantiates portfolioPage for teacher of a particular student's answers
 	public portfolioPage(boolean teacher, String ID, String studentID)
 	{
 		this.teacher = teacher;
@@ -189,7 +191,7 @@ public class portfolioPage extends JFrame
 		pack();
 	}
 	
-	//opens a dropInPage, closes current page
+	//opens a dropInPage, disposes of portfolioPage.
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -197,7 +199,7 @@ public class portfolioPage extends JFrame
 		dispose();
 	}
 	
-	//opens a portfolioListPage, closes current page
+	//opens a portfolioListPage, disposes of portfolioPage.
 	public void portfolioListPage(boolean teacher, String ID)
 	{
 		new portfolioListPage(teacher, ID).setVisible(true);
@@ -205,7 +207,7 @@ public class portfolioPage extends JFrame
 		dispose();
 	}
 	
-	//Make a list of all answers by ID.
+	//Make a list of all answers in database by ID.
 	private ArrayList<Answer> makeList(String ID)
 	{
 		ArrayList<Answer> answers = new ArrayList<>();

@@ -4,7 +4,7 @@ public class Question extends Record
 {
 	private boolean teacher = false;
 	
-	
+	//instantiates Question object
 	public Question(String ID, String name, String filePath, int maxPoints)
 	{
 		super(ID, name, filePath, -1, maxPoints, false);
@@ -21,11 +21,13 @@ public class Question extends Record
 		teacher = true;
 	}
 	
+	//returns whether the user is a teacher
 	public boolean isTeacher()
 	{
 		return teacher;
 	}
 	
+	//overrides toString()
 	public String toString()
 	{
 		String str;

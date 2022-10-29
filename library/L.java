@@ -57,6 +57,7 @@ public class L
 		return id;
 	}
 	
+	//methods makes a list of all teacher users
 	public static LinkedList<String> makeTeacherList()
 	{
 		int index = 0;

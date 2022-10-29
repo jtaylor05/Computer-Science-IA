@@ -19,19 +19,6 @@ public class Questions
 	private final static int LENGTH_OF_GRADE = 10;
 	private final static int LENGTH_OF_FILE = END_OF_PATH + LENGTH_OF_GRADE + 1;
 	
-	//following is a tester method; REMOVE FOR FINAL PRODUCT.
-	public static void main(String[] args)
-	{
-		//addQuestion("Question 1", "images/question_1", 10);
-		//addQuestion("Question 2", "images/question_2", 12);
-		
-		//String name = getName(0);
-		//String id = getID(0);
-		//int index = getNameIndex("Question 2");
-		
-		//System.out.println(L.shear(name) + "\n" + id + "\n" + index);
-	}
-	
 	//Method adds question data to file "questions"; returns void.
 	public static void addQuestion(String name, String filePath, int totalPoints)
 	{
@@ -54,6 +41,7 @@ public class Questions
 		Accounts.updateUnanswered(true, false, false, null);
 	}
 	
+	//replaces a previous question with a new one
 	public static void replaceQuestion(String name, String filePath, int totalPoints, String QID)
 	{
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, name);
@@ -101,6 +89,7 @@ public class Questions
 		Answers.update();
 	}
 	
+	//removes question from database
 	public static void removeQuestion(String QID)
 	{
 		File temp = new File("database/temp");
@@ -327,6 +316,7 @@ public class Questions
 		return p;
 	}
 	
+	//counts number of questions in database
 	public static int numberQuestions()
 	{
 		int index = 0;

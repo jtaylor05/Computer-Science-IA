@@ -6,6 +6,7 @@ public class Answer extends Record
 {
 	private String username;
 	
+	//constructors of Answer object
 	public Answer(String user, String questionName, String filePath, int grade, int maxPoints)
 	{
 		super(null, questionName, filePath, grade, maxPoints, true);
@@ -40,6 +41,7 @@ public class Answer extends Record
 		return username;
 	}
 	
+	//overrides toString()
 	public String toString()
 	{
 		String name = L.fitToLength(23, this.name.toUpperCase());

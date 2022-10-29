@@ -23,24 +23,7 @@ public class Accounts
 	private final static int END_OF_ANSWERED = END_OF_EMAIL + LENGTH_OF_INFO;
 	private final static int LENGTH_OF_FILE = END_OF_ANSWERED + 1;
 	
-	//following is a tester method; REMOVE FOR FINAL PRODUCT.
-	public static void main(String[] args)
-	{
-		//addAccount("JacksonT", "p4ssWord!", "jtaylor@gmail.com", false);
-		//addAccount("LeslieT", "12345678", "ltaylor@gmail.com", true);
-		//addAccount("MaiaS", "chester", "msymons@gmail.com", false);
-		
-		//int index = getUsernameIndex("JacksonT");
-		
-		//System.out.println(L.shear(getPassword(index)));
-		//System.out.println(getID(index));
-		//System.out.println(isTeacher(index));
-		
-		updateAnswered(false, true, false, getID(1));
-		
-	}
-	
-	//Method adds account data to file "accounts"; returns void.
+	//Method adds account data to file "accounts".
 	public static void addAccount(String username, String password, String email, boolean isTeacher)
 	{
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, username);
@@ -116,6 +99,7 @@ public class Accounts
 		return -1;
 	}
 	
+	//does same as function above, however goes from minimum index
 	public static int getUsernameIndex(String username, int minIndex)
 	{
 		String user = "";
@@ -149,7 +133,7 @@ public class Accounts
 		return -1;
 	}
 	
-	//To retrieve username from certain index in database; returns found username.
+	//To return username from certain index in database.
 	public static String getUsername(int index)
 	{
 		String username = "";
@@ -280,6 +264,7 @@ public class Accounts
 		return -1;
 	}
 	
+	//does same as method above, but goes from a minimum index
 	public static int getPasswordIndex(String password, int minIndex)
 	{
 		String pass = "";
@@ -403,6 +388,7 @@ public class Accounts
 		return -1;
 	}
 	
+	//gets the number of unanswered
 	public static int getUnanswered(String ID)
 	{
 		int index = getIDIndex(ID);
@@ -435,6 +421,7 @@ public class Accounts
 		return unanswered;
 	}
 	
+	//to change the amount of unanswered
 	public static void setUnanswered(String ID, int value)
 	{
 		int index = getIDIndex(ID);
@@ -457,6 +444,7 @@ public class Accounts
 		}
 	}
 	
+	//automatically changes the unanswered
 	public static void updateUnanswered(boolean newQuestion, boolean replacedQuestion, boolean removedQuestion, String QID)
 	{
 		int index = 0;
@@ -483,6 +471,7 @@ public class Accounts
 		}
 	}
 	
+	//automatically changes unanswered for a user
 	public static void updateUnanswered(String ID)
 	{
 		int index = getIDIndex(ID);
@@ -493,6 +482,7 @@ public class Accounts
 		
 	}
 	
+	//returns number of questions which recieved feedback
 	public static int getFeedback(String ID)
 	{
 		int index = getIDIndex(ID);
@@ -525,6 +515,7 @@ public class Accounts
 		return feedback;
 	}
 	
+	//changes value of feedback
 	public static void setFeedback(String ID, int value)
 	{
 		int index = getIDIndex(ID);
@@ -547,6 +538,7 @@ public class Accounts
 		}
 	}
 	
+	//automatically changes feedback values
 	public static void updateFeedback(boolean login, boolean newFeedback, boolean responded, String ID)
 	{
 		int index = 0;
@@ -582,6 +574,7 @@ public class Accounts
 		
 	}
 	
+	//returns the amount of answered questions (for teachers)
 	public static int getAnswered(String ID)
 	{
 		int index = getIDIndex(ID);
@@ -614,6 +607,7 @@ public class Accounts
 		return answered;
 	}
 	
+	//changes answered value
 	public static void setAnswered(String ID, int value)
 	{
 		int index = getIDIndex(ID);
@@ -637,6 +631,7 @@ public class Accounts
 		}
 	}
 	
+	//automatically changes answered value
 	public static void updateAnswered(boolean login, boolean newResponse, boolean responded, String ID)
 	{
 		int index = getIDIndex(ID);
@@ -670,7 +665,7 @@ public class Accounts
 		
 	}
 	
-	//Method uses last value of ID to check whether teacher or student;
+	//Method users last value of ID to check whether teacher or student;
 	//returns boolean value true if a teacher, false if not;
 	public static boolean isTeacher(int index)
 	{

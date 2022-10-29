@@ -22,28 +22,7 @@ public class Answers
 	private final static int NEW_ANSWER = GOTTEN_FEEDBACK + 1;
 	private final static int LENGTH_OF_FILE = NEW_ANSWER + 1;
 	
-	//following is a tester method; REMOVE FOR FINAL PRODUCT.
-	public static void main(String[] args)
-	{
-		//addAnswer(Accounts.getID(0), Questions.getID(1), "images/answer_1", 7);
-		//addAnswer(Accounts.getID(1), Questions.getID(0), "images/answer_2", 4);
-		int i = 0;
-		String uID = getUserID(i);
-		String qID = getQID(i);
-		while(uID != null)
-		{
-			System.out.println(uID + " " + qID);
-			
-			i = i + 1;
-			uID = getUserID(i);
-			qID = getQID(i);
-		}
-		
-		System.out.println(findAnswer(getUserID(1), getQID(1)));
-
-	}
-	
-	//Method adds answer data to file "answer"; returns void.
+	//Method adds answer data to file "answer".
 	public static void addAnswer(String userID, String qID, String filePath, int points)
 	{
 		String id = userID + qID;
@@ -62,7 +41,7 @@ public class Answers
 		}		
 	}
 	
-	//Method adds answer data to file "answer"; returns void.
+	//Method adds answer data to file "answer".
 	public static void addAnswer(String userID, String qID, String filePath)
 	{
 		String id = userID + qID;
@@ -81,6 +60,7 @@ public class Answers
 		}		
 	}
 	
+	//removes an answer from database.
 	public static void removeAnswer(int index)
 	{
 		File temp = new File("database/temp");
@@ -216,6 +196,7 @@ public class Answers
 		return filePath;
 	}
 	
+	//changes file path of an answer
 	public static boolean changeFilePath(int index, String newPath)
 	{
 		try
@@ -415,7 +396,7 @@ public class Answers
 		return p;
 	}
 	
-	
+	//changes grade value
 	public static boolean changePoints(int index, int newPoints)
 	{
 		try
@@ -443,6 +424,7 @@ public class Answers
 		return false;
 	}
 	
+	//updates other databases if there is a change in values
 	public static void update()
 	{
 		int index = 0;
@@ -478,6 +460,7 @@ public class Answers
 		}
 	}
 	
+	//counts the number of answers in the database
 	public static int numberAnswers()
 	{
 		int index = 0;
@@ -500,6 +483,7 @@ public class Answers
 		return index;
 	}
 	
+	//whether the question at index has feedback
 	public static boolean hasFeedback(int index)
 	{
 		boolean hasFeedback = false;
@@ -529,6 +513,7 @@ public class Answers
 		return hasFeedback;
 	}
 	
+	//changes the boolean value of feedback
 	public static boolean changeFeedback(int index)
 	{
 		boolean hasFeedback = hasFeedback(index);
@@ -565,6 +550,7 @@ public class Answers
 		return false;
 	}
 	
+	//checks whether answer is new
 	public static boolean isNewAnswer(int index)
 	{
 		boolean isNewAnswer = false;
@@ -594,6 +580,7 @@ public class Answers
 		return isNewAnswer;
 	}
 	
+	//changes boolean value of newAnswer
 	public static boolean changeNewAnswer(int index)
 	{
 		boolean isNewAnswer = isNewAnswer(index);

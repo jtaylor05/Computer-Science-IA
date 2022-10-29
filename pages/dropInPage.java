@@ -9,14 +9,6 @@ import library.L;
 
 public class dropInPage extends JFrame
 {
-	/*
-	 * isTeacher - boolean holding true if user is teacher, false if not
-	 * dropInFrame - JFrame holding all components needed for the Drop-In page
-	 * logOut - JButton allowing for a user to log out of their account
-	 * questionList - JButton leading to the questionListPage
-	 * portfolioList - JButton leading to the portfolioPage. Teachers only.
-	 * 
-	 */
 	private boolean teacher;
 	private String ID;
 	
@@ -32,7 +24,7 @@ public class dropInPage extends JFrame
 	private JLabel feedback = new JLabel();
 	private JLabel newAnswers = new JLabel();
 	
-	
+	//instantiates dropInPage Frame
 	public dropInPage(boolean isTeacher, String id)
 	{
 		teacher = isTeacher;
@@ -65,7 +57,7 @@ public class dropInPage extends JFrame
 		logOutRow.add(logOut, c);
 			c.insets = new Insets(0, 0, 0, 0);
 			c.anchor = GridBagConstraints.CENTER;
-		
+		//resizes text
 		ComponentListener cl = new ComponentListener() {
 
 			@Override
@@ -175,14 +167,14 @@ public class dropInPage extends JFrame
 		pack();
 	}
 	
-	//Logs out of application for current account; returns nothing.
+	//Logs out of application for current account by disposing of Frame.
 	public void logOut()
 	{
 		setVisible(false);
 		dispose();
 	}
 	
-	//opens question list page and closes drop in page; returns nothing.
+	//opens question list page and disposes dropInPage.
 	public void questionList()
 	{
 		new questionListPage(teacher, ID).setVisible(true);
@@ -190,7 +182,7 @@ public class dropInPage extends JFrame
 		dispose();
 	}
 	
-	//opens portfolio list page and closes drop in page; returns nothing.
+	//opens portfolio list page and disposes dropInPage.
 	public void portfolioList()
 	{
 		if(teacher)
@@ -203,11 +195,5 @@ public class dropInPage extends JFrame
 		}
 		setVisible(false);
 		dispose();
-	}
-	
-	public static void main(String[] args)
-	{
-		//new dropInPage(Accounts.isTeacher(0), Accounts.getID(0)).setVisible(true);
-		new dropInPage(Accounts.isTeacher(1), Accounts.getID(1)).setVisible(true);
 	}
 }

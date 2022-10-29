@@ -36,6 +36,7 @@ public class questionPage extends JFrame
 	private JPanel answerBox = new JPanel();
 	private JScrollPane answerScroller;
 	
+	//instantiates questionPage Frame
 	public questionPage(Question q, String ID, boolean isTeacher)
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -269,7 +270,7 @@ public class questionPage extends JFrame
 		pack();
 	}
 
-	//public Question edit() - allows user to draw on a questionFile and returns a new png in the dropBox
+	//allows teacher user to grade an answer of a student
 	public void grade(Answer a, boolean teacher)
 	{
 		JFrame grade = new JFrame("Grade");
@@ -410,7 +411,7 @@ public class questionPage extends JFrame
 		grade.pack();
 	}
 	
-	//submits a file to filePath. returns true if done, false if not
+	//teacher submits a new filePath to a question
 	public void submitFeedback(Answer a, boolean teacher)
 	{
 		JFrame submit = new JFrame("Submit Image");
@@ -517,7 +518,7 @@ public class questionPage extends JFrame
 		submit.pack();
 	}
 	
-	//submits a file to filePath. returns true if done, false if not
+	//student user submits their work as a filepath to a question
 	public void submitWork(Answer a, boolean teacher)
 	{
 		JFrame submit = new JFrame("Submit Image");
@@ -619,9 +620,7 @@ public class questionPage extends JFrame
 		submit.pack();
 	}
 	
-	//public void download() - downloads questionFile as a file to computer
-	
-	//opens a questionListPage, closing the current page
+	//opens a questionListPage, disposing questionPage.
 	public void questionList()
 	{
 		new questionListPage(teacher, ID).setVisible(true);
