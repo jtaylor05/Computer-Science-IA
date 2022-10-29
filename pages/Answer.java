@@ -4,11 +4,7 @@ import library.L;
 
 public class Answer extends Record
 {
-	String username;
-	int grade = -1;
-	int maxPoints;
-	String filePath;
-	boolean hasAnswer = true;
+	private String username;
 	
 	public Answer(String user, String questionName, String filePath, int grade, int maxPoints)
 	{

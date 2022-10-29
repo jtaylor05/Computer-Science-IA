@@ -70,7 +70,6 @@ public class Questions
 			do
 			{
 				i = Answers.getQIDIndex(QID, i + 1);
-				System.out.println(i);
 				if(i >= 0)
 				{
 					int grade = Answers.getPoints(i);

@@ -3,19 +3,16 @@ package pages;
 public class Question extends Record
 {
 	private boolean teacher = false;
-	private String message = "not graded";
 	
 	
-	public Question(String ID, String name, String filePath, int maxPoints, String message)
+	public Question(String ID, String name, String filePath, int maxPoints)
 	{
 		super(ID, name, filePath, -1, maxPoints, false);
-		this.message = message;
 	}
 		
-	public Question(String ID, String name, String filePath, int grade, int maxPoints, String message)
+	public Question(String ID, String name, String filePath, int grade, int maxPoints)
 	{
 		super(ID, name, filePath, grade, maxPoints, true);
-		this.message = message;
 	}
 		
 	public Question(String ID, String name, int maxPoints)
@@ -24,15 +21,17 @@ public class Question extends Record
 		teacher = true;
 	}
 	
-	public String getMessage()
-	{ return message; }
+	public boolean isTeacher()
+	{
+		return teacher;
+	}
 	
 	public String toString()
 	{
 		String str;
 		if(hasAnswer)
 		{
-			str = name + " : (" + grade + ") " + message;
+			str = name + " : (" + grade + ") ";
 		}
 		else if(teacher)
 		{

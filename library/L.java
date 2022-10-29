@@ -1,6 +1,6 @@
 package library;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.UUID;
 
 import database.Accounts;
@@ -57,11 +57,11 @@ public class L
 		return id;
 	}
 	
-	public static ArrayList<String> makeTeacherList()
+	public static LinkedList<String> makeTeacherList()
 	{
 		int index = 0;
 		String id = Accounts.getID(index);
-		ArrayList<String> ids = new ArrayList<>();
+		LinkedList<String> ids = new LinkedList<>();
 		while(id != null)
 		{
 			if(Accounts.isTeacher(index))

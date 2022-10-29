@@ -25,7 +25,7 @@ public class questionPage extends JFrame
 	 */
 	private Question question;
 	private Answer answer;
-	private ArrayList<Answer> answers = new ArrayList<>();
+	private LinkedList<Answer> answers = new LinkedList<>();
 	private boolean teacher;
 	private String ID;
 	
@@ -383,7 +383,7 @@ public class questionPage extends JFrame
 						Answers.changeFeedback(index);
 					}
 					
-					ArrayList<String> ids = L.makeTeacherList();
+					LinkedList<String> ids = L.makeTeacherList();
 					for(int i = 0; i < ids.size(); i++)
 					{
 						if(!Answers.isNewAnswer(index))
@@ -491,7 +491,7 @@ public class questionPage extends JFrame
 					}
 					Accounts.updateFeedback(false, true, false, uID);
 					
-					ArrayList<String> ids = L.makeTeacherList();
+					LinkedList<String> ids = L.makeTeacherList();
 					for(int i = 0; i < ids.size(); i++)
 					{
 						Accounts.updateAnswered(false, false, true, ids.get(i));
@@ -593,7 +593,7 @@ public class questionPage extends JFrame
 						Accounts.updateUnanswered(ID);
 					}
 					
-					ArrayList<String> ids = L.makeTeacherList();
+					LinkedList<String> ids = L.makeTeacherList();
 					for(int i = 0; i < ids.size(); i++)
 					{
 						Accounts.updateAnswered(false, true, false, ids.get(i));
@@ -630,9 +630,9 @@ public class questionPage extends JFrame
 	}
 	
 	//make List of all answers a user has
-	public ArrayList<Answer> makeList()
+	public LinkedList<Answer> makeList()
 	{
-		ArrayList<Answer> as = new ArrayList<>();
+		LinkedList<Answer> as = new LinkedList<>();
 		int index = 0;
 		String userID = Accounts.getID(index);
 		String name = Accounts.getUsername(index);

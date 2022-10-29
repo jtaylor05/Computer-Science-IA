@@ -13,7 +13,7 @@ public class questionListPage extends JFrame
 {
 	private boolean teacher;
 	private String ID;
-	private ArrayList<Question> questionList;
+	private LinkedList<Question> questionList;
 	
 	private JPanel homeRow = new JPanel();
 	private JPanel scroller = new JPanel();
@@ -234,10 +234,6 @@ public class questionListPage extends JFrame
 					c.gridx = 2;
 					c.insets = new Insets(0, 0, 0, 0);
 				questions.add(jl, c);
-				
-				JLabel message = new JLabel(q.getMessage());
-					c.gridx = 3;
-				questions.add(message, c);
 			}
 			
 			homeRow.setLayout(new GridBagLayout());
@@ -482,9 +478,9 @@ public class questionListPage extends JFrame
 	}
 	
 	//makes a list of questions as above, but includes userID's answers if there is one
-	public ArrayList<Question> makeList(String userID)
+	public LinkedList<Question> makeList(String userID)
 	{
-		ArrayList<Question> questions = new ArrayList<>();
+		LinkedList<Question> questions = new LinkedList<>();
 		
 		int index = 0;
 		String QID = Questions.getID(index);
@@ -500,10 +496,9 @@ public class questionListPage extends JFrame
 			String name = Questions.getName(index);
 			name = L.shear(name);
 			String filePath = Questions.getFilePath(index);
-			int maxPoints = Questions.getPoints(index);	
-			String message = "";
+			int maxPoints = Questions.getPoints(index);
 			Question q = null;
-			q = new Question(QID, name, filePath, points, maxPoints, message);
+			q = new Question(QID, name, filePath, points, maxPoints);
 						
 			questions.add(q);
 			
@@ -515,9 +510,9 @@ public class questionListPage extends JFrame
 	}
 	
 	//makes a list of all questions, their IDs, names, and max points
-	public ArrayList<Question> makeList()
+	public LinkedList<Question> makeList()
 	{
-		ArrayList<Question> questions = new ArrayList<>();
+		LinkedList<Question> questions = new LinkedList<>();
 			
 		int index = 0;
 		String QID = Questions.getID(index);
@@ -540,7 +535,7 @@ public class questionListPage extends JFrame
 		return questions;
 	}
 	
-	public ArrayList<Question> sortList(ArrayList<Question> list)
+	public LinkedList<Question> sortList(LinkedList<Question> list)
 	{
 		for(int i = 0; i < list.size(); i++)
 		{
