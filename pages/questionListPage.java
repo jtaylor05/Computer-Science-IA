@@ -510,6 +510,8 @@ public class questionListPage extends JFrame
 			QID = Questions.getID(index);
 		}
 		
+		questions = sortList(questions);
+		
 		return questions;
 	}
 	

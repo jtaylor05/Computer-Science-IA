@@ -22,6 +22,11 @@ public class Answers
 	private final static int NEW_ANSWER = GOTTEN_FEEDBACK + 1;
 	private final static int LENGTH_OF_FILE = NEW_ANSWER + 1;
 	
+	public static void main(String[] args)
+	{
+		update();
+	}
+	
 	//Method adds answer data to file "answer".
 	public static void addAnswer(String userID, String qID, String filePath, int points)
 	{

@@ -322,7 +322,7 @@ public class logInPage extends JFrame
 		{
 			public void keyPressed(KeyEvent e)
 			{
-				if(!userBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
+				if(!emailBoxTyped && e.getKeyChar() >= 32 && e.getKeyChar() <= 126)
 				{
 					emailBox.setText("");
 					emailBoxTyped = true;
@@ -331,7 +331,7 @@ public class logInPage extends JFrame
 					
 			public void keyReleased(KeyEvent e)
 			{
-				if(usernameBox.getText().equals(""))
+				if(emailBox.getText().equals(""))
 				{
 					emailBox.setText("Enter Email");
 					emailBoxTyped = false;
@@ -512,6 +512,7 @@ public class logInPage extends JFrame
 	//opens dropInPage Frame
 	public void dropInPage(boolean teacher, String ID)
 	{
+		
 		Accounts.updateFeedback(true, false, false, ID);
 		Accounts.updateAnswered(true, false, false, ID);
 		new dropInPage(teacher, ID).setVisible(true);
