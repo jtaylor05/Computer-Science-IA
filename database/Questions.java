@@ -14,7 +14,7 @@ public class Questions
 	private final static int LENGTH_OF_ID = 36;
 	private final static int LENGTH_OF_NAME = 23;
 	private final static int END_OF_NAME = LENGTH_OF_ID + LENGTH_OF_NAME;
-	private final static int LENGTH_OF_PATH = 48;
+	private final static int LENGTH_OF_PATH = 80;
 	private final static int END_OF_PATH = END_OF_NAME + LENGTH_OF_PATH;
 	private final static int LENGTH_OF_GRADE = 10;
 	private final static int LENGTH_OF_FILE = END_OF_PATH + LENGTH_OF_GRADE + 1;

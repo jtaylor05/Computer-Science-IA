@@ -23,11 +23,6 @@ public class Accounts
 	private final static int END_OF_ANSWERED = END_OF_EMAIL + LENGTH_OF_INFO;
 	private final static int LENGTH_OF_FILE = END_OF_ANSWERED + 1;
 	
-	public static void main(String[] args)
-	{
-		System.out.println(Answers.numberAnswers());
-	}
-	
 	//Method adds account data to file "accounts".
 	public static void addAccount(String username, String password, String email, boolean isTeacher)
 	{

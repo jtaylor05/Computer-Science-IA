@@ -1,12 +1,16 @@
 package pages;
 
-import java.util.*;   
+import java.util.*;    
 import database.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.AttributeSet.ColorAttribute;
 
 import java.awt.event.*;
+import java.io.*;
 import java.awt.*;
+import java.awt.image.*;
 import library.L;
 
 public class questionListPage extends JFrame
@@ -64,14 +68,22 @@ public class questionListPage extends JFrame
 				
 				final Question q = questionList.get(i);
 				
-				Canvas ca = new Canvas() {
-					public void paint(Graphics g)
+				JPanel image = new JPanel() {
+					protected void paintComponent(Graphics g)
 					{
-						Toolkit t = Toolkit.getDefaultToolkit();
-						Image i = t.getImage(q.getPath() + ".png");
-						g.drawImage(i, 50, 50, this);
+						super.paintComponent(g);
+						
+						Image img = null;
+						try
+						{
+							img = ImageIO.read(new File(q.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+						}
+						catch(Exception e) {}
+						
+						g.drawImage(img, 2, 2, this);
 					}
 				};
+				image.setPreferredSize(new Dimension(160, 200));
 					c.fill = GridBagConstraints.HORIZONTAL;
 					
 					c.gridx = 0; c.gridy = i;
@@ -79,7 +91,7 @@ public class questionListPage extends JFrame
 					c.weightx = 0.5;
 					
 					c.insets = new Insets(0, 0, 10, 0);
-				questions.add(ca, c);
+				questions.add(image, c);
 				
 				JButton jb = new JButton(q.getName());
 				jb.addActionListener(new ActionListener() {
@@ -180,22 +192,30 @@ public class questionListPage extends JFrame
 				
 				final Question q = questionList.get(i);
 				
-				Canvas ca = new Canvas() {
-					public void paint(Graphics g)
+				JPanel image = new JPanel() {
+					protected void paintComponent(Graphics g)
 					{
-						Toolkit t = Toolkit.getDefaultToolkit();
-						Image i = t.getImage(q.getPath() + ".png");
-						g.drawImage(i, 50, 50, this);
+						super.paintComponent(g);
+						
+						Image img = null;
+						try
+						{
+							img = ImageIO.read(new File(q.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+						}
+						catch(Exception e) {}
+						
+						g.drawImage(img, 2, 2, this);
 					}
 				};
+				image.setPreferredSize(new Dimension(160, 200));
 					c.fill = GridBagConstraints.HORIZONTAL;
-				
+					
 					c.gridx = 0; c.gridy = i;
-				
+					
 					c.weightx = 0.5;
 					
 					c.insets = new Insets(0, 0, 10, 0);
-				questions.add(ca, c);
+				questions.add(image, c);
 				
 				JButton jb = new JButton(questionList.get(i).getName());
 				jb.addActionListener(new ActionListener() {
@@ -256,7 +276,7 @@ public class questionListPage extends JFrame
 			homeRow.add(home, c);
 				c.insets = new Insets(0, 0, 0, 0);
 		}
-			questionScroller.setPreferredSize(new Dimension(400, 200));
+			questionScroller.setPreferredSize(new Dimension(450, 200));
 		scroller.add(questionScroller, c);
 			
 		setLayout(new GridBagLayout());
@@ -447,7 +467,7 @@ public class questionListPage extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				boolean isName = !"".equals(nameText.getText()) && nameText.getText().length() <= 23;
-				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 48;
+				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 80;
 				int maxPoints; 
 				try
 				{
@@ -527,9 +547,9 @@ public class questionListPage extends JFrame
 		{
 			String name = Questions.getName(index);
 			int maxPoints = Questions.getPoints(index);
-				
-			Question q = new Question(QID, name, maxPoints);
-				
+			String filePath = Questions.getFilePath(index);
+			
+			Question q = new Question(QID, name, filePath, maxPoints);
 			questions.add(q);
 				
 			index = index + 1;

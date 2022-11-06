@@ -1,10 +1,13 @@
 package pages;
 
-import java.util.*; 
+import java.util.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.xml.transform.Templates;
 
 import java.awt.event.*;
+import java.io.File;
 import java.awt.*;
 import database.*;
 import library.L;
@@ -111,21 +114,30 @@ public class questionPage extends JFrame
 			{
 				final Answer a = answers.get(i);
 				
-				Canvas ca = new Canvas() {
-					public void paint(Graphics g)
+				JPanel image = new JPanel() {
+					protected void paintComponent(Graphics g)
 					{
-						Toolkit t = Toolkit.getDefaultToolkit();
-						Image i = t.getImage(a.getPath() + ".png");
-						g.drawImage(i, 50, 50, this);
+						super.paintComponent(g);
+						
+						Image img = null;
+						try
+						{
+							img = ImageIO.read(new File(a.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+						}
+						catch(Exception e) {}
+						
+						g.drawImage(img, 2, 2, this);
 					}
 				};
+				image.setPreferredSize(new Dimension(160, 200));
 					c.fill = GridBagConstraints.HORIZONTAL;
-				
+					
 					c.gridx = 0; c.gridy = i;
-				
+					
 					c.weightx = 0.5;
-					c.insets = new Insets(20, 0, 0, 0);
-				answerBox.add(ca, c);
+					
+					c.insets = new Insets(0, 0, 10, 0);
+				answerBox.add(image, c);
 				
 				JLabel user = new JLabel(a.getUser());
 					c.fill = GridBagConstraints.NONE;
@@ -190,20 +202,30 @@ public class questionPage extends JFrame
 		{
 			answerBox.setLayout(new GridBagLayout());
 			
-			Canvas ca = new Canvas() {
-				public void paint(Graphics g)
+			JPanel image = new JPanel() {
+				protected void paintComponent(Graphics g)
 				{
-					Toolkit t = Toolkit.getDefaultToolkit();
-					Image i = t.getImage(answer.getPath() + ".png");
-					g.drawImage(i, 50, 50, this);
+					super.paintComponent(g);
+					
+					Image img = null;
+					try
+					{
+						img = ImageIO.read(new File(answer.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+					}
+					catch(Exception e) {}
+					
+					g.drawImage(img, 2, 2, this);
 				}
 			};
+			image.setPreferredSize(new Dimension(160, 200));
 				c.fill = GridBagConstraints.HORIZONTAL;
-			
+				
 				c.gridx = 0;
-		
+				
 				c.weightx = 0.5;
-			answerBox.add(ca, c);
+				
+				c.insets = new Insets(0, 0, 10, 0);
+			answerBox.add(image, c);
 			
 			JLabel grade = new JLabel("");
 			if(answer.hasAnswer() && answer.getGrade() > -1)
@@ -293,18 +315,26 @@ public class questionPage extends JFrame
 			label2.setBackground(L.LIGHT_BROWN); label2.setOpaque(true);
 		grade.add(label2, c);
 		
-		Canvas ca = new Canvas() {
-			public void paint(Graphics g)
+		JPanel image = new JPanel() {
+			protected void paintComponent(Graphics g)
 			{
-				Toolkit t = Toolkit.getDefaultToolkit();
-				Image i = t.getImage(a.getPath() + ".png");
-				g.drawImage(i, 50, 50, this);
+				super.paintComponent(g);
+				
+				Image img = null;
+				try
+				{
+					img = ImageIO.read(new File(a.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+				}
+				catch(Exception e) {}
+				
+				g.drawImage(img, 2, 2, this);
 			}
 		};
+		image.setPreferredSize(new Dimension(160, 200));
 			c.fill = GridBagConstraints.BOTH;
 			
 			c.gridy = 2;
-		grade.add(ca, c);
+		grade.add(image, c);
 		
 		JPanel newGrade = new JPanel(); newGrade.setLayout(new GridLayout(2,1));
 		JLabel newGradeLabel = new JLabel("Enter New Grade:");
@@ -354,7 +384,7 @@ public class questionPage extends JFrame
 			
 			public void actionPerformed(ActionEvent e)
 			{
-				boolean isGrade = !"".equals(newGradeText.getText()) && newGradeText.getText().length() <= 48;
+				boolean isGrade = !"".equals(newGradeText.getText());
 				int points;
 				try
 				{
@@ -467,7 +497,7 @@ public class questionPage extends JFrame
 				
 			public void actionPerformed(ActionEvent e)
 			{
-				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 48;
+				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 80;
 					
 				if(isFilePath)
 				{
@@ -571,7 +601,7 @@ public class questionPage extends JFrame
 			
 			public void actionPerformed(ActionEvent e)
 			{
-				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 48;
+				boolean isFilePath = !"".equals(filePathText.getText()) && filePathText.getText().length() <= 80;
 				
 				if(isFilePath)
 				{

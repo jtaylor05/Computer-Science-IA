@@ -14,7 +14,7 @@ public class Answers
 	private final static int LENGTH_OF_USERID = 37;
 	private final static int LENGTH_OF_QID = 36;
 	private final static int END_OF_ID = LENGTH_OF_USERID + LENGTH_OF_QID;
-	private final static int LENGTH_OF_PATH = 48;
+	private final static int LENGTH_OF_PATH = 80;
 	private final static int END_OF_PATH = END_OF_ID + LENGTH_OF_PATH;
 	private final static int LENGTH_OF_GRADE = 10;
 	private final static int END_OF_GRADE = END_OF_PATH + LENGTH_OF_GRADE;
