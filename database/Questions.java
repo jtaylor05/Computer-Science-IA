@@ -47,7 +47,7 @@ public class Questions
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, name);
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
 		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "" + totalPoints);
-		String id = L.getID();
+		String id = QID;
 		
 		int index = getIDIndex(QID);
 		int prevPoints = getPoints(index);
@@ -118,7 +118,7 @@ public class Questions
 		}
 		catch(Exception e)
 		{
-			System.out.println("exception: " + e);
+			System.out.println("excheption: " + e);
 		}	
 		
 		Accounts.updateUnanswered(false, false, true, QID);

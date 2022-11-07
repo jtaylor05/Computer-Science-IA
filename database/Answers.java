@@ -88,6 +88,7 @@ public class Answers
 			raf.close();
 			fw.close();
 			
+			System.out.println("working");
 			Files.delete(database.toPath());
 			temp.renameTo(database);
 			
@@ -438,6 +439,7 @@ public class Answers
 		{
 			if(Accounts.getIDIndex(userID) == -1)
 			{
+				System.out.println("index " + index);
 				removeAnswer(index);
 				userID = getUserID(index);
 			}
