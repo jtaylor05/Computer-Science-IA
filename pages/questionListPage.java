@@ -76,21 +76,21 @@ public class questionListPage extends JFrame
 						Image img = null;
 						try
 						{
-							img = ImageIO.read(new File(q.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+							img = ImageIO.read(new File(q.getPath())).getScaledInstance(340, 240, Image.SCALE_DEFAULT);
 						}
 						catch(Exception e) {}
 						
 						g.drawImage(img, 2, 2, this);
 					}
 				};
-				image.setPreferredSize(new Dimension(160, 200));
+				image.setPreferredSize(new Dimension(340, 240));
 					c.fill = GridBagConstraints.HORIZONTAL;
 					
 					c.gridx = 0; c.gridy = i;
 					
 					c.weightx = 0.5;
 					
-					c.insets = new Insets(0, 0, 10, 0);
+					c.insets = new Insets(10, 10, 10, 10);
 				questions.add(image, c);
 				
 				JButton jb = new JButton(q.getName());
@@ -114,6 +114,8 @@ public class questionListPage extends JFrame
 					c.gridx = 1;
 					
 					c.weightx = 0;
+					
+					c.insets = new Insets(0, 10, 0, 10);
 					jb.setPreferredSize(new Dimension(150, 30));
 					jb.setBackground(L.LIGHT_BROWN);
 					jb.setForeground(Color.BLACK);
@@ -122,8 +124,9 @@ public class questionListPage extends JFrame
 				JLabel jl = new JLabel();
 				jl.setText("Out of " + q.getMaxPoints() + " points");
 					c.gridx = 2;
-					c.insets = new Insets(0, 0, 0, 0);
+					c.insets = new Insets(0, 10, 0, 10);
 				questions.add(jl, c);
+					c.insets = new Insets(0, 0, 0, 0);
 			}
 			
 			JButton add = new JButton("Add");
@@ -200,21 +203,21 @@ public class questionListPage extends JFrame
 						Image img = null;
 						try
 						{
-							img = ImageIO.read(new File(q.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+							img = ImageIO.read(new File(q.getPath())).getScaledInstance(380, 250, Image.SCALE_DEFAULT);
 						}
 						catch(Exception e) {}
 						
 						g.drawImage(img, 2, 2, this);
 					}
 				};
-				image.setPreferredSize(new Dimension(160, 200));
+				image.setPreferredSize(new Dimension(380, 250));
 					c.fill = GridBagConstraints.HORIZONTAL;
 					
 					c.gridx = 0; c.gridy = i;
 					
 					c.weightx = 0.5;
 					
-					c.insets = new Insets(0, 0, 10, 0);
+					c.insets = new Insets(10, 10, 10, 10);
 				questions.add(image, c);
 				
 				JButton jb = new JButton(questionList.get(i).getName());
@@ -230,6 +233,8 @@ public class questionListPage extends JFrame
 					c.gridx = 1;
 				
 					c.weightx = 0;
+					
+					c.insets = new Insets(0, 10, 0, 10);
 					jb.setPreferredSize(new Dimension(150, 30));
 					jb.setBackground(L.LIGHT_BROWN);
 					jb.setForeground(Color.BLACK);
@@ -253,8 +258,9 @@ public class questionListPage extends JFrame
 					jl.setText("Points: N/A");
 				}
 					c.gridx = 2;
-					c.insets = new Insets(0, 0, 0, 0);
+					c.insets = new Insets(0, 10, 0, 10);
 				questions.add(jl, c);
+					c.insets = new Insets(0, 0, 0, 0);
 			}
 			
 			homeRow.setLayout(new GridBagLayout());
@@ -276,7 +282,7 @@ public class questionListPage extends JFrame
 			homeRow.add(home, c);
 				c.insets = new Insets(0, 0, 0, 0);
 		}
-			questionScroller.setPreferredSize(new Dimension(450, 200));
+			questionScroller.setPreferredSize(new Dimension(650, 400));
 		scroller.add(questionScroller, c);
 			
 		setLayout(new GridBagLayout());
@@ -375,7 +381,7 @@ public class questionListPage extends JFrame
 				
 				if(isName && isFilePath && maxPoints > 0)
 				{
-					Questions.addQuestion(nameText.getText(), filePathText.getText(), maxPoints);
+					Questions.add(nameText.getText(), filePathText.getText(), maxPoints);
 					add.dispose();
 					new questionListPage(teacher, ID).setVisible(true);
 					dispose();
@@ -403,6 +409,7 @@ public class questionListPage extends JFrame
 		GridBagConstraints c = new GridBagConstraints();
 		edit.setVisible(true);
 		int index = Questions.getIDIndex(q.getID());
+		System.out.println(index);
 		
 		JLabel label = new JLabel("Edit " + q.getName());
 		label.setHorizontalTextPosition(WIDTH/2);
@@ -453,7 +460,7 @@ public class questionListPage extends JFrame
 		remove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				Questions.removeQuestion(q.getID());
+				Questions.remove(q.getID());
 				edit.dispose();
 				new questionListPage(teacher, ID).setVisible(true);
 				dispose();
@@ -480,7 +487,7 @@ public class questionListPage extends JFrame
 				
 				if(isName && isFilePath && maxPoints > 0)
 				{
-					Questions.replaceQuestion(nameText.getText(), filePathText.getText(), maxPoints, q.getID());
+					Questions.replace(nameText.getText(), filePathText.getText(), maxPoints, q.getID());
 					edit.dispose();
 					new questionListPage(teacher, ID).setVisible(true);
 					dispose();

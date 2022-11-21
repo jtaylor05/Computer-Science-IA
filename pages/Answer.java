@@ -21,8 +21,6 @@ public class Answer extends Record
 	public Answer(String questionName, int grade, int maxPoints)
 	{
 		super(null, questionName, null, grade, maxPoints, true);
-		this.grade = grade;
-		this.maxPoints = maxPoints;
 	}
 	
 	public Answer(String user, String questionName, int maxPoints)

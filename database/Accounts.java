@@ -3,16 +3,11 @@ package database;
 import java.io.*;
 import library.L;
 
-public class Accounts 
+public class Accounts extends Database
 {
-	private static FileWriter fw;
-	private static RandomAccessFile raf;
 	private final static String DATABASE_FILE_PATH = "database/accounts";
-	
-	
-	private final static int LENGTH_OF_ID = 37;
-	private final static int LENGTH_OF_NAME = 23;
-	private final static int END_OF_NAME = LENGTH_OF_ID + LENGTH_OF_NAME;
+
+	private final static int END_OF_NAME = LENGTH_OF_USERID + LENGTH_OF_NAME;
 	private final static int LENGTH_OF_PASS = 28;
 	private final static int END_OF_PASS = END_OF_NAME + LENGTH_OF_PASS;
 	private final static int LENGTH_OF_EMAIL = 48;
@@ -24,7 +19,7 @@ public class Accounts
 	private final static int LENGTH_OF_FILE = END_OF_ANSWERED + 1;
 	
 	//Method adds account data to file "accounts".
-	public static void addAccount(String username, String password, String email, boolean isTeacher)
+	public static void add(String username, String password, String email, boolean isTeacher)
 	{
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, username);
 		String fixedPass = L.fitToLength(LENGTH_OF_PASS, password);
@@ -44,381 +39,92 @@ public class Accounts
 		}
 		
 		
-		
-		try
+		if(isTeacher)
 		{
-			fw = new FileWriter(DATABASE_FILE_PATH, true);
-			if(isTeacher)
-			{
-				fw.write(id + teacher + fixedName + fixedPass + fixedEmail + answered + " \n");
-			}
-			else
-			{
-				fw.write(id + teacher + fixedName + fixedPass + fixedEmail + unanswered + "0\n");
-			}
-			fw.close();
+			write(id + teacher + fixedName + fixedPass + fixedEmail + answered + " \n", DATABASE_FILE_PATH);
 		}
-		catch(Exception e)
+		else
 		{
-			System.out.println("exception");
-		}		
+			write(id + teacher + fixedName + fixedPass + fixedEmail + unanswered + "0\n", DATABASE_FILE_PATH);
+		}	
 	}
 	
 	//Method searches for search term "username" of all usernames in file 
 	//"accounts"; returns int index of account with "username".
 	public static int getUsernameIndex(String username)
 	{
-		String fixedName = L.fitToLength(LENGTH_OF_NAME, username);
-		String name = "";
-		int index = -1;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-				
-				String line = raf.readLine();
-				name = line.substring(LENGTH_OF_ID, END_OF_NAME);
-				
-				if(name.equals(fixedName))
-				{
-					return index;
-				}
-				
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 87 error " + e);
-		}
-		
-		return -1;
+		return getIndex(username, LENGTH_OF_NAME, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_NAME, LENGTH_OF_FILE);
 	}
 	
 	//does same as function above, however goes from minimum index
 	public static int getUsernameIndex(String username, int minIndex)
 	{
-		String user = "";
-		int index = minIndex;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			raf.seek(LENGTH_OF_FILE * index);
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-					
-				String line = raf.readLine();
-				user = line.substring(LENGTH_OF_ID, END_OF_NAME);
-				user = L.shear(user);
-				
-				if(user.equals(username))
-				{
-					return index;
-				}
-				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(username, LENGTH_OF_NAME, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_NAME, LENGTH_OF_FILE, minIndex);
 	}
 	
 	//To return username from certain index in database.
 	public static String getUsername(int index)
 	{
-		String username = "";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				return null;
-			}
-			
-			String line = raf.readLine();
-			username = line.substring(LENGTH_OF_ID, END_OF_NAME);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 114 error " + e);
-		}
-		
-		return L.shear(username);
+		return get(index, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_NAME, LENGTH_OF_FILE);
 	}
 	
 	//Method searches for search term "email" of all email in file 
 	//"accounts"; returns int index of account with "email".
 	public static int getEmailIndex(String email)
 	{
-		String fixedEmail = L.fitToLength(LENGTH_OF_EMAIL, email);
-		String mail = "";
-		int index = -1;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-				
-				String line = raf.readLine();
-				mail = line.substring(END_OF_PASS);
-				
-				if(mail.equals(fixedEmail))
-				{
-					return index;
-				}
-				
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 148 error " + e);
-		}
-		
-		return -1;
+		return getIndex(email, LENGTH_OF_EMAIL, DATABASE_FILE_PATH, END_OF_PASS, LENGTH_OF_FILE, LENGTH_OF_FILE);
 	}
 	
 	public static int getEmailIndex(String email, int minIndex)
 	{
-		String mail = "";
-		int index = minIndex;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			raf.seek(LENGTH_OF_FILE * index);
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-					
-				String line = raf.readLine();
-				mail = line.substring(END_OF_PASS, LENGTH_OF_FILE);
-				mail = L.shear(mail);
-				
-				if(mail.equals(email))
-				{
-					return index;
-				}
-				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(email, LENGTH_OF_EMAIL, DATABASE_FILE_PATH, END_OF_PASS, LENGTH_OF_FILE, LENGTH_OF_FILE, minIndex);
 	}
 	
 	//Method searches for search term "password" of all passwords in file 
 	//"passwords"; returns int index of account with "password".
 	public static int getPasswordIndex(String password)
 	{
-		String fixedPass = L.fitToLength(LENGTH_OF_PASS, password);
-		String pass = "";
-		int index = -1;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-					
-				String line = raf.readLine();
-				pass = line.substring(END_OF_NAME, END_OF_PASS);
-					
-				if(pass.equals(fixedPass))
-				{
-					return index;
-				}
-					
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 182 error " + e);
-		}
-			
-		return -1;
+		return getIndex(password, LENGTH_OF_PASS, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PASS, LENGTH_OF_FILE);
 	}
 	
 	//does same as method above, but goes from a minimum index
 	public static int getPasswordIndex(String password, int minIndex)
 	{
-		String pass = "";
-		int index = minIndex;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			raf.seek(LENGTH_OF_FILE * index);
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-					
-				String line = raf.readLine();
-				pass = line.substring(END_OF_NAME, END_OF_PASS);
-				pass = L.shear(pass);
-					
-				if(pass.equals(password))
-				{
-					return index;
-				}
-				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(password, LENGTH_OF_PASS, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PASS, LENGTH_OF_FILE, minIndex);
 	}
 	
 	//Method finds password of account at index; returns found password of account.
 	public static String getPassword(int index)
 	{
-		String password = "";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				return null;
-			}
-			
-			String line = raf.readLine();
-			password = line.substring(END_OF_NAME, END_OF_PASS);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-		
-		return password;
+		return get(index, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PASS, LENGTH_OF_FILE);
 	}
 	
 	//Method finds ID of account at index; returns found ID of account.
 	public static String getID(int index)
 	{
-		String ID = "";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				return null;
-			}
-			
-			String line = raf.readLine();
-			ID = line.substring(0, LENGTH_OF_ID);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 236 error " + e);
-		}
-		
-		return ID;
+		return get(index, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE);
 	}
 	
 	//method uses looks for index of searchterm "searchID"; returns index of where "searchID"
 	//was found or -1 if not found.
-	public static int getIDIndex(String searchID)
+	public static int getIDIndex(String ID)
 	{
-		String id = "";
-		int index = -1;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-					
-				String line = raf.readLine();
-				id = line.substring(0, LENGTH_OF_ID);
-						
-				if(id.equals(searchID))
-				{
-					return index;
-				}
-					
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(ID, LENGTH_OF_USERID, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE);
+	}
+	
+	//overloading method
+	public static int get(String ID, int begin, int end)
+	{
+		int index = getIDIndex(ID);
+		
+		String str = get(index, DATABASE_FILE_PATH, begin, end, LENGTH_OF_FILE);
+		return Integer.parseInt(str);
 	}
 	
 	//gets the number of unanswered
 	public static int getUnanswered(String ID)
 	{
-		int index = getIDIndex(ID);
-		int unanswered = -1;
-		if(!isTeacher(index))
-		{
-			try
-			{
-				raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-				if(LENGTH_OF_FILE * index < raf.length())
-				{
-					raf.seek(LENGTH_OF_FILE * index);
-				}
-				else
-				{
-					return unanswered;
-				}
-				
-				String line = raf.readLine();
-				String temp = line.substring(END_OF_EMAIL, UNANSWERED_INDEX);
-				unanswered = Integer.parseInt(temp);
-				raf.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("error " + e);
-			}
-		}
-		
-		return unanswered;
+		return get(ID, END_OF_EMAIL, UNANSWERED_INDEX);
 	}
 	
 	//to change the amount of unanswered
@@ -427,20 +133,7 @@ public class Accounts
 		int index = getIDIndex(ID);
 		if(!isTeacher(index))
 		{
-			try
-			{
-				raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-				if(LENGTH_OF_FILE * index < raf.length())
-				{
-					raf.seek(LENGTH_OF_FILE * index + END_OF_EMAIL);
-					raf.writeBytes("" + value);
-				}
-				raf.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("error " + e);
-			}
+			writeAt(value, index, 1, DATABASE_FILE_PATH, END_OF_EMAIL, LENGTH_OF_FILE);
 		}
 	}
 	
@@ -485,34 +178,7 @@ public class Accounts
 	//returns number of questions which recieved feedback
 	public static int getFeedback(String ID)
 	{
-		int index = getIDIndex(ID);
-		int feedback = -1;
-		if(!isTeacher(index))
-		{
-			try
-			{
-				raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-				if(LENGTH_OF_FILE * index < raf.length())
-				{
-					raf.seek(LENGTH_OF_FILE * index);
-				}
-				else
-				{
-					return feedback;
-				}
-				
-				String line = raf.readLine();
-				String temp = line.substring(UNANSWERED_INDEX, FEEDBACK_INDEX);
-				feedback = Integer.parseInt(temp);
-				raf.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("error " + e);
-			}
-		}
-		
-		return feedback;
+		return get(ID, UNANSWERED_INDEX, FEEDBACK_INDEX);
 	}
 	
 	//changes value of feedback
@@ -521,20 +187,7 @@ public class Accounts
 		int index = getIDIndex(ID);
 		if(!isTeacher(index))
 		{
-			try
-			{
-				raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-				if(LENGTH_OF_FILE * index < raf.length())
-				{
-					raf.seek(LENGTH_OF_FILE * index + UNANSWERED_INDEX);
-					raf.writeBytes("" + value);
-				}
-				raf.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("error " + e);
-			}
+			writeAt(value, index, 1, DATABASE_FILE_PATH, UNANSWERED_INDEX, LENGTH_OF_FILE);
 		}
 	}
 	
@@ -577,57 +230,16 @@ public class Accounts
 	//returns the amount of answered questions (for teachers)
 	public static int getAnswered(String ID)
 	{
-		int index = getIDIndex(ID);
-		int answered = -1;
-		if(isTeacher(index))
-		{
-			try
-			{
-				raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-				if(LENGTH_OF_FILE * index < raf.length())
-				{
-					raf.seek(LENGTH_OF_FILE * index);
-				}
-				else
-				{
-					return answered;
-				}
-				
-				String line = raf.readLine();
-				String temp = line.substring(END_OF_EMAIL, END_OF_ANSWERED);
-				answered = Integer.parseInt(L.shear(temp));
-				raf.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("error " + e);
-			}
-		}
-		
-		return answered;
+		return get(ID, END_OF_EMAIL, END_OF_ANSWERED);
 	}
 	
 	//changes answered value
 	public static void setAnswered(String ID, int value)
 	{
 		int index = getIDIndex(ID);
-		if(isTeacher(index))
+		if(!isTeacher(index))
 		{
-			try
-			{
-				raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-				if(LENGTH_OF_FILE * index < raf.length())
-				{
-					raf.seek(LENGTH_OF_FILE * index + END_OF_EMAIL);
-					System.out.println(value);
-					raf.writeBytes("" + value);
-				}
-				raf.close();
-			}
-			catch(Exception e)
-			{
-				System.out.println("error " + e);
-			}
+			writeAt(value, index, 1, DATABASE_FILE_PATH, END_OF_EMAIL, LENGTH_OF_FILE);
 		}
 	}
 	
@@ -670,30 +282,7 @@ public class Accounts
 	//returns boolean value true if a teacher, false if not;
 	public static boolean isTeacher(int index)
 	{
-		boolean isTeacher = false;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				return false;
-			}
-			
-			String line = raf.readLine();
-			String str = line.substring(LENGTH_OF_ID - 1, LENGTH_OF_ID);
-			if(str.equals("1"))
-			{ isTeacher = true; } 
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 266 error " + e);
-		}
-		
-		return isTeacher;
+		String bool = get(index, DATABASE_FILE_PATH, LENGTH_OF_USERID - 1, LENGTH_OF_USERID, LENGTH_OF_FILE);
+		return bool.equals("1");
 	}
 }

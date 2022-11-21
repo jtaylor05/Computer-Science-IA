@@ -217,17 +217,20 @@ public class portfolioPage extends JFrame
 		{
 			index = Answers.getUserIDIndex(ID, index + 1);
 			
-			String QID = Answers.getQID(index);
-			int qIndex = Questions.getIDIndex(QID);
-			String name = Questions.getName(qIndex);
-			
-			int grade = Answers.getPoints(index);
-			int maxPoints = Questions.getPoints(qIndex);
-			
-			if(!name.equals(""))
+			if(index > -1)
 			{
-				Answer a = new Answer(name, grade, maxPoints);
-				answers.add(a);
+				String QID = Answers.getQID(index);
+				int qIndex = Questions.getIDIndex(QID);
+				String name = Questions.getName(qIndex);
+			
+				int grade = Answers.getPoints(index);
+				int maxPoints = Questions.getPoints(qIndex);
+			
+				if(!name.equals(""))
+				{
+					Answer a = new Answer(name, grade, maxPoints);
+					answers.add(a);
+				}
 			}
 		}
 		while(index >= 0);

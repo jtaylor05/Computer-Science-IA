@@ -502,7 +502,7 @@ public class logInPage extends JFrame
 		
 		if(Accounts.getUsernameIndex(username) == -1)
 		{
-			Accounts.addAccount(username, password1, email, teacher);
+			Accounts.add(username, password1, email, teacher);
 			return true;
 		}
 		

@@ -5,98 +5,47 @@ import java.nio.file.Files;
 
 import library.L;
 
-public class Answers 
+public class Answers extends Database
 {
-	private static FileWriter fw;
-	private static RandomAccessFile raf;
 	private final static String DATABASE_FILE_PATH = "database/answers";
-	
-	private final static int LENGTH_OF_USERID = 37;
-	private final static int LENGTH_OF_QID = 36;
-	private final static int END_OF_ID = LENGTH_OF_USERID + LENGTH_OF_QID;
-	private final static int LENGTH_OF_PATH = 80;
+
+	private final static int END_OF_ID = LENGTH_OF_USERID + LENGTH_OF_QUESTIONID;
 	private final static int END_OF_PATH = END_OF_ID + LENGTH_OF_PATH;
-	private final static int LENGTH_OF_GRADE = 10;
 	private final static int END_OF_GRADE = END_OF_PATH + LENGTH_OF_GRADE;
 	private final static int GOTTEN_FEEDBACK = END_OF_GRADE + 1;
 	private final static int NEW_ANSWER = GOTTEN_FEEDBACK + 1;
 	private final static int LENGTH_OF_FILE = NEW_ANSWER + 1;
 	
+	//to force an update
 	public static void main(String[] args)
 	{
 		update();
 	}
 	
 	//Method adds answer data to file "answer".
-	public static void addAnswer(String userID, String qID, String filePath, int points)
+	public static void add(String userID, String qID, String filePath, int points)
 	{
 		String id = userID + qID;
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
 		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "" + points);
 		
-		try
-		{
-			fw = new FileWriter(DATABASE_FILE_PATH, true);
-			fw.write(id + fixedPath + fixedPoints + "10\n");
-			fw.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("exception");
-		}		
+		write(id + fixedPath + fixedPoints + "10\n", DATABASE_FILE_PATH);
 	}
 	
 	//Method adds answer data to file "answer".
-	public static void addAnswer(String userID, String qID, String filePath)
+	public static void add(String userID, String qID, String filePath)
 	{
 		String id = userID + qID;
 		String fixedPath = L.fitToLength(LENGTH_OF_PATH, filePath);
 		String fixedPoints = L.fitToLength(LENGTH_OF_GRADE, "-2");
 			
-		try
-		{
-			fw = new FileWriter(DATABASE_FILE_PATH, true);
-			fw.write(id + fixedPath + fixedPoints + "01\n");
-			fw.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("exception");
-		}		
+		write(id + fixedPath + fixedPoints + "01\n", DATABASE_FILE_PATH);	
 	}
 	
 	//removes an answer from database.
-	public static void removeAnswer(int index)
+	public static void remove(int index)
 	{
-		File temp = new File("database/temp");
-		File database = new File(DATABASE_FILE_PATH);
-		try
-		{
-			raf = new RandomAccessFile(database, "r");
-			fw = new FileWriter(temp, true);
-			int count;
-			int length = (int)raf.length()/LENGTH_OF_FILE;
-			String line = raf.readLine();
-			for(count = 0; count < length; count++)
-			{
-				if(count != index)
-				{
-					fw.write(line + "\n");
-				}
-				line = raf.readLine();
-			}
-			raf.close();
-			fw.close();
-			
-			System.out.println("working");
-			Files.delete(database.toPath());
-			temp.renameTo(database);
-			
-		}
-		catch(Exception e)
-		{
-			System.out.println("exception: " + e);
-		}		
+		remove(index, DATABASE_FILE_PATH, LENGTH_OF_FILE);	
 	}
 	
 	//Method uses a question and user ID to find a matching answer
@@ -119,315 +68,67 @@ public class Answers
 	//Method finds user ID of answer at index; returns found user ID.
 	public static String getUserID(int index)
 	{
-		String ID = "";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				raf.close();
-				return null;
-			}
-			
-			String line = raf.readLine();
-			ID = line.substring(0, LENGTH_OF_USERID);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error on getUserID " + e);
-		}
-		
-		return ID;
+		return get(index, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE);
 	}
 	
 	//Method finds question ID of answer at index; returns found question ID.
 	public static String getQID(int index)
 	{
-		String ID = "";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-				}
-			else
-			{
-				raf.close();
-				return null;
-			}
-				
-			String line = raf.readLine();
-			ID = line.substring(LENGTH_OF_USERID, END_OF_ID);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error on getQID " + e);
-		}			
-		return ID;
+		return get(index, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_ID, LENGTH_OF_FILE);
 	}
 	
 	//method finds file path of answer image at index; returns found file path.
 	public static String getFilePath(int index)
 	{
-		String filePath = "";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				raf.close();
-				return null;
-			}
-			
-			String line = raf.readLine();
-			filePath = line.substring(END_OF_ID, END_OF_PATH);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-		
-		return filePath;
+		return get(index, DATABASE_FILE_PATH, END_OF_ID, END_OF_PATH, LENGTH_OF_FILE);
 	}
 	
 	//changes file path of an answer
-	public static boolean changeFilePath(int index, String newPath)
+	public static void changeFilePath(int index, String newPath)
 	{
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index + END_OF_ID);
-			}
-			else
-			{
-				raf.close();
-				return false;
-			}
-			String path = L.fitToLength(LENGTH_OF_PATH, "" + newPath);
-			
-			raf.writeBytes(path);
-			raf.close();
-			return true;
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-		return false;
+		writeAt(newPath, index, LENGTH_OF_PATH, DATABASE_FILE_PATH, END_OF_ID, LENGTH_OF_FILE);
 	}
 	
 	//method uses looks for index of searchterm "searchUserID"; returns index of where "searchUserID"
 	//was found or -1 if not found.
-	public static int getUserIDIndex(String searchUserID)
+	public static int getUserIDIndex(String ID)
 	{
-		String id = "";
-		int index = -1;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-				
-				String line = raf.readLine();
-				id = line.substring(0, LENGTH_OF_USERID);
-				
-				if(id.equals(searchUserID))
-				{
-					raf.close();
-					return index;
-				}
-					
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-			
-		return -1;
+		return getIndex(ID, LENGTH_OF_USERID, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE);
 	}
 	
 	//method uses looks for index of searchterm "searchUserID"; returns index of where "searchUserID"
 	//was found or -1 if not found.
-	public static int getUserIDIndex(String searchUserID, int minIndex)
+	public static int getUserIDIndex(String ID, int minIndex)
 	{
-		String id = "";
-		int index = minIndex;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			raf.seek(LENGTH_OF_FILE * index);
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-					
-				String line = raf.readLine();
-				id = line.substring(0, LENGTH_OF_USERID);
-					
-				if(id.equals(searchUserID))
-				{
-					raf.close();
-					return index;
-				}
-				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(ID, LENGTH_OF_USERID, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE, minIndex);
 	}
 	
 	//method uses looks for index of searchterm "searchQID"; returns index of where "searchQID"
 	//was found or -1 if not found.
-	public static int getQIDIndex(String searchQID)
+	public static int getQIDIndex(String ID)
 	{
-		String id = "";
-		int index = -1;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-					
-				String line = raf.readLine();
-				id = line.substring(LENGTH_OF_USERID, END_OF_ID);
-				
-				if(id.equals(searchQID))
-				{
-					raf.close();
-					return index;
-				}
-						
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(ID, LENGTH_OF_QUESTIONID, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_ID, LENGTH_OF_FILE);
 	}
 	
 	//method uses looks for index of searchterm "searchQID"; returns index of where "searchQID"
 	//was found or -1 if not found.
-	public static int getQIDIndex(String searchQID, int minIndex)
+	public static int getQIDIndex(String ID, int minIndex)
 	{
-		String id = "";
-		int index = minIndex;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			raf.seek(LENGTH_OF_FILE * index);
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{			
-				String line = raf.readLine();
-				id = line.substring(LENGTH_OF_USERID, END_OF_ID);
-					
-				if(id.equals(searchQID))
-				{
-					raf.close();
-					return index;
-				}
-				
-				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * (index + 1));
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-				
-		return -1;
+		return getIndex(ID, LENGTH_OF_QUESTIONID, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_ID, LENGTH_OF_FILE, minIndex);
 	}
 	
 	//To find the int value of the total number of points for question at index;
 	//returns the int value found.
 	public static int getPoints(int index)
 	{
-		String points = "-1";
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				raf.close();
-				return -1;
-			}
-			
-			String line = raf.readLine();
-			points = line.substring(END_OF_PATH, END_OF_GRADE);
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-		
-		points = L.shear(points);
-		int p = Integer.parseInt(points);
-		return p;
+		String val = get(index, DATABASE_FILE_PATH, END_OF_PATH, END_OF_GRADE, LENGTH_OF_FILE);
+		return Integer.parseInt(val);
 	}
 	
 	//changes grade value
-	public static boolean changePoints(int index, int newPoints)
+	public static void changePoints(int index, int newPoints)
 	{
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index + END_OF_PATH);
-			}
-			else
-			{
-				raf.close();
-				return false;
-			}
-			String points = L.fitToLength(LENGTH_OF_GRADE, "" + newPoints);
-			
-			raf.writeBytes(points);
-			raf.close();
-			return true;
-		}
-		catch(Exception e)
-		{
-			System.out.println("error " + e);
-		}
-		return false;
+		writeAt(newPoints, index, LENGTH_OF_GRADE, DATABASE_FILE_PATH, END_OF_PATH, LENGTH_OF_FILE);
 	}
 	
 	//updates other databases if there is a change in values
@@ -439,8 +140,7 @@ public class Answers
 		{
 			if(Accounts.getIDIndex(userID) == -1)
 			{
-				System.out.println("index " + index);
-				removeAnswer(index);
+				remove(index);
 				userID = getUserID(index);
 			}
 			else
@@ -456,7 +156,7 @@ public class Answers
 		{
 			if(Questions.getIDIndex(QID) == -1)
 			{
-				removeAnswer(index);
+				remove(index);
 				QID = getQID(index);
 			}
 			else
@@ -470,157 +170,48 @@ public class Answers
 	//counts the number of answers in the database
 	public static int numberAnswers()
 	{
-		int index = 0;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			int length = (int)raf.length();
-			while(raf.getFilePointer() < length)
-			{
-				index = index + 1;
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Q195 error " + e);
-		}
-		
-		return index;
+		return countEntries(DATABASE_FILE_PATH, LENGTH_OF_FILE);
 	}
 	
 	//whether the question at index has feedback
 	public static boolean hasFeedback(int index)
 	{
-		boolean hasFeedback = false;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				return false;
-			}
-			
-			String line = raf.readLine();
-			String str = line.substring(END_OF_GRADE, GOTTEN_FEEDBACK);
-			if(str.equals("1"))
-			{ hasFeedback = true; } 
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 266 error " + e);
-		}
-		
-		return hasFeedback;
+		String bool = get(index, DATABASE_FILE_PATH, END_OF_GRADE, GOTTEN_FEEDBACK, LENGTH_OF_FILE);
+		return bool.equals("1");
 	}
 	
 	//changes the boolean value of feedback
-	public static boolean changeFeedback(int index)
+	public static void changeFeedback(int index)
 	{
 		boolean hasFeedback = hasFeedback(index);
-		try
+		if(hasFeedback)
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index + END_OF_GRADE);
-			}
-			else
-			{
-				raf.close();
-				return false;
-			}
-			
-			if(hasFeedback)
-			{
-				raf.writeBytes("0");
-			}
-			else
-			{
-				raf.writeBytes("1");
-			}
-			
-			
-			raf.close();
-			return true;
+			writeAt(0, index, 1, DATABASE_FILE_PATH, END_OF_GRADE, LENGTH_OF_FILE);
 		}
-		catch(Exception e)
+		else
 		{
-			System.out.println("error " + e);
+			writeAt(1, index, 1, DATABASE_FILE_PATH, END_OF_GRADE, LENGTH_OF_FILE);
 		}
-		return false;
 	}
 	
 	//checks whether answer is new
 	public static boolean isNewAnswer(int index)
 	{
-		boolean isNewAnswer = false;
-		try
-		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index);
-			}
-			else
-			{
-				return false;
-			}
-			
-			String line = raf.readLine();
-			String str = line.substring(GOTTEN_FEEDBACK, NEW_ANSWER);
-			if(str.equals("1"))
-			{ isNewAnswer = true; } 
-			raf.close();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Line 266 error " + e);
-		}
-		
-		return isNewAnswer;
+		String bool = get(index, DATABASE_FILE_PATH, GOTTEN_FEEDBACK, NEW_ANSWER, LENGTH_OF_FILE);
+		return bool.equals("1");
 	}
 	
 	//changes boolean value of newAnswer
-	public static boolean changeNewAnswer(int index)
+	public static void changeNewAnswer(int index)
 	{
 		boolean isNewAnswer = isNewAnswer(index);
-		try
+		if(isNewAnswer)
 		{
-			raf = new RandomAccessFile(DATABASE_FILE_PATH, "rw");
-			if(LENGTH_OF_FILE * index < raf.length())
-			{
-				raf.seek(LENGTH_OF_FILE * index + GOTTEN_FEEDBACK);
-			}
-			else
-			{
-				raf.close();
-				return false;
-			}
-			
-			if(isNewAnswer)
-			{
-				raf.writeBytes("0");
-			}
-			else
-			{
-				raf.writeBytes("1");
-			}
-			
-			
-			raf.close();
-			return true;
+			writeAt(0, index, 1, DATABASE_FILE_PATH, END_OF_GRADE, LENGTH_OF_FILE);
 		}
-		catch(Exception e)
+		else
 		{
-			System.out.println("error " + e);
+			writeAt(1, index, 1, DATABASE_FILE_PATH, END_OF_GRADE, LENGTH_OF_FILE);
 		}
-		return false;
 	}
 }

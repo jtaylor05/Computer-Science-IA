@@ -122,21 +122,21 @@ public class questionPage extends JFrame
 						Image img = null;
 						try
 						{
-							img = ImageIO.read(new File(a.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+							img = ImageIO.read(new File(a.getPath())).getScaledInstance(340, 240, Image.SCALE_DEFAULT);
 						}
 						catch(Exception e) {}
 						
 						g.drawImage(img, 2, 2, this);
 					}
 				};
-				image.setPreferredSize(new Dimension(160, 200));
+				image.setPreferredSize(new Dimension(340, 240));
 					c.fill = GridBagConstraints.HORIZONTAL;
 					
 					c.gridx = 0; c.gridy = i;
 					
 					c.weightx = 0.5;
 					
-					c.insets = new Insets(0, 0, 10, 0);
+					c.insets = new Insets(10, 10, 10, 10);
 				answerBox.add(image, c);
 				
 				JLabel user = new JLabel(a.getUser());
@@ -145,6 +145,8 @@ public class questionPage extends JFrame
 					c.gridx = 1;
 				
 					c.weightx = 0;
+					
+					c.insets = new Insets(0, 10, 0, 10);
 					user.setPreferredSize(new Dimension(150, 30));
 				answerBox.add(user, c);
 				
@@ -177,7 +179,7 @@ public class questionPage extends JFrame
 				});
 					c.gridx = 3;
 					
-					c.insets = new Insets(3, 3, 3, 3);
+					c.insets = new Insets(8, 8, 8, 8);
 					edit.setPreferredSize(new Dimension(130, 30));
 					edit.setBackground(L.LIGHT_BROWN);
 					edit.setForeground(Color.BLACK);
@@ -210,21 +212,21 @@ public class questionPage extends JFrame
 					Image img = null;
 					try
 					{
-						img = ImageIO.read(new File(answer.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+						img = ImageIO.read(new File(answer.getPath())).getScaledInstance(340, 240, Image.SCALE_DEFAULT);
 					}
 					catch(Exception e) {}
 					
 					g.drawImage(img, 2, 2, this);
 				}
 			};
-			image.setPreferredSize(new Dimension(160, 200));
+			image.setPreferredSize(new Dimension(340, 240));
 				c.fill = GridBagConstraints.HORIZONTAL;
 				
 				c.gridx = 0;
 				
 				c.weightx = 0.5;
 				
-				c.insets = new Insets(0, 0, 10, 0);
+				c.insets = new Insets(10, 10, 10, 10);
 			answerBox.add(image, c);
 			
 			JLabel grade = new JLabel("");
@@ -249,7 +251,7 @@ public class questionPage extends JFrame
 				c.gridx = 1;
 		
 				c.weightx = 0;
-				c.insets = new Insets(20, 0, 0, 0);
+				c.insets = new Insets(0, 10, 0, 10);
 				grade.setPreferredSize(new Dimension(150, 30));
 			answerBox.add(grade, c);
 			
@@ -262,12 +264,12 @@ public class questionPage extends JFrame
 			});
 				c.gridx = 2;
 				
-				c.insets = new Insets(3, 3, 3, 3);
+				c.insets = new Insets(8, 8, 8, 8);
 				submit.setPreferredSize(new Dimension(150, 30));
 				submit.setBackground(L.LIGHT_BROWN);
 				submit.setForeground(Color.BLACK);
 			answerBox.add(submit, c);
-			c.insets = new Insets(0, 0, 0, 0);
+				c.insets = new Insets(0, 0, 0, 0);
 		}
 		
 		setLayout(new GridBagLayout());
@@ -312,8 +314,11 @@ public class questionPage extends JFrame
 		grade.add(label1, c);
 		JLabel label2 = new JLabel("Max Points: " + a.getMaxPoints());
 			c.gridy = 1;
+			
+			c.ipady = 20;
 			label2.setBackground(L.LIGHT_BROWN); label2.setOpaque(true);
 		grade.add(label2, c);
+			c.ipady = 0;
 		
 		JPanel image = new JPanel() {
 			protected void paintComponent(Graphics g)
@@ -323,14 +328,14 @@ public class questionPage extends JFrame
 				Image img = null;
 				try
 				{
-					img = ImageIO.read(new File(a.getPath())).getScaledInstance(160, 200, Image.SCALE_DEFAULT);
+					img = ImageIO.read(new File(a.getPath())).getScaledInstance(340, 240, Image.SCALE_DEFAULT);
 				}
 				catch(Exception e) {}
 				
 				g.drawImage(img, 2, 2, this);
 			}
 		};
-		image.setPreferredSize(new Dimension(160, 200));
+		image.setPreferredSize(new Dimension(340, 240));
 			c.fill = GridBagConstraints.BOTH;
 			
 			c.gridy = 2;
@@ -364,7 +369,12 @@ public class questionPage extends JFrame
 			c.fill = GridBagConstraints.HORIZONTAL;
 			
 			c.gridy = 3;
+			
+			c.ipady = 20;
+			c.ipadx = 20;
 		grade.add(newGrade, c);
+			c.ipady = 0;
+			c.ipadx = 0;
 		
 		JPanel buttons = new JPanel(); buttons.setLayout(new GridBagLayout());
 		buttons.setBackground(L.LIGHT_BROWN);
@@ -409,7 +419,7 @@ public class questionPage extends JFrame
 					}
 					else
 					{
-						Answers.addAnswer(uID, question.getID(), "", points);
+						Answers.add(uID, question.getID(), "", points);
 						Answers.changeNewAnswer(index);
 						Answers.changeFeedback(index);
 					}
@@ -516,7 +526,7 @@ public class questionPage extends JFrame
 					}
 					else
 					{
-						Answers.addAnswer(uID, question.getID(), filePathText.getText());
+						Answers.add(uID, question.getID(), filePathText.getText());
 						Answers.changeNewAnswer(index);
 						Answers.changeFeedback(index);
 					}
@@ -620,7 +630,7 @@ public class questionPage extends JFrame
 					}
 					else
 					{
-						Answers.addAnswer(ID, question.getID(), filePathText.getText());
+						Answers.add(ID, question.getID(), filePathText.getText());
 						Accounts.updateUnanswered(ID);
 					}
 					
@@ -673,7 +683,6 @@ public class questionPage extends JFrame
 			Answer a;
 			if(!Accounts.isTeacher(index))
 			{
-				System.out.println(name);
 				if(answerIndex > -1)
 				{
 					a = new Answer(name, question.getName(), Answers.getFilePath(answerIndex), Answers.getPoints(answerIndex), question.getMaxPoints());
