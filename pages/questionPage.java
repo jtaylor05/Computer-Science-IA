@@ -702,4 +702,24 @@ public class questionPage extends JFrame
 		
 		return as;
 	}
+	
+	//sorts a list of answers alphabetically by user name
+	public LinkedList<Answer> sortList(LinkedList<Answer> list)
+	{
+		for(int i = 0; i < list.size(); i++)
+		{
+			for(int j = i; j > 0; j--)
+			{
+				Answer first = list.get(j);
+				Answer second = list.get(j - 1);
+				if(first.getName().compareTo(second.getName()) < 0) 
+				{
+					Answer temp = list.get(j);
+					list.set(j, list.get(j - 1));
+					list.set(j - 1, temp);
+				}		
+			}
+		}
+		return list;
+	}
 }
