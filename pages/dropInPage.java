@@ -7,6 +7,10 @@ import javax.swing.*;
 import database.Accounts;
 import library.L;
 
+/**
+ * Initial holding page. Includes navigation to questionListPage, 
+ * portfolioListPage and portfolioPage as well as a log out button.
+ */
 public class dropInPage extends JFrame
 {
 	private boolean teacher;
@@ -24,7 +28,10 @@ public class dropInPage extends JFrame
 	private JLabel feedback = new JLabel();
 	private JLabel newAnswers = new JLabel();
 	
-	//instantiates dropInPage Frame
+	/**
+	 * @param isTeacher boolean value of whether user is teacher
+	 * @param id String id of user logged in
+	 */
 	public dropInPage(boolean isTeacher, String id)
 	{
 		teacher = isTeacher;
@@ -167,14 +174,18 @@ public class dropInPage extends JFrame
 		pack();
 	}
 	
-	//Logs out of application for current account by disposing of Frame.
+	/**
+	 * logs out of application by closing it
+	 */
 	public void logOut()
 	{
 		setVisible(false);
 		dispose();
 	}
 	
-	//opens question list page and disposes dropInPage.
+	/**
+	 * opens questionListPage
+	 */
 	public void questionList()
 	{
 		new questionListPage(teacher, ID).setVisible(true);
@@ -182,7 +193,9 @@ public class dropInPage extends JFrame
 		dispose();
 	}
 	
-	//opens portfolio list page and disposes dropInPage.
+	/**
+	 * opens the portfolioListPage or the portfolioPage depending on whether the user is a teacher.
+	 */
 	public void portfolioList()
 	{
 		if(teacher)

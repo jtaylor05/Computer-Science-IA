@@ -7,6 +7,9 @@ import database.Accounts;
 
 import java.awt.*;
 
+/**
+ * Library class for IA project. Includes general methods.
+ */
 public class L 
 {
 	public static final Color PRIME_BLUE = new Color(100, 211, 255);
@@ -15,7 +18,11 @@ public class L
 	public static final Color DARK_BROWN = new Color(179, 110, 34);
 	public static final Color LIGHT_BROWN = new Color(255, 181, 99);
 	
-	//Method changes String length to fit integer value length; returns changed String.
+	/**
+	 * @param length length to fit to
+	 * @param str String to fit to length
+	 * @return new String with length equal to parameter length
+	 */
 	public static String fitToLength(int length, String str)
 	{
 		if(str.length() > length)
@@ -32,7 +39,10 @@ public class L
 		}
 	}
 	
-	//Method removes spaces at the end of a String; returns changed String.
+	/**
+	 * @param str String to be sheared of all trailing spaces
+	 * @return sheared String
+	 */
 	public static String shear(String str)
 	{
 		for(int i = str.length() - 1; i >= 0; i--)
@@ -49,7 +59,9 @@ public class L
 		return str;
 	}
 	
-	//Method uses UUID to get a random 36 digit hexcode ID; returns ID as a String;
+	/**
+	 * @return new random UUID
+	 */
 	public static String getID()
 	{
 		UUID uuid = UUID.randomUUID();
@@ -57,7 +69,9 @@ public class L
 		return id;
 	}
 	
-	//methods makes a list of all teacher users
+	/**
+	 * @return List of all teacher IDs
+	 */
 	public static LinkedList<String> makeTeacherList()
 	{
 		int index = 0;

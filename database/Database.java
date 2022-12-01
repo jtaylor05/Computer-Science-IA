@@ -7,6 +7,10 @@ import java.nio.file.Files;
 
 import library.L;
 
+/**
+ * Parent class for all databases. Contains interaction between class
+ * and text file.
+ */
 public class Database 
 {
 	protected static FileWriter fw;
@@ -18,6 +22,11 @@ public class Database
 	protected final static int LENGTH_OF_PATH = 80;
 	protected final static int LENGTH_OF_GRADE = 10;
 	
+	/**
+	 * @param <T> generic datatype of item s
+	 * @param s item to be written to .txt file
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 */
 	protected static <T> void write(T s, String DATABASE_FILE_PATH)
 	{
 		try
@@ -34,6 +43,15 @@ public class Database
 		}		
 	}
 	
+	/**
+	 * @param <T> generic datatype of item s
+	 * @param s item to be written to a .txt file
+	 * @param index entry number to be written at
+	 * @param LENGTH_OF_S length of item s to be written
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 * @param begin beginning of write
+	 * @param LENGTH_OF_FILE length of file entry
+	 */
 	protected static <T> void writeAt(T s, int index, int LENGTH_OF_S, String DATABASE_FILE_PATH, int begin, int LENGTH_OF_FILE)
 	{
 		String str = L.fitToLength(LENGTH_OF_S, "" + s);
@@ -53,6 +71,11 @@ public class Database
 		}
 	}
 	
+	/**
+	 * @param index entry number to be removed
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 * @param LENGTH_OF_FILE length of file entry
+	 */
 	protected static void remove(int index, String DATABASE_FILE_PATH, int LENGTH_OF_FILE)
 	{
 		File temp = new File("database/temp");
@@ -85,6 +108,15 @@ public class Database
 		}	
 	}
 	
+	/**
+	 * @param st String search term
+	 * @param LENGTH_OF_ST length of search term
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 * @param begin beginning of search term in entry
+	 * @param end end of search term in entry
+	 * @param LENGTH_OF_FILE length of file entry
+	 * @return int index of where st appears in entry
+	 */
 	protected static int getIndex(String st, int LENGTH_OF_ST, String DATABASE_FILE_PATH, int begin, int end, int LENGTH_OF_FILE)
 	{
 		String fixedST = L.fitToLength(LENGTH_OF_ST, st);
@@ -118,6 +150,16 @@ public class Database
 		return -1;
 	}
 	
+	/**
+	 * @param st String search term
+	 * @param LENGTH_OF_ST length of search term
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 * @param begin beginning of search term in entry
+	 * @param end end of search term in entry
+	 * @param LENGTH_OF_FILE length of file entry
+	 * @param minIndex starting index of search
+	 * @return int index of where st appears in entry after minIndex
+	 */
 	protected static int getIndex(String st, int LENGTH_OF_ST, String DATABASE_FILE_PATH, int begin, int end, int LENGTH_OF_FILE, int minIndex)
 	{
 		String fixedST = L.fitToLength(LENGTH_OF_ST, st);
@@ -150,6 +192,14 @@ public class Database
 		return -1;
 	}
 	
+	/**
+	 * @param index entry number to be read
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 * @param begin beginning of data in entry to be read
+	 * @param end end of data in entry to be read
+	 * @param LENGTH_OF_FILE length of entry
+	 * @return String data read from entry
+	 */
 	protected static String get(int index, String DATABASE_FILE_PATH, int begin, int end, int LENGTH_OF_FILE)
 	{
 		String data = "";
@@ -176,6 +226,11 @@ public class Database
 		return L.shear(data);
 	}
 	
+	/**
+	 * @param DATABASE_FILE_PATH file path of .txt file
+	 * @param LENGTH_OF_FILE length of a file entry
+	 * @return number of entries in .txt file
+	 */
 	protected static int countEntries(String DATABASE_FILE_PATH, int LENGTH_OF_FILE)
 	{
 		int count = 0;

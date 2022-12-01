@@ -13,6 +13,10 @@ import java.awt.*;
 import java.awt.image.*;
 import library.L;
 
+/**
+ * List page of all questions. Includes navigation to question pages and 
+ * drop in page.
+ */
 public class questionListPage extends JFrame
 {
 	private boolean teacher;
@@ -29,7 +33,10 @@ public class questionListPage extends JFrame
 	private JPanel questions = new JPanel();
 	private JScrollPane questionScroller = new JScrollPane(questions);
 	
-	//instantiates questionListPage Frame
+	/**
+	 * @param isTeacher boolean value of whether user is a teacher
+	 * @param ID String ID of currently logged in user
+	 */
 	public questionListPage(boolean isTeacher, String ID)
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -303,7 +310,10 @@ public class questionListPage extends JFrame
 		pack();
 	}
 	
-	//disposes questionListPage and opens drop-in page
+	/**
+	 * @param teacher boolean value of whether user is a teacher
+	 * @param ID String ID of currently logged in user
+	 */
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -311,7 +321,9 @@ public class questionListPage extends JFrame
 		dispose();
 	}
 	
-	//Opens a pop-up that takes information for a new question
+	/**
+	 * Adds a Question to question database
+	 */
 	public void addQuestion()
 	{
 		JFrame add = new JFrame("Add Question");
@@ -399,8 +411,9 @@ public class questionListPage extends JFrame
 		add.pack();
 	}
 	
-	//opens a pop-up page including information of a current question. All alterations to data are saved 
-	//to the database
+	/**
+	 * @param q relevant question to be edited
+	 */
 	public void editQuestion(Question q)
 	{
 		JFrame edit = new JFrame("Edit Question");
@@ -508,7 +521,11 @@ public class questionListPage extends JFrame
 		edit.pack();
 	}
 	
-	//makes lists of all questions with grade of particular user
+	/**
+	 * @param userID currently logged in user
+	 * @return LinkedList of all questions, including whether they have been answered 
+	 * by the user.
+	 */
 	public LinkedList<Question> makeList(String userID)
 	{
 		LinkedList<Question> questions = new LinkedList<>();
@@ -542,7 +559,9 @@ public class questionListPage extends JFrame
 		return questions;
 	}
 	
-	//makes a list of all questions, their IDs, names, and max points
+	/**
+	 * @return makes list of all questions 
+	 */
 	public LinkedList<Question> makeList()
 	{
 		LinkedList<Question> questions = new LinkedList<>();
@@ -568,7 +587,10 @@ public class questionListPage extends JFrame
 		return questions;
 	}
 	
-	//sorts a list of questions alphabetically by their name
+	/**
+	 * @param list LinkedList to be sorted
+	 * @return LinkedList sorted alphabetically by name
+	 */
 	public LinkedList<Question> sortList(LinkedList<Question> list)
 	{
 		for(int i = 0; i < list.size(); i++)

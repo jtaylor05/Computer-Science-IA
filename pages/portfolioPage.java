@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import database.*;
 import library.L;
 
+/**
+ * Visual portfolio of single user's answers. Navigates to portfolioListPage 
+ * and dropInPage.
+ */
 public class portfolioPage extends JFrame
 {
 	boolean teacher;
@@ -22,7 +26,10 @@ public class portfolioPage extends JFrame
 	
 	private ArrayList<Answer> as;
 	
-	//instantiates portfolioPage Frame for student
+	/**
+	 * @param teacher boolean value of whether user is a teacher
+	 * @param ID String ID of logged in user
+	 */
 	public portfolioPage(boolean teacher, String ID)
 	{
 		this.teacher = teacher;
@@ -104,7 +111,11 @@ public class portfolioPage extends JFrame
 		pack();
 	}
 	
-	//instantiates portfolioPage for teacher of a particular student's answers
+	/**
+	 * @param teacher boolean value of whether user is a teacher
+	 * @param ID String ID of logged in user
+	 * @param studentID Student whose portfolio is being made
+	 */
 	public portfolioPage(boolean teacher, String ID, String studentID)
 	{
 		this.teacher = teacher;
@@ -191,7 +202,10 @@ public class portfolioPage extends JFrame
 		pack();
 	}
 	
-	//opens a dropInPage, disposes of portfolioPage.
+	/**
+	 * @param teacher boolean value of whether user is a teacher
+	 * @param ID String ID of currently logged in user
+	 */
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -199,7 +213,10 @@ public class portfolioPage extends JFrame
 		dispose();
 	}
 	
-	//opens a portfolioListPage, disposes of portfolioPage.
+	/**
+	 * @param teacher boolean value of whether user is a teacher
+	 * @param ID String ID of currently logged in user
+	 */
 	public void portfolioListPage(boolean teacher, String ID)
 	{
 		new portfolioListPage(teacher, ID).setVisible(true);
@@ -207,7 +224,10 @@ public class portfolioPage extends JFrame
 		dispose();
 	}
 	
-	//Make a list of all answers in database by ID.
+	/**
+	 * @param ID user for which answers are being made
+	 * @return ArrayList of all student's answers
+	 */
 	private ArrayList<Answer> makeList(String ID)
 	{
 		ArrayList<Answer> answers = new ArrayList<>();

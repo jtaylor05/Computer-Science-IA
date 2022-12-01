@@ -5,6 +5,10 @@ import java.nio.file.Files;
 
 import library.L;
 
+/**
+ * Accesses database for questions using .txt file: .\database\questions.
+ * Extends class Database.
+ */
 public class Questions extends Database
 {
 	private final static String DATABASE_FILE_PATH = "database/questions";
@@ -14,7 +18,11 @@ public class Questions extends Database
 	private final static int END_OF_PATH = END_OF_NAME + LENGTH_OF_PATH;
 	private final static int LENGTH_OF_FILE = END_OF_PATH + LENGTH_OF_GRADE + 1;
 	
-	//Method adds question data to file "questions"; returns void.
+	/**
+	 * @param name user-chosen name of question
+	 * @param filePath user-chosen file path of image
+	 * @param totalPoints user-chosen max points
+	 */
 	public static void add(String name, String filePath, int totalPoints)
 	{
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, name);
@@ -27,7 +35,13 @@ public class Questions extends Database
 		Accounts.updateUnanswered(true, false, false, null);
 	}
 	
-	//replaces a previous question with a new one
+	/**
+	 * 
+	 * @param name user-chosen name of question
+	 * @param filePath user-chosen file path of image
+	 * @param totalPoints user-chosen max points
+	 * @param QID question ID of question being replaced
+	 */
 	public static void replace(String name, String filePath, int totalPoints, String QID)
 	{
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, name);
@@ -65,7 +79,9 @@ public class Questions extends Database
 		Answers.update();
 	}
 	
-	//removes question from database
+	/**
+	 * @param QID question ID of question to be removed
+	 */
 	public static void remove(String QID)
 	{
 		int index = getIDIndex(QID);
@@ -76,47 +92,64 @@ public class Questions extends Database
 		Answers.update();
 	}
 	
-	//Method finds ID of question at index; returns found ID of question.
+	/**
+	 * @param index entry number in .txt file
+	 * @return String question ID at index
+	 */
 	public static String getID(int index)
 	{
 		return get(index, DATABASE_FILE_PATH, 0, LENGTH_OF_QUESTIONID, LENGTH_OF_FILE);
 	}
 	
-	//method uses looks for index of searchterm "ID"; returns index of where "ID"
-	//was found or -1 if not found.
+	/**
+	 * @param ID search term
+	 * @return index of parameter question ID in .txt file
+	 */
 	public static int getIDIndex(String ID)
 	{
 		return getIndex(ID, LENGTH_OF_QUESTIONID, DATABASE_FILE_PATH, 0, LENGTH_OF_QUESTIONID, LENGTH_OF_FILE);
 	}
 	
-	//method finds file path of question at index; returns found file path.
+	/**
+	 * @param index entry number in .txt file
+	 * @return String file path at index
+	 */
 	public static String getFilePath(int index)
 	{
 		return get(index, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PATH, LENGTH_OF_FILE);
 	}
 	
-	//method finds name of question at index; returns found name.
+	/**
+	 * @param index entry number in .txt file
+	 * @return String question name at index
+	 */
 	public static String getName(int index)
 	{
 		return get(index, DATABASE_FILE_PATH, LENGTH_OF_QUESTIONID, END_OF_NAME, LENGTH_OF_FILE);
 	}
 	
-	//method uses looks for index of searchterm "name"; returns index of where "name"
-	//was found or -1 if not found.
+	/**
+	 * @param name search term
+	 * @return index of parameter question name in .txt file
+	 */
 	public static int getNameIndex(String name)
 	{
 		return getIndex(name, LENGTH_OF_NAME, DATABASE_FILE_PATH, LENGTH_OF_QUESTIONID, END_OF_NAME, LENGTH_OF_FILE);
 	}
 	
-	//To find the int value of the total number of points for question at index;
-	//returns the int value found.
+	/**
+	 * @param index entry number in .txt file
+	 * @return int max points at index
+	 */
 	public static int getPoints(int index)
 	{
 		String val = get(index, DATABASE_FILE_PATH, END_OF_PATH, LENGTH_OF_FILE - 1, LENGTH_OF_FILE);
 		return Integer.parseInt(val);
 	}
 	
-	//counts number of questions in database
+	/**
+	 * @return number of entries in the database
+	 */
 	public static int numberQuestions()
 	{
 		return countEntries(DATABASE_FILE_PATH, LENGTH_OF_FILE);

@@ -3,6 +3,10 @@ package database;
 import java.io.*;
 import library.L;
 
+/**
+ * Accesses database for user Accounts using .txt file: .\database\accounts.
+ * Extends class Database.
+ */
 public class Accounts extends Database
 {
 	private final static String DATABASE_FILE_PATH = "database/accounts";
@@ -18,7 +22,12 @@ public class Accounts extends Database
 	private final static int END_OF_ANSWERED = END_OF_EMAIL + LENGTH_OF_INFO;
 	private final static int LENGTH_OF_FILE = END_OF_ANSWERED + 1;
 	
-	//Method adds account data to file "accounts".
+	/**
+	 * @param username user-chosen String
+	 * @param password user-chosen String
+	 * @param email user-chosen String
+	 * @param isTeacher boolean value representing whether user is teacher
+	 */
 	public static void add(String username, String password, String email, boolean isTeacher)
 	{
 		String fixedName = L.fitToLength(LENGTH_OF_NAME, username);
@@ -49,70 +58,108 @@ public class Accounts extends Database
 		}	
 	}
 	
-	//Method searches for search term "username" of all usernames in file 
-	//"accounts"; returns int index of account with "username".
+	/**
+	 * @param username search term
+	 * @return index of parameter username in .txt file
+	 */
 	public static int getUsernameIndex(String username)
 	{
 		return getIndex(username, LENGTH_OF_NAME, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_NAME, LENGTH_OF_FILE);
 	}
 	
-	//does same as function above, however goes from minimum index
+	/**
+	 * @param username username search term
+	 * @param minIndex starting index of search
+	 * @return index of parameter username after minIndex in .txt file
+	 */
 	public static int getUsernameIndex(String username, int minIndex)
 	{
 		return getIndex(username, LENGTH_OF_NAME, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_NAME, LENGTH_OF_FILE, minIndex);
 	}
 	
-	//To return username from certain index in database.
+	/**
+	 * @param index entry number in .txt file
+	 * @return String username at index
+	 */
 	public static String getUsername(int index)
 	{
 		return get(index, DATABASE_FILE_PATH, LENGTH_OF_USERID, END_OF_NAME, LENGTH_OF_FILE);
 	}
 	
-	//Method searches for search term "email" of all email in file 
-	//"accounts"; returns int index of account with "email".
+	/**
+	 * 
+	 * @param email search term
+	 * @return index of parameter email in .txt file
+	 */
 	public static int getEmailIndex(String email)
 	{
 		return getIndex(email, LENGTH_OF_EMAIL, DATABASE_FILE_PATH, END_OF_PASS, LENGTH_OF_FILE, LENGTH_OF_FILE);
 	}
 	
+	/**
+	 * @param email search term
+	 * @param minIndex starting index of search
+	 * @return index of parameter email after minIndex in .txt file
+	 */
 	public static int getEmailIndex(String email, int minIndex)
 	{
 		return getIndex(email, LENGTH_OF_EMAIL, DATABASE_FILE_PATH, END_OF_PASS, LENGTH_OF_FILE, LENGTH_OF_FILE, minIndex);
 	}
 	
-	//Method searches for search term "password" of all passwords in file 
-	//"passwords"; returns int index of account with "password".
+	/**
+	 * 
+	 * @param password search term
+	 * @return index of parameter password in .txt file
+	 */
 	public static int getPasswordIndex(String password)
 	{
 		return getIndex(password, LENGTH_OF_PASS, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PASS, LENGTH_OF_FILE);
 	}
 	
-	//does same as method above, but goes from a minimum index
+	/**
+	 * @param password search term
+	 * @param minIndex starting index of search
+	 * @return index of parameter password after minIndex in .txt file
+	 */
 	public static int getPasswordIndex(String password, int minIndex)
 	{
 		return getIndex(password, LENGTH_OF_PASS, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PASS, LENGTH_OF_FILE, minIndex);
 	}
 	
-	//Method finds password of account at index; returns found password of account.
+	/**
+	 * @param index entry number in .txt file
+	 * @return String password at index
+	 */
 	public static String getPassword(int index)
 	{
 		return get(index, DATABASE_FILE_PATH, END_OF_NAME, END_OF_PASS, LENGTH_OF_FILE);
 	}
 	
-	//Method finds ID of account at index; returns found ID of account.
+	/**
+	 * @param index entry number in .txt file
+	 * @return String ID at index
+	 */
 	public static String getID(int index)
 	{
 		return get(index, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE);
 	}
 	
-	//method uses looks for index of searchterm "searchID"; returns index of where "searchID"
-	//was found or -1 if not found.
+	/**
+	 * @param ID search term
+	 * @return index of parameter ID in .txt file
+	 */
 	public static int getIDIndex(String ID)
 	{
 		return getIndex(ID, LENGTH_OF_USERID, DATABASE_FILE_PATH, 0, LENGTH_OF_USERID, LENGTH_OF_FILE);
 	}
 	
-	//overloading method
+	/**
+	 * @param ID relevant user ID
+	 * @param begin beginning of data in .txt entry
+	 * @param end end of data in .txt entry
+	 * @return int value found in .txt file entry
+	 * polymorphs method get() in class Database
+	 */
 	public static int get(String ID, int begin, int end)
 	{
 		int index = getIDIndex(ID);
@@ -121,13 +168,19 @@ public class Accounts extends Database
 		return Integer.parseInt(str);
 	}
 	
-	//gets the number of unanswered
+	/**
+	 * @param ID relevant user ID
+	 * @return int number of unanswered for parameter user ID
+	 */
 	public static int getUnanswered(String ID)
 	{
 		return get(ID, END_OF_EMAIL, UNANSWERED_INDEX);
 	}
 	
-	//to change the amount of unanswered
+	/**
+	 * @param ID user to change value of
+	 * @param value new value
+	 */
 	public static void setUnanswered(String ID, int value)
 	{
 		int index = getIDIndex(ID);
@@ -137,7 +190,12 @@ public class Accounts extends Database
 		}
 	}
 	
-	//automatically changes the unanswered
+	/**
+	 * @param newQuestion boolean value of whether new question has been made
+	 * @param replacedQuestion boolean value of whether old question has been replaced
+	 * @param removedQuestion boolean value of whether question has been removed
+	 * @param QID the question that was replaced or removed
+	 */
 	public static void updateUnanswered(boolean newQuestion, boolean replacedQuestion, boolean removedQuestion, String QID)
 	{
 		int index = 0;
@@ -164,7 +222,9 @@ public class Accounts extends Database
 		}
 	}
 	
-	//automatically changes unanswered for a user
+	/**
+	 * @param ID user value which has increased unanswered
+	 */
 	public static void updateUnanswered(String ID)
 	{
 		int index = getIDIndex(ID);
@@ -175,13 +235,19 @@ public class Accounts extends Database
 		
 	}
 	
-	//returns number of questions which recieved feedback
+	/**
+	 * @param ID relevant user ID
+	 * @return int number of unresponded feedback for parameter user ID
+	 */
 	public static int getFeedback(String ID)
 	{
 		return get(ID, UNANSWERED_INDEX, FEEDBACK_INDEX);
 	}
 	
-	//changes value of feedback
+	/**
+	 * @param ID user to change value of
+	 * @param value new value
+	 */
 	public static void setFeedback(String ID, int value)
 	{
 		int index = getIDIndex(ID);
@@ -191,7 +257,12 @@ public class Accounts extends Database
 		}
 	}
 	
-	//automatically changes feedback values
+	/**
+	 * @param login boolean value of whether a login has been made
+	 * @param newFeedback boolean value of whether new feedback has been made
+	 * @param responded boolean value of whether feedback has been responded to
+	 * @param ID the user that will have the changed values
+	 */
 	public static void updateFeedback(boolean login, boolean newFeedback, boolean responded, String ID)
 	{
 		int index = 0;
@@ -227,13 +298,19 @@ public class Accounts extends Database
 		
 	}
 	
-	//returns the amount of answered questions (for teachers)
+	/**
+	 * @param ID relevant user ID
+	 * @return int value of answered for parameter user ID
+	 */
 	public static int getAnswered(String ID)
 	{
 		return get(ID, END_OF_EMAIL, END_OF_ANSWERED);
 	}
 	
-	//changes answered value
+	/**
+	 * @param ID user to change value of
+	 * @param value new value
+	 */
 	public static void setAnswered(String ID, int value)
 	{
 		int index = getIDIndex(ID);
@@ -243,7 +320,12 @@ public class Accounts extends Database
 		}
 	}
 	
-	//automatically changes answered value
+	/**
+	 * @param login boolean value of whether a new login has occurred
+	 * @param newResponse boolean value representing whether a new question has been answer
+	 * @param responded boolean value representing whether an answer has been responded to
+	 * @param ID the user that will have the changed value
+	 */
 	public static void updateAnswered(boolean login, boolean newResponse, boolean responded, String ID)
 	{
 		int index = getIDIndex(ID);
@@ -278,8 +360,10 @@ public class Accounts extends Database
 		
 	}
 	
-	//Method users last value of ID to check whether teacher or student;
-	//returns boolean value true if a teacher, false if not;
+	/**
+	 * @param index index of relavent user to be checked
+	 * @return boolean value at end of ID of whether user is teacher
+	 */
 	public static boolean isTeacher(int index)
 	{
 		String bool = get(index, DATABASE_FILE_PATH, LENGTH_OF_USERID - 1, LENGTH_OF_USERID, LENGTH_OF_FILE);

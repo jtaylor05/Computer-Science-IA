@@ -12,20 +12,12 @@ import java.awt.*;
 import database.*;
 import library.L;
 
+/**
+ * Page holding all relevant details for a singular question. Navigates to 
+ * questionListPage.
+ */
 public class questionPage extends JFrame
 {
-	/*
-	 * isTeacher - boolean holding true if user is teacher, false if not
-	 * questionFrame - JFrame holding all the components that make up a question.
-	 * questionFile - File containing an image or text block that would be the question
-	 * dropBox - JButton allowing the user to drop in their answer file
-	 * answerList - jFrame holding all student answers. Teacher only.
-	 * download - JButton which allows user to download file.
-	 * edit - JButton which allows user to edit file in the application.
-	 * redo - JButton which pings specific student user
-	 * submit - JButton submitting answer in dropBox as user answer.
-	 * bacl - JButton used to lead back to the questionListPage
-	 */
 	private Question question;
 	private Answer answer;
 	private LinkedList<Answer> answers = new LinkedList<>();
@@ -39,7 +31,11 @@ public class questionPage extends JFrame
 	private JPanel answerBox = new JPanel();
 	private JScrollPane answerScroller;
 	
-	//instantiates questionPage Frame
+	/**
+	 * @param q relevant question
+	 * @param ID String ID of user currently logged in
+	 * @param isTeacher boolean value of whether user is a teacher
+	 */
 	public questionPage(Question q, String ID, boolean isTeacher)
 	{
 		GridBagConstraints c = new GridBagConstraints();
@@ -174,7 +170,7 @@ public class questionPage extends JFrame
 				edit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 					{
-						grade(a, teacher);
+						grade(a);
 					}
 				});
 					c.gridx = 3;
@@ -189,7 +185,7 @@ public class questionPage extends JFrame
 				submit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 					{
-						submitFeedback(a, teacher);
+						submitFeedback(a);
 					}
 				});
 					c.gridx = 4;
@@ -259,7 +255,7 @@ public class questionPage extends JFrame
 			submit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e)
 				{
-					submitWork(answer, teacher);
+					submitWork(answer);
 				}
 			});
 				c.gridx = 2;
@@ -294,8 +290,10 @@ public class questionPage extends JFrame
 		pack();
 	}
 
-	//allows teacher user to grade an answer of a student
-	public void grade(Answer a, boolean teacher)
+	/**
+	 * @param a Answer that is being edited and graded
+	 */
+	public void grade(Answer a)
 	{
 		JFrame grade = new JFrame("Grade");
 		grade.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -451,8 +449,10 @@ public class questionPage extends JFrame
 		grade.pack();
 	}
 	
-	//teacher submits a new filePath to a question
-	public void submitFeedback(Answer a, boolean teacher)
+	/**
+	 * @param a Answer to get edited and get new image file path
+	 */
+	public void submitFeedback(Answer a)
 	{
 		JFrame submit = new JFrame("Submit Image");
 		submit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -558,8 +558,10 @@ public class questionPage extends JFrame
 		submit.pack();
 	}
 	
-	//student user submits their work as a filepath to a question
-	public void submitWork(Answer a, boolean teacher)
+	/**
+	 * @param a Answer to gain initial image submission for students
+	 */
+	public void submitWork(Answer a)
 	{
 		JFrame submit = new JFrame("Submit Image");
 		submit.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -660,7 +662,9 @@ public class questionPage extends JFrame
 		submit.pack();
 	}
 	
-	//opens a questionListPage, disposing questionPage.
+	/**
+	 * Opens a new questionListPage
+	 */
 	public void questionList()
 	{
 		new questionListPage(teacher, ID).setVisible(true);
@@ -668,7 +672,9 @@ public class questionPage extends JFrame
 		dispose();
 	}
 	
-	//make List of all answers a user has
+	/**
+	 * @return LinkedList of all student user answers 
+	 */
 	public LinkedList<Answer> makeList()
 	{
 		LinkedList<Answer> as = new LinkedList<>();
@@ -703,7 +709,10 @@ public class questionPage extends JFrame
 		return as;
 	}
 	
-	//sorts a list of answers alphabetically by user name
+	/**
+	 * @param list LinkedList to be sorted
+	 * @return LinkedList sorted alphabetically by username
+	 */
 	public LinkedList<Answer> sortList(LinkedList<Answer> list)
 	{
 		for(int i = 0; i < list.size(); i++)

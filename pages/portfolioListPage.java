@@ -9,6 +9,10 @@ import javax.swing.*;
 import database.Accounts;
 import library.L;
 
+/**
+ * List page of all users. Includes navigation to dropInPage and 
+ * portfolio page. Only accessible to teachers.
+ */
 public class portfolioListPage extends JFrame
 {
 	ArrayList<String> StudentIDs = new ArrayList<>();
@@ -21,7 +25,10 @@ public class portfolioListPage extends JFrame
 	private JPanel portfolios = new JPanel();
 	private JScrollPane portfolioScroller = new JScrollPane(portfolios);
 	
-	//instantiates portfolioListPage Frame
+	/**
+	 * @param teacher boolean value of whether user is a teacher
+	 * @param ID String ID of user
+	 */
 	public portfolioListPage(boolean teacher, String ID)
 	{
 		StudentIDs = makeStudentList();
@@ -112,7 +119,10 @@ public class portfolioListPage extends JFrame
 		pack();
 	}
 	
-	//open a drop-in page, disposes portfolioListPage.
+	/**
+	 * @param teacher boolean value of whether logged in user is teacher
+	 * @param ID String ID of logged in user
+	 */
 	public void dropInPage(boolean teacher, String ID)
 	{
 		new dropInPage(teacher, ID).setVisible(true);
@@ -120,7 +130,11 @@ public class portfolioListPage extends JFrame
 		dispose();
 	}
 	
-	//open a portfolio page, disposes portfolioListPage.
+	/**
+	 * @param teacher boolean value of whether logged in user is teacher
+	 * @param ID String ID of logged in user
+	 * @param studentID String ID of student portfolio
+	 */
 	public void portfolioPage(boolean teacher, String ID, String studentID)
 	{
 		new portfolioPage(teacher, ID, studentID).setVisible(true);
@@ -128,7 +142,9 @@ public class portfolioListPage extends JFrame
 		dispose();
 	}
 	
-	//Makes a list of all student ID's
+	/**
+	 * @return ArrayList of all student IDs in accounts database
+	 */
 	public ArrayList<String> makeStudentList()
 	{
 		ArrayList<String> ids = new ArrayList<>();

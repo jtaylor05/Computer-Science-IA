@@ -7,6 +7,9 @@ import javax.swing.*;
 import database.*;
 import library.L;
 
+/**
+ * On-Run page opened. Allows all users to both register new accounts and log in with their account.
+ */
 public class logInPage extends JFrame
 {
 	private boolean teacher = false;
@@ -43,7 +46,9 @@ public class logInPage extends JFrame
 	private boolean emailBoxTyped = false;
 	private JTextField emailBox = new JTextField("Enter Email");
 	
-	//Instantiates Frame
+	/**
+	 * Instantiates the log-in page window
+	 */
 	public logInPage()
 	{
 		okCloseBox.setBackground(L.LIGHT_BROWN);
@@ -449,8 +454,9 @@ public class logInPage extends JFrame
 		pack();
 	}
 	
-	//using database "accounts", checks whether information matches a single account;
-	//returns true if account is found, false if not.
+	/**
+	 * @return boolean value of whether username and password match an account.
+	 */
 	public boolean validateInfo()
 	{
 		String username = usernameBox.getText();
@@ -478,8 +484,9 @@ public class logInPage extends JFrame
 		return false;
 	}
 	
-	//using database "accounts", checks whether username matches an account;
-	//Adds account and returns true if not, returns false if yes.
+	/**
+	 * @return boolean value of whether account doesn't exist and was added.
+	 */
 	public boolean registerInfo()
 	{
 		String password1 = enteredPass;
@@ -509,7 +516,10 @@ public class logInPage extends JFrame
 		return false;
 	}
 	
-	//opens dropInPage Frame
+	/**
+	 * @param teacher boolean value of whether user brought to drop-in page is a teacher.
+	 * @param ID ID of user brought to drop-in page.
+	 */
 	public void dropInPage(boolean teacher, String ID)
 	{
 		
@@ -520,9 +530,15 @@ public class logInPage extends JFrame
 		dispose();
 	}
 	
-	//enqueue and dequeue helps with LinkedList pIndexs, which acts as a dynamic queue
+
+	/**
+	 * @param i value added to end of queue
+	 */
 	public void enqueue(Integer i)
 	{	pIndexs.add(i);	}
+	/**
+	 * @return value at front of queue
+	 */
 	public Integer dequeue()
 	{	return pIndexs.remove(0);	}
 	
@@ -535,7 +551,9 @@ public class logInPage extends JFrame
 		lip.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
-	//sets up register or log-in box
+	/**
+	 * When the register or log-in box is changed, sets-up JFrame
+	 */
 	public void setupBox()
 	{
 		GridBagConstraints c = new GridBagConstraints();
